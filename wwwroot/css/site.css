@@ -20,3 +20,143 @@ html {
 body {
   margin-bottom: 60px;
 }
+.azulcub {
+  color: #2B7A78
+}
+
+.cont-formulario{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+}
+
+.btn-accept {
+  padding: 20px;
+  border-radius: 10px 10px 10px 10px;
+  background-color: #004879;
+  -webkit-text-fill-color: white;
+}
+
+.box-credenciales {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.error{
+  color: red;
+  font-size: 22px;
+}
+
+li {
+  margin: 10px;
+  }
+
+.login-entry {
+  background-color: #0048791c;
+  border-radius: 10px;
+  font-size: 24px;
+  width: 395px; 
+}
+
+.form-entry {
+  background-color: #0048791c;
+  border-radius: 10px;
+  font-size: 18px;
+}
+.prof-nav-bar{
+  background-color: #2B7A78;
+  border-radius: 1 0 10px 10px;
+}
+
+.bar-text {
+  color: white;
+  font-size: 24px;
+  margin-top: 10px;
+  margin-left: 25px;
+}
+
+.top-menu {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 40px
+}
+
+.search-bar{
+  border-radius: 18px;
+  padding: 5px;
+  max-width: 305px;
+  margin-top: 50px;
+}
+
+.btn-select{
+  border-radius: 10px 10px 10px 10px;
+  background-color: #007904;
+  -webkit-text-fill-color: white;
+}
+
+
+/* CSS */
+.button-34 {
+  background: #3AAFA9;
+  border-radius: 999px;
+  box-shadow: #3AAFA9 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+}
+
+
+.btn-delete{
+  border-radius: 10px 10px 10px 10px;
+  background-color: #BF1C1C;
+  -webkit-text-fill-color: white;
+  padding: 7px;
+}
+
+.edit-label{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 55px;
+  max-width: 40%;
+}
+.filtro-dropdown{
+  background-color: #00487969;
+  border-radius: 7px;
+  font-size: 20px;
+  color: white;
+  border-color: #084e7d;
+}
+
+
+.button-66 {
+  background-color: #2B7A78;
+  color: #fff;
+  width: fit-content;
+  border: 0;
+}
+
+.button-66:hover {
+  background-color: #3ba3a0;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .button-66 {
+    padding: 16px 44px;
+    min-width: 150px;
+  }
+}

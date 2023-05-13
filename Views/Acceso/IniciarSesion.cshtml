@@ -1,0 +1,36 @@
+@{
+    Layout = "LayoutInicioSesion";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Login CubiculosTEC</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    <form>
+        <div class="box-credenciales">
+
+                <h1 style="margin-top: 2%; color:#004879">Inicio de sesión</h1>
+                
+                <div style="margin-bottom: 5%;">
+
+                    <h3 style="margin-top: 10%;">Dirección de correo electrónico:</h3>
+
+                    <h3> <input class = "login-entry" type="email" id="correo" name="correo"><br> </h3>
+
+                    <h3 style="margin-top: 10%;">Contraseña:</h3>
+
+                    <h3> <input class = "login-entry" required="required" type="text" id="contra" name="contra"><br> </h3>
+ 
+                </div>
+                <button class="btn-accept" type="submit">Iniciar sesión</button>
+                <a style="margin-top: 30px;font-size: 20px; color: #004879" asp-area="" asp-controller="Registro" asp-action="Index">Registrar nuevo usuario</a>
+
+            </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,76 @@
+@{
+  ViewData["Title"] = "Gestión de profesores";
+  Layout = "CoordinadorLayout";
+}
+
+
+<script>
+  function eliminar() {
+    if (confirm("¿Desea eliminar este estudiante") == true) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  function buscar() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("busq");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tablaProfesores");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+
+<div class="text-center">
+  <h1 style="color: #004879; font-size: 80x">Profesores</h1>
+  <div style="display: flex; flex-direction: column ">
+    <div style="display: flex; justify-content: space-between">
+    <span><input class="search-bar" type="text" id="busq" onkeyup="buscar()" placeholder="Buscar profesor..."></span>
+    <span><button type="button" class = "button-66">Agregar nuevo profesor</button></span>
+    </div>
+    <table id="tablaProfesores" style="margin-top: 60px;" class="table">
+      <thead>
+        <tr style="background: #89D2CF">
+          <th style="color:black; font-size:110%; width:5%" >Código</th>
+          <th style="color:black; font-size:110%">Nombre</th>
+          <th style="color:black; font-size:110%; width:15%">Campus</th>
+          <th style="color:black; font-size:110%">Correo electrónico</th>
+          <th style="color:black; font-size:110%">Estado</th>
+          <th style="color:black; font-size:110%">Editar</th>
+        </tr>
+
+      </thead>
+      <tbody>
+
+          <tr>
+            <td align="center"> estado</td>
+            <td align="center"> nombre</td>
+            <td align="center"> campus </td>
+            <td align="center"> correo </td>
+            <td align="center"> estado </td>
+            <td style="display: flex; justify-content: space-around;">
+              <a style="text-decoration: none;padding: 6px;" href=""
+                ><img src="https://cdn-icons-png.flaticon.com/512/266/266146.png" width="20" height="20"></a>
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </div>
+      @if (ViewBag.eliminado == false){
+        <script>alert("No se pudo eliminar el estudiante");</script>
+    }
+</div>
