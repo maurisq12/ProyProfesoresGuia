@@ -23,4 +23,9 @@ public class ProfesorGuia
         this.fotografia = fotografia;
         this.activo = activo;
     }
+    
+    public override string ToString()
+    {
+        return $"Código: {codigo}\nNombre: {nombreCompleto}\nCorreo Electrónico: {correoElectronico}\nTeléfono Oficina: {telefonoOficina}\nTeléfono Celular: {telefonoCelular}\nFotografía: {fotografia}\nActivo: {activo}";
+    }
 }

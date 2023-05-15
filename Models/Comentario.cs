@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ProfesoresGuia.Models;
 
 public class Comentario
@@ -8,6 +10,18 @@ public class Comentario
     public String cuerpo { get; set; }
     public List<Respuesta> listaRespuestas { get; set; }
 
+    public Comentario()
+    {
+    }
+
+    public Comentario(int idComentario, ProfesorGuia emisor, DateTime fechaHora, string cuerpo, List<Respuesta> listaRespuestas)
+    {
+        this.idComentario = idComentario;
+        this.emisor = emisor;
+        this.fechaHora = fechaHora;
+        this.cuerpo = cuerpo;
+        this.listaRespuestas = listaRespuestas;
+    }
 
     public Comentario(int idComentario, ProfesorGuia emisor, DateTime fechaHora, String cuerpo)
     {
@@ -27,5 +41,22 @@ public class Comentario
     public void RemoveRespuesta(Respuesta respuesta)
     {
         listaRespuestas.Remove(respuesta);
+    }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"ID Comentario: {idComentario}");
+        sb.AppendLine($"Emisor: {emisor}");
+        sb.AppendLine($"Fecha y Hora: {fechaHora}");
+        sb.AppendLine($"Cuerpo: {cuerpo}");
+
+        sb.AppendLine("Respuestas:");
+        foreach (var respuesta in listaRespuestas)
+        {
+            sb.AppendLine(respuesta.ToString());
+        }
+
+        return sb.ToString();
     }
 }

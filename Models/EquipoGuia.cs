@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ProfesoresGuia.Models;
 
 public class EquipoGuia
@@ -9,6 +11,20 @@ public class EquipoGuia
     public List<Estudiante> listaEstudiantes { get; set; }
     public String ultimaModificacion { get; set; }
 
+
+    public EquipoGuia()
+    {
+    }
+
+    public EquipoGuia(int idEquipoGuia, int anno, ProfesorGuia profesorCoordinador, List<ProfesorGuia> profesoresGuia, List<Estudiante> listaEstudiantes, string ultimaModificacion)
+    {
+        this.idEquipoGuia = idEquipoGuia;
+        this.anno = anno;
+        this.profesorCoordinador = profesorCoordinador;
+        this.profesoresGuia = profesoresGuia;
+        this.listaEstudiantes = listaEstudiantes;
+        this.ultimaModificacion = ultimaModificacion;
+    }
 
     public EquipoGuia(int idEquipoGuia, int anno, ProfesorGuia coordinador)
     {
@@ -39,5 +55,29 @@ public class EquipoGuia
     public void RemoveEstudiante(Estudiante estudiante)
     {
         listaEstudiantes.Remove(estudiante);
+    }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"ID Equipo de Guía: {idEquipoGuia}");
+        sb.AppendLine($"Año: {anno}");
+        sb.AppendLine($"Profesor Coordinador: {profesorCoordinador}");
+
+        sb.AppendLine("Profesores Guía:");
+        foreach (var profesor in profesoresGuia)
+        {
+            sb.AppendLine(profesor.ToString());
+        }
+
+        sb.AppendLine("Estudiantes:");
+        foreach (var estudiante in listaEstudiantes)
+        {
+            sb.AppendLine(estudiante.ToString());
+        }
+
+        sb.AppendLine($"Última Modificación: {ultimaModificacion}");
+
+        return sb.ToString();
     }
 }

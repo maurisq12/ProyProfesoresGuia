@@ -17,4 +17,9 @@ public class Coordinador
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
     }
+    
+    public override string ToString()
+    {
+        return $"ID: {id}\nNombre Completo: {nombreCompleto}\nCorreo Electrónico: {correoElectronico}";
+    }
 }
