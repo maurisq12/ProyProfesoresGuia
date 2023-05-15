@@ -6,6 +6,8 @@ namespace ProfesoresGuia.Controllers;
 
 public class Controlador : Controller
 {
+    private AdminProfesores admProfesores = new AdminProfesores();
+    
     public IActionResult InicioSesion(){
         return View("../Acceso/IniciarSesion");
     }
@@ -39,7 +41,7 @@ public class Controlador : Controller
     }
 
     public IActionResult GestProfesores(){
-        var todosProfesores = SingletonDAO.getInstance().getTodosProfesores();
+        var todosProfesores = admProfesores.obtenerProfesores();
         ViewBag.profesores = todosProfesores;
         return View("../Coordinador/gestProfesores");
     }

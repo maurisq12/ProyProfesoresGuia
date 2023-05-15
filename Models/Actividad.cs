@@ -8,7 +8,7 @@ public class Actividad
     public TipoActividad tipo { get; set; }
     public String nombre { get; set; }
     public DateTime fechaHora { get; set; }
-    public HashSet<ProfesorGuia> responsables { get; set; }
+    public List<ProfesorGuia> responsables { get; set; }
     public DateTime fechaAnuncio { get; set; }
     public int diasPreviosAnuncio { get; set; }
     public List<DateTime> recordatorios { get; set; }
@@ -27,7 +27,7 @@ public class Actividad
         this.tipo = tipo;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
-        responsables = new HashSet<ProfesorGuia>();
+        responsables = new List<ProfesorGuia>();
         this.fechaAnuncio = fechaAnuncio;
         this.diasPreviosAnuncio = diasPreviosAnuncio;
         recordatorios = new List<DateTime>();

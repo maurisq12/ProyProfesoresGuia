@@ -533,7 +533,7 @@ CREATE OR ALTER PROCEDURE insertar_recordatorio(
 @fecha_recordatorio DATE
 ) AS
 BEGIN
-INSERT INTO Recordatorios (idRecordatorio, idActividad, fechaRecordatorio)
+INSERT INTO Recordatorios (idRecordatorios, idActividad, fechaRecordatorio)
 VALUES (@id_recordatorio, @actividad_id, @fecha_recordatorio);
 COMMIT;
 END;
