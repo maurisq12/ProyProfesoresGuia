@@ -1,0 +1,115 @@
+@{
+    Layout = "CoordinadorLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function img_pathUrl(input){
+        $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+</script>
+
+<head>
+	<style>
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+	</style>
+
+	<title>Login V3</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	<form>
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100">
+                
+                <span class="login100-form-logo">
+                    <i class="zmdi zmdi-landscape"></i>
+                </span>
+                <title>Registro</title>
+                <h1 style="color:#004879">Registro de usuario </h1>
+
+                <h2>
+                    Por favor proporciona los siguientes datos para poder realizar el registro.
+                </h2>
+                <div class="cont-formulario">
+                    <div>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Nombre</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Sede</h3><br>
+                            <select name="cars" id="cars" class = "login-entry">
+                                <option value="volvo">Cartago</option>
+                                <option value="saab">San José</option>
+                                <option value="opel">Limón</option>
+                                <option value="audi">San Carlos</option>
+                            </select>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Nombre</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Teléfono oficina</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Teléfono celular</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                    </div>
+
+                    <div>
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Correo electrónico</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Contraseña</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Fotografía:</h3><br>
+
+                            <img src="" id="img_url" alt="your image" style="width:400px; height:300px;"><br> <br>    
+                            <input type="file" id="fotografía" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                    </div>                    
+                </div>                
+			</div>
+            
+		</div>
+        <button style="align-self: center;" class="btn-accept" type="submit">Registrar nuevo profesor</button>
+    </div>
+	</form>
+	
+</body>
+
+</html>

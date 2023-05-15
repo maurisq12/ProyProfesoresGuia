@@ -1,0 +1,88 @@
+@{
+    Layout = "CoordinadorLayout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function img_pathUrl(input) {
+        $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+</script>
+
+<head>
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+
+    <title>Login V3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <form method="post" action="@Url.Action("editEstudianteconf", "Admin")">
+        <div class="limiter">
+        <h1 class="display-4">Edición de profesor</h1>
+
+        <div style="float: left">
+            <div class="edit-label">
+                <label style="font-size: 20px;">Código de profesor</label>
+                <div class="col-sm-6">
+                    <label style="font-size: 20px;">SJ-001</label>
+                </div>
+            </div>
+            <div class="edit-label">
+                <label style="font-size: 20px;">Nombre Completo</label>
+                <div class="col-sm-6">
+                    <input type="text" name="laContrasena" class="login-entry" value="">
+                </div>
+            </div>
+            <div class="edit-label">
+                <label style="font-size: 20px;">Correo electrónico</label>
+                <div class="col-sm-6">
+                    <input type="number" name="laCedula" class="login-entry" value="">
+                </div>
+            </div>
+            <div class="edit-label">
+                <label style="font-size: 20px;">Número de teléfono de la oficina</label>
+                <div class="col-sm-6">
+                    <input type="number" name="elCarne" class="login-entry" value="">
+                </div>
+            </div>
+            <div class="edit-label">
+                <label style="font-size: 20px;">Número de teléfono celular</label>
+                <div class="col-sm-6">
+                    <input type="text" name="elNombre" class="login-entry" value="">
+                </div>
+            </div>
+            <div>
+                <label style="font-size: 20px;">Estado</label>
+                <div class="col-sm-6">
+                    <select class="login-entry" name="elEstado">
+                        <option value="1">Activo</option>
+                        <option value="2">Suspendido </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div style="float: right">
+            <button style="align-self: center;" class="btn-accept" type="submit">Dar de baja</button><br><br><br>
+            <button style="align-self: center;" class="btn-accept" type="submit">Aplicar cambios</button>
+        </div>
+        <button style="align-self: center;" class="btn-accept" type="submit">Aplicar cambios</button>
+        </div>
+    </form>
+</body>
+
+</html>

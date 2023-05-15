@@ -8,10 +8,12 @@ public class ProfesorGuia
     public String telefonoOficina { get; set; }
     public String telefonoCelular { get; set; }
     public String fotografia { get; set; }
-    public bool activo { get; set; }
+    public String activo { get; set; }
+
+    public ProfesorGuia(){}
 
 
-    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, bool activo)
+    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo)
     {
         this.codigo = codigo;
         this.nombreCompleto = nombreCompleto;

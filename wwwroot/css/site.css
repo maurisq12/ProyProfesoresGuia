@@ -122,9 +122,9 @@ li {
 
 .btn-delete{
   border-radius: 10px 10px 10px 10px;
-  background-color: #BF1C1C;
+  background-color: #d63a3a;
   -webkit-text-fill-color: white;
-  padding: 7px;
+  padding: 10px;
 }
 
 .edit-label{
@@ -156,6 +156,27 @@ li {
 
 @media (min-width: 768px) {
   .button-66 {
+    padding: 16px 44px;
+    min-width: 150px;
+  }
+}
+
+.button-67 {
+  background-color: #89D2CF;
+  color: #000000;
+  width: fit-content;
+  border: 0;
+  font-weight: bold;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+}
+
+.button-67:hover {
+  background-color: #8cddda;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .button-67 {
     padding: 16px 44px;
     min-width: 150px;
   }

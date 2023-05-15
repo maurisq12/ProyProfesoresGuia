@@ -6,24 +6,45 @@ namespace ProfesoresGuia.Controllers;
 
 public class Controlador : Controller
 {
-    public IActionResult VInicioSesion(){
+    public IActionResult InicioSesion(){
         return View("../Acceso/IniciarSesion");
     }
 
-    public IActionResult VRegistrar(){
+    public IActionResult Registrar(){
         return View("../Acceso/Registrar");
     }
 
-    public IActionResult VInicioAsistente(){
+    public IActionResult InicioAsistente(){
         return View("../Asistente/Inicio");
     }
 
-    public IActionResult VInicioProfesor(){
+    public IActionResult nicioProfesor(){
         return View("../Profesor/Inicio");
     }
 
+    public IActionResult CoordinadorProfesoresEquipo(){
+        return View("../Coordinador/profesoresEquipo");
+    }
+
+    public IActionResult CoordinadorEstudiantesEquipo(){
+        return View("../Coordinador/estudiantesEquipo");
+    }
+
+    public IActionResult CoordinadorRegistrarProfesor(){
+        return View("../Coordinador/registrarProfesor");
+    }
+
+    public IActionResult CoordinadorEditarProfesor(){
+        return View("../Coordinador/editarProfesor");
+    }
+
     public IActionResult GestProfesores(){
+        var todosProfesores = SingletonDAO.getInstance().getTodosProfesores();
+        ViewBag.profesores = todosProfesores;
         return View("../Coordinador/gestProfesores");
+    }
+    public bool dbpr(){
+        return SingletonDAO.getInstance().sesionUsuario("carlosmonbre@itcr.ac.cr","123");
     }
 
 
