@@ -43,9 +43,11 @@ public class Controlador : Controller
         ViewBag.profesores = todosProfesores;
         return View("../Coordinador/gestProfesores");
     }
-    public bool dbpr(){
-        return SingletonDAO.getInstance().sesionUsuario("carlosmonbre@itcr.ac.cr","123");
+
+    public IActionResult CoordinadorNuevaActividad(){
+        return View("../Coordinador/nuevaActividad");
     }
+    
 
 
 
