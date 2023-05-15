@@ -5,8 +5,8 @@ public class EquipoGuia
     public int idEquipoGuia { get; set; }
     public int anno { get; set; }
     public ProfesorGuia profesorCoordinador { get; set; }
-    public HashSet<ProfesorGuia> profesoresGuia { get; set; }
-    public HashSet<Estudiante> listaEstudiantes { get; set; }
+    public List<ProfesorGuia> profesoresGuia { get; set; }
+    public List<Estudiante> listaEstudiantes { get; set; }
     public String ultimaModificacion { get; set; }
 
 
@@ -15,8 +15,8 @@ public class EquipoGuia
         this.idEquipoGuia = idEquipoGuia;
         this.anno = anno;
         this.profesorCoordinador = coordinador;
-        profesoresGuia = new HashSet<ProfesorGuia>();
-        listaEstudiantes = new HashSet<Estudiante>();
+        profesoresGuia = new List<ProfesorGuia>();
+        listaEstudiantes = new List<Estudiante>();
         ultimaModificacion = "";
     }
 
