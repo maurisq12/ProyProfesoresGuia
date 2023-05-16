@@ -23,4 +23,15 @@ public class DTOProfesor
         this.fotografia = fotografia;
         this.activo = activo;
     }
+    
+    public override string ToString()
+    {
+        return $"Código DTOProfesor: {codigo}\n" +
+               $"Nombre completo: {nombreCompleto}\n" +
+               $"Correo electrónico: {correoElectronico}\n" +
+               $"Teléfono de oficina: {telefonoOficina}\n" +
+               $"Teléfono celular: {telefonoCelular}\n" +
+               $"Fotografía: {fotografia}\n" +
+               $"Activo: {activo}";
+    }
 }
