@@ -191,10 +191,15 @@ VALUES (@in_idEstudiante, @in_carne, @in_nombreCompleto, @in_correoElectronico, 
 END;
 
 --------READ----------------------
-CREATE OR ALTER PROCEDURE consultar_estudiante
+CREATE PROCEDURE consultar_estudiante
 AS
 BEGIN
-SELECT * FROM Estudiante;
+    SELECT E.idEstudiante, E.carne, E.nombreCompleto, E.correoElectronico, E.telefonoCelular, 
+           CA.idCentroAcademico, CA.idSiglas, CA.nombre AS nombreCentroAcademico, CA.cantProfesores,
+           SC.idSiglas, SC.Siglas
+    FROM Estudiante E
+    INNER JOIN CentroAcademico CA ON E.idCentroAcademico = CA.idCentroAcademico
+    INNER JOIN SiglasCentros SC ON CA.idSiglas = SC.idSiglas;
 END;
 
 --------UPDATE--------------------
