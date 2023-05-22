@@ -155,52 +155,97 @@ public class SingletonDAO
 
     }
     
-    public List<Estudiante> getEstudiantes()
+   public List<Estudiante> getEstudiantes()
     {
-       
-        string storedProcedure = "consultar_estudiante";
+        var estudiantes = new List<Estudiante>();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();        
 
-        List<Estudiante> estudiantes = new List<Estudiante>();
-
-        SingletonDB basedatos = SingletonDB.getInstance()
         
-            basedatos.getConnection().Open();   
+        string storedProcedure = "consultar_estudiante";
+        SqlCommand cmd = new SqlCommand(storedProcedure ,basedatos.getConnection());
 
-            using (SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection()))
+    
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        using (SqlDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
             {
-                command.CommandType = CommandType.StoredProcedure;
+                Estudiante estudiante = new Estudiante();
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Estudiante estudiante = new Estudiante();
+                estudiante.idEstudiante = Convert.ToInt32(reader["idEstudiante"]);
+                estudiante.carne = reader["carne"].ToString();
+                estudiante.nombreCompleto = reader["nombreCompleto"].ToString();
+                estudiante.correoElectronico = reader["correoElectronico"].ToString();
+                estudiante.telefonoCelular = reader["telefonoCelular"].ToString();
 
-                        estudiante.idEstudiante = Convert.ToInt32(reader["idEstudiante"]);
-                        estudiante.carne = reader["carne"].ToString();
-                        estudiante.nombreCompleto = reader["nombreCompleto"].ToString();
-                        estudiante.correoElectronico = reader["correoElectronico"].ToString();
-                        estudiante.telefonoCelular = reader["telefonoCelular"].ToString();
+                CentroAcademico centroAcademico = new CentroAcademico();
+                centroAcademico.idCentro = Convert.ToInt32(reader["idCentroAcademico"]);
 
-                        CentroAcademico centroAcademico = new CentroAcademico();
-                        centroAcademico.idCentro = Convert.ToInt32(reader["idCentroAcademico"]);
+                centroAcademico.siglas = (SiglasCentros)Enum.Parse(typeof(SiglasCentros),reader["Siglas"].ToString()); 
+                centroAcademico.nombre = reader["nombreCentroAcademico"].ToString();
+                centroAcademico.cantidadProfesores = Convert.ToInt32(reader["cantProfesores"]);
 
-                        centroAcademico.siglas = (SiglasCentros)Enum.Parse(typeof(SiglasCentros),reader["Siglas"].ToString()); 
-                        centroAcademico.nombre = reader["nombreCentroAcademico"].ToString();
-                        centroAcademico.cantidadProfesores = Convert.ToInt32(reader["cantProfesores"]);
+                estudiante.centroEstudio = centroAcademico;
 
-                        estudiante.centroEstudio = centroAcademico;
-
-                        estudiantes.Add(estudiante);
-                    }
-                }
+                estudiantes.Add(estudiante);
+                
             }
+                basedatos.getConnection().Close();
         }
-
+            
+        
+       
         return estudiantes;
     }
 
+    public List<EquipoGuia> getEquiposGuia()
+    {
+    var equiposGuia = new List<EquipoGuia>();
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open();   
+    string storedProcedure = "consultar_equipoGuia";
 
+    SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+    command.CommandType = CommandType.StoredProcedure;
+
+        try
+        {
+            basedatos.getConnection().Open(); 
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                EquipoGuia equipoGuia = new EquipoGuia();
+                equipoGuia.idEquipoGuia = Convert.ToInt32(reader["idEquipoGuia"]);
+                equipoGuia.anno = Convert.ToInt32(reader["anno"]);
+                equipoGuia.ultimaModificacion = reader["ultimaModificacion"].ToString();
+
+                ProfesorGuia coordinador = new ProfesorGuia();
+                coordinador.codigo = reader["idProfesorCoordinador"].ToString();
+                coordinador.nombreCompleto = reader["nombreCompleto"].ToString();
+                coordinador.correoElectronico = reader["correoElectronico"].ToString();
+                coordinador.telefonoOficina = reader["telefonoOficina"].ToString();
+                coordinador.telefonoCelular = reader["telefonoCelular"].ToString();
+                coordinador.fotografia = (byte[])reader["fotografia"];
+                coordinador.activo = reader["activo"].ToString();
+
+                equipoGuia.profesorCoordinador= coordinador;
+
+                equiposGuia.Add(equipoGuia);
+            }
+
+            reader.Close();
+            basedatos.getConnection().Close();
+            return equiposGuia;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+            return equiposGuia;
+        }
+    }
 
 
 
