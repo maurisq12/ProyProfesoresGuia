@@ -1,71 +1,166 @@
--------CRUD PROFESOR------------------------
+CREATE TABLE Usuarios(
+	idUsuario iNT IDENTITY (1,1) PRIMARY KEY,
+	correoElectronico varchar(100),
+	contrasenna varchar(100),
+	rol varchar(100)
+);
 
---------CREATE--------------------
+CREATE TABLE Profesor (
+    codigo varchar(100) PRIMARY KEY,
+    nombreCompleto varchar(100),
+    correoElectronico varchar(100),
+    telefonoOficina varchar(100),
+    telefonoCelular varchar(100),
+    fotografia varbinary(100),
+    activo bit
+);
 
-CREATE OR ALTER PROCEDURE insertar_profesor
-@in_codigo varchar(100),
-@in_nombreCompleto varchar(100),
-@in_correoElectronico varchar(100),
-@in_telefonoOficina varchar(100),
-@in_telefonoCelular varchar(100),
-@in_fotografia varbinary(max),
-@in_activo bit
-AS
-BEGIN
-INSERT INTO Profesor(codigo, nombreCompleto, correoElectronico, telefonoOficina, telefonoCelular, fotografia, activo)
-VALUES (@in_codigo, @in_nombreCompleto, @in_correoElectronico, @in_telefonoOficina, @in_telefonoCelular, @in_fotografia, @in_activo);
-END;
-
---------READ--------------------
-
-CREATE OR ALTER PROCEDURE consultar_profesor
-AS
-BEGIN
-SELECT codigo, nombrecompleto, correoelectronico, telefonooficina, telefonocelular, fotografia, activo
-FROM dbo.Profesor;
-END;
-
---------UPDATE--------------------
-
-CREATE OR ALTER PROCEDURE actualizar_profesor
-@in_codigo varchar(100),
-@in_correoElectronico varchar(100),
-@in_telefonoCelular varchar(100)
-AS
-BEGIN
-UPDATE Profesor SET correoElectronico = @in_correoElectronico, telefonoCelular = @in_telefonoCelular
-WHERE codigo = @in_codigo;
-END;
-
---------DELETE--------------------
-
-CREATE OR ALTER PROCEDURE eliminar_profesor
-@in_codigo varchar(100)
-AS
-BEGIN
-DELETE FROM Profesor WHERE codigo = @in_codigo;
-END;
+CREATE TABLE EquipoGuia (
+    idEquipoGuia iNT IDENTITY (1,1) PRIMARY KEY,
+    anno int,
+    idProfesorCoordinador varchar(100) FOREIGN KEY REFERENCES Profesor(codigo),
+    ultimaModificacion varchar(100)
+);
 
 
--------CRUD EquipoGuia------------------------
---------CREATE--------------------
-CREATE OR ALTER PROCEDURE insertar_equipoGuia
-    @in_idEquipoGuia int, 
-    @in_anno int, 
-    @in_idProfesorCoordinador varchar(100), 
-    @in_ultimaModificacion varchar(100)
-AS 
-BEGIN 
-    INSERT INTO EquipoGuia (idEquipoGuia, anno, idProfesorCoordinador, ultimaModificacion) 
-    VALUES (@in_idEquipoGuia, @in_anno, @in_idProfesorCoordinador, @in_ultimaModificacion); 
-END; 
+CREATE TABLE CentroAcademico (
+    idCentroAcademico iNT PRIMARY KEY,
+    
+    nombre varchar(100),
+    cantProfesores INT,
+    Siglas varchar(20)
+);
+    
+CREATE TABLE Asistente (
+	idAsistente iNT PRIMARY KEY,
+	nombre varchar(100),
+	correo varchar(100),
+	idCentroAcademico int FOREIGN KEY REFERENCES CentroAcademico(idCentroAcademico)
+)
 
 
---------READ----------------------
-CREATE OR ALTER PROCEDURE consultar_equipoGuia
-AS 
-BEGIN
-    SELECT * FROM EquipoGuia ;
+CREATE TABLE Estudiante (
+    idEstudiante iNT PRIMARY KEY,
+    carne varchar(100),
+    nombreCompleto varchar(100),
+    correoElectronico varchar(100),
+    telefonoCelular varchar(100),
+    idCentroAcademico int FOREIGN KEY REFERENCES CentroAcademico(idCentroAcademico)
+     
+);
+
+CREATE TABLE EquipoGuiaXprofesores (
+    idEquipoGuiaXEstudiantes iNT IDENTITY (1,1) PRIMARY KEY,
+    idEquipoGuia int FOREIGN KEY REFERENCES EquipoGuia(idEquipoGuia),
+    idProfesorGuia varchar(100) FOREIGN KEY REFERENCES Profesor(codigo)
+ 
+);
+
+CREATE TABLE TipoActividad (
+    idTipoActividad iNT IDENTITY (1,1) PRIMARY KEY,
+    TipoActividad varchar(100)
+);
+
+
+CREATE TABLE Modalidad (
+    idModalidad iNT IDENTITY (1,1) PRIMARY KEY,
+    Modalidad varchar(100)
+);
+
+
+CREATE TABLE EstadoActividad (
+    idEstadoActividad iNT IDENTITY (1,1) PRIMARY KEY,
+    EstadoActividad varchar(100)
+);
+
+CREATE TABLE Actividad (
+    idActividad iNT IDENTITY (1,1) PRIMARY KEY,
+    semana int,
+    idTipoActividad int FOREIGN KEY REFERENCES TipoActividad(idTipoActividad),
+    nombre varchar(100),
+    fechaHora date,
+    fechaAnuncio date,
+    diasPreviosAnuncio int,
+    idModalidad int FOREIGN KEY REFERENCES Modalidad(idModalidad),
+    enlaceRemoto varchar(100),
+    afiche varbinary(MAX),
+    idEstadoActividad int FOREIGN KEY REFERENCES EstadoActividad(idEstadoActividad)
+ 
+  
+);
+
+CREATE TABLE PlanTrabajo
+(
+    idPlanTrabajo INT IDENTITY (1,1) PRIMARY KEY,
+    idEquipoGuia INT FOREIGN KEY REFERENCES EquipoGuia(idEquipoGuia),
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad)
+        
+);
+
+CREATE TABLE ActividadXresponsables
+(
+    idActividadXresponsables INT IDENTITY (1,1) PRIMARY KEY,
+    idProfesorGuia VARCHAR(100) FOREIGN KEY REFERENCES Profesor(codigo),
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad)
+
+        
+);
+
+CREATE TABLE Recordatorios
+(
+    idRecordatorios INT IDENTITY (1,1) PRIMARY KEY,
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad),
+    fechaRecordatorio DATE
+       
+);
+
+CREATE TABLE Comentario
+(
+    idComentario INT IDENTITY (1,1) PRIMARY KEY,
+    idProfesorGuia VARCHAR(100) FOREIGN KEY REFERENCES Profesor(codigo),
+    fechaHora DATETIME,
+    cuerpo VARCHAR(100)
+);
+
+CREATE TABLE ActividadXComentario
+(
+    idActividadXComentario INT IDENTITY (1,1) PRIMARY KEY,
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad),
+    idComentario INT FOREIGN KEY REFERENCES Comentario(idComentario)
+        
+);
+
+CREATE TABLE Respuesta
+(
+    idRespuesta INT IDENTITY (1,1) PRIMARY KEY,
+    idProfesorGuia VARCHAR(100) FOREIGN KEY REFERENCES Profesor(codigo),
+    fechaHora DATETIME,
+    cuerpo VARCHAR(100),
+    idComentario INT FOREIGN KEY REFERENCES Comentario(idComentario)
+);
+   
+CREATE TABLE Evidencias
+(
+    idEvidencia INT IDENTITY (1,1) PRIMARY KEY,
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad),
+    listaAsistencia VARCHAR(100),
+    linkGrabacion VARCHAR(100)
+        
+);
+
+CREATE TABLE Imagen
+(
+    idImagen INT IDENTITY (1,1) PRIMARY KEY,
+    Imagen VARBINARY(MAX)
+);
+
+CREATE TABLE EvidenciasXimagen
+(
+    idEvidenciasXimagen INT IDENTITY (1,1) PRIMARY KEY,
+    idImagen INT FOREIGN KEY REFERENCES Imagen(idImagen),
+    idEvidencia INT FOREIGN KEY REFERENCES Evidencias(idEvidencia)
+       
+); ;
 END;
 
 
