@@ -154,7 +154,51 @@ public class SingletonDAO
         return listaResultado; 
 
     }
+    
+    public List<Estudiante> ConsultarEstudiantes()
+    {
+       
+        string storedProcedure = "consultar_estudiante";
 
+        List<Estudiante> estudiantes = new List<Estudiante>();
+
+        SingletonDB basedatos = SingletonDB.getInstance()
+        
+            basedatos.getConnection().Open();   
+
+            using (SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection()))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Estudiante estudiante = new Estudiante();
+
+                        estudiante.idEstudiante = Convert.ToInt32(reader["idEstudiante"]);
+                        estudiante.carne = reader["carne"].ToString();
+                        estudiante.nombreCompleto = reader["nombreCompleto"].ToString();
+                        estudiante.correoElectronico = reader["correoElectronico"].ToString();
+                        estudiante.telefonoCelular = reader["telefonoCelular"].ToString();
+
+                        CentroAcademico centroAcademico = new CentroAcademico();
+                        centroAcademico.idCentro = Convert.ToInt32(reader["idCentroAcademico"]);
+
+                        centroAcademico.siglas = (SiglasCentros)Enum.Parse(typeof(SiglasCentros),reader["Siglas"].ToString()); 
+                        centroAcademico.nombre = reader["nombreCentroAcademico"].ToString();
+                        centroAcademico.cantidadProfesores = Convert.ToInt32(reader["cantProfesores"]);
+
+                        estudiante.centroEstudio = centroAcademico;
+
+                        estudiantes.Add(estudiante);
+                    }
+                }
+            }
+        }
+
+        return estudiantes;
+    }
 
 
 
