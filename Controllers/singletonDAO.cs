@@ -155,7 +155,7 @@ public class SingletonDAO
 
     }
     
-    public List<Estudiante> ConsultarEstudiantes()
+    public List<Estudiante> getEstudiantes()
     {
        
         string storedProcedure = "consultar_estudiante";
