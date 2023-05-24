@@ -1,6 +1,9 @@
-using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 using System.Data.SqlClient;
 using ProfesoresGuia.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ProfesoresGuia.Controllers;
 
@@ -19,28 +22,14 @@ public class SingletonDAO
     }
     
     
-    public void getVersion()
-    {
-        SingletonDB basedatos = SingletonDB.getInstance();
+    //Funciones de inicio de sesión y cerrado de sesión
 
-        basedatos.getConnection().Open();
-    
-
-        string sql = "SELECT version()";
-
-        SqlCommand cmd = new SqlCommand(sql, basedatos.getConnection());
-
-        var version = cmd.ExecuteScalar().ToString();
-        Console.WriteLine($"PostgreSQL version: {version}");
-
-        basedatos.getConnection().Close();
-    }
 
     public int validacion(string pCorreo, string pContrasena){
         SingletonDB basedatos = SingletonDB.getInstance();
         basedatos.getConnection().Open();
 
-        string query= "SELECT id FROM Usuario WHERE correo=@pCorreo and contrasena = @pContrasena";
+        string query= "SELECT idTipo FROM Usuario WHERE correo=@pCorreo and contrasena = @pContrasena";
 
         SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
         cmd.Parameters.AddWithValue("@pCorreo",pCorreo);
@@ -49,16 +38,51 @@ public class SingletonDAO
         
         using (SqlDataReader dr = cmd.ExecuteReader()){
             while(dr.Read()){
-                tipo= Int32.Parse(dr["id"].ToString());
+                tipo= Int32.Parse(dr["idTipo"].ToString());
             }
-        }
-        if (tipo==0){
-            basedatos.getConnection().Close();
-            return 0;
         }
         basedatos.getConnection().Close();
         return tipo;        
     }
+
+    public async Task<ClaimsIdentity> sesionUsuario(string pCorreo, string pContrasena){
+        int result = validacion(pCorreo,pContrasena);
+        Console.WriteLine("Es un usuario de tipo: "+result);
+        if (result==0){
+            return null;
+        }
+        else if (result==1 || result==2){
+            Console.WriteLine("Retorno de claims para profesor");
+            ProfesorGuia profe = getProfesorCorreo(pCorreo);
+            var claims = new List<Claim> {
+                    new Claim(ClaimTypes.NameIdentifier, profe.codigo.ToString()),
+                    new Claim(ClaimTypes.Email, profe.correoElectronico)                    
+            };
+            if(result==1)
+                claims.Add(new Claim(ClaimTypes.Role, "Profesor"));
+            else
+                claims.Add(new Claim(ClaimTypes.Role, "ProfesorCoordinador"));
+            var claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+            return claimsIdentity;
+        }
+        else if (result==3 || result==4){
+            Coordinador coord = getCoordinadorCorreo(pCorreo);
+            var claims = new List<Claim> {
+                    new Claim(ClaimTypes.NameIdentifier, coord.id.ToString()),
+                    new Claim(ClaimTypes.Email, coord.correoElectronico)                    
+            };
+            if(result==1)
+                claims.Add(new Claim(ClaimTypes.Role, "Profesor"));
+            else
+                claims.Add(new Claim(ClaimTypes.Role, "ProfesorCoordinador"));
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+            return claimsIdentity;
+            
+        }
+        return null;
+    }
+
+    //
 
     public ProfesorGuia getProfesorCorreo(string pCorreo){
         SingletonDB basedatos = SingletonDB.getInstance();
@@ -68,6 +92,7 @@ public class SingletonDAO
         string query= "SELECT codigo,nombreCompleto,correoElectronico,telefonoOficina, telefonoCelular, fotografia, activo FROM Profesor WHERE correoElectronico=@pCorreo";
 
         SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
+        cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.AddWithValue("@pCorreo",pCorreo);
         
         using (SqlDataReader dr = cmd.ExecuteReader()){
@@ -84,6 +109,7 @@ public class SingletonDAO
                         objeto.activo="Inactivo";
             }
         }
+        basedatos.getConnection().Close();
         return objeto;
     }
 
@@ -104,26 +130,9 @@ public class SingletonDAO
                 objeto.correoElectronico=dr["correoElectronico"].ToString();
             }
         }
+        basedatos.getConnection().Close();
         return objeto;
     }
-
-    public bool sesionUsuario(string pCorreo, string pContrasena){
-        int result = validacion(pCorreo,pContrasena);
-        if (result==0){
-            return false;
-        }
-        if (result==1 || result==2){
-            ProfesorGuia profe = getProfesorCorreo(pCorreo);
-            Console.WriteLine(profe.nombreCompleto);
-        }
-        if (result==3 || result==4){
-            Coordinador coord = getCoordinadorCorreo(pCorreo);
-        }
-        return true;
-    }
-
-
-
 
     public List<ProfesorGuia> getTodosProfesores(){
         var listaResultado = new List<ProfesorGuia>();
