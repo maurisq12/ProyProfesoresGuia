@@ -125,36 +125,37 @@ public class SingletonDAO
 
 
 
-    public List<ProfesorGuia> getTodosProfesores(){
-        var listaResultado = new List<ProfesorGuia>();
-        SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();        
+   public List<ProfesorGuia> getTodosProfesores(){
 
-        string query= "SELECT codigo, nombreCompleto,telefonoCelular, telefonoOficina, correoElectronico, activo FROM Profesor  ";        
-
-        SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
-        
-        using (SqlDataReader dr = cmd.ExecuteReader()){
-            while(dr.Read()){
-                ProfesorGuia objeto = new ProfesorGuia(){
-                    codigo=dr["codigo"].ToString(),
-                    nombreCompleto= dr["nombreCompleto"].ToString(),
-                    telefonoCelular= dr["telefonoCelular"].ToString(),
-                    telefonoOficina= dr["telefonoOficina"].ToString(),
-                    //fotografia= dr["fotografia"].ToString(),
-                    correoElectronico=dr["correoElectronico"].ToString()};
-                    if (Convert.ToBoolean((dr["activo"].ToString())))
-                        objeto.activo="Activo";
-                    else
-                        objeto.activo="Inactivo";
-                listaResultado.Add(objeto);
-            }
-        }
-        basedatos.getConnection().Close();
-        return listaResultado; 
-
-    }
+    List<ProfesorGuia> profesores = new List<ProfesorGuia>();
     
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("consultar_profesor", basedatos.getConnection());
+        //command.CommandType = CommandType.StoredProcedure;
+        
+        
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read()){
+            ProfesorGuia profesor = new ProfesorGuia();
+            
+                profesor.codigo = reader["codigo"].ToString();
+                profesor.nombreCompleto = reader["nombrecompleto"].ToString();
+                profesor.correoElectronico = reader["correoelectronico"].ToString();
+                profesor.telefonoOficina = reader["telefonooficina"].ToString();
+                profesor.telefonoCelular = reader["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])reader["fotografia"];
+                profesor.activo = reader["activo"].ToString();
+
+            
+            profesores.Add(profesor);
+        }
+    }
+    basedatos.getConnection().Close();
+    return profesores;
+    }
+
    public List<Estudiante> getEstudiantes()
     {
         var estudiantes = new List<Estudiante>();
@@ -165,8 +166,6 @@ public class SingletonDAO
         string storedProcedure = "consultar_estudiante";
         SqlCommand cmd = new SqlCommand(storedProcedure ,basedatos.getConnection());
 
-    
-        cmd.CommandType = CommandType.StoredProcedure;
 
         using (SqlDataReader reader = cmd.ExecuteReader())
         {
@@ -208,11 +207,10 @@ public class SingletonDAO
     string storedProcedure = "consultar_equipoGuia";
 
     SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
-    command.CommandType = CommandType.StoredProcedure;
+    //command.CommandType = CommandType.StoredProcedure;
 
         try
         {
-            basedatos.getConnection().Open(); 
             SqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -240,10 +238,12 @@ public class SingletonDAO
             basedatos.getConnection().Close();
             return equiposGuia;
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
             Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+            basedatos.getConnection().Close();
             return equiposGuia;
+            
         }
     }
 
