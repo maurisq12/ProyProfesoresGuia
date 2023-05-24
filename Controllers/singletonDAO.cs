@@ -122,7 +122,124 @@ public class SingletonDAO
         return true;
     }
 
+    public bool insertarCentroAcademico(CentroAcademico c)
+    {
+        
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();        
 
+        
+        string storedProcedure = "insertar_centroAcademico";
+        SqlCommand commandCentro = new SqlCommand(storedProcedure ,basedatos.getConnection());
+        commandCentro.CommandType = System.Data.CommandType.StoredProcedure;
+
+            //commandCentro.CommandType = CommandType.StoredProcedure;
+            commandCentro.Parameters.AddWithValue("@in_idCentroAcademico", c.idCentro);
+            commandCentro.Parameters.AddWithValue("@in_Siglas", c.siglas.ToString());
+            commandCentro.Parameters.AddWithValue("@in_nombre", c.nombre);
+            commandCentro.Parameters.AddWithValue("@in_cantProfesores", c.cantidadProfesores);
+           try
+        {
+                    
+            commandCentro.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+             
+    }
+    public bool insertarEstudiante(Estudiante e)
+    {
+        this.insertarCentroAcademico(e.centroEstudio);
+        SingletonDB basedatos = SingletonDB.getInstance();
+        
+        basedatos.getConnection().Open();        
+
+        
+        string storedProcedure = "insertar_estudiante";
+        SqlCommand command = new SqlCommand(storedProcedure ,basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            
+            command.Parameters.AddWithValue("@in_idEstudiante", e.idEstudiante);
+            command.Parameters.AddWithValue("@in_carne", e.carne);
+            command.Parameters.AddWithValue("@in_nombreCompleto", e.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", e.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoCelular", e.telefonoCelular);
+            command.Parameters.AddWithValue("@in_idCentroAcademico", e.centroEstudio.idCentro);
+            
+            
+        try
+        {     
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+             
+    }
+    public void InsertarEquipoGuia(EquipoGuia eq)
+{
+    
+    string storedProcedure = "insertar_equipoGuia";
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open(); 
+
+    
+    
+    SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+    command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@in_idEquipoGuia", eq.idEquipoGuia);
+        command.Parameters.AddWithValue("@in_anno", eq.anno);
+        command.Parameters.AddWithValue("@in_idProfesorCoordinador", eq.profesorCoordinador.codigo);
+        command.Parameters.AddWithValue("@in_ultimaModificacion", eq.ultimaModificacion);
+
+        try
+        {
+        
+            command.ExecuteNonQuery();
+            Console.WriteLine("Equipo Guía insertado correctamente.");
+            basedatos.getConnection().Close();
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+             basedatos.getConnection().Close();
+        }
+    }
 
 
    public List<ProfesorGuia> getTodosProfesores(){
