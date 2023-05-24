@@ -17,7 +17,7 @@ public class Controlador : Controller
     private AdminEquipos admEquipos = new AdminEquipos();
     
     private AdminEstudiantes admEstudiantes = new AdminEstudiantes();
-    private AdminProfesores admProfesores = new AdminProfesores();
+    //private AdminProfesores admProfesores = new AdminProfesores();
     
     
     public IActionResult InicioSesion(){
