@@ -1,0 +1,79 @@
+@{
+  ViewData["Title"] = "Gestión de profesores";
+  Layout = "CoordinadorLayout";
+}
+
+
+<script>
+  function buscar() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("busq");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tablaProfesores");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-color: #b7c0c0;
+}
+</style>
+
+<div class="text-center">
+  <div>
+  <span></span><h1 style="color: #004879; font-size: 80x">Plan de trabajo</h1></span>
+  </div><br>
+  <div style="display: flex; flex-direction: column " class="justify">
+    <div style="align-self: start;">
+    <span><input class="search-bar" type="text" id="busq" onkeyup="buscar()" placeholder="Buscar actividad..."></span>
+    </div>
+    <table id="tablaProfesores" style="margin-top: 60px;" class="table">
+      <thead>
+        <tr style="background: #89D2CF">
+          <th style="color:black; font-size:110%; width:5%" >Semana</th>
+          <th style="color:black; font-size:110%">Nombre</th>
+          <th style="color:black; font-size:110%; width:15%">Tipo</th>
+          <th style="color:black; font-size:110%">Responsable</th>
+          <th style="color:black; font-size:110%">Modalidad</th>
+          <th style="color:black; font-size:110%">Estado</th>
+          <th style="color:black; font-size:110%">Información</th>
+
+        </tr>
+
+      </thead>
+      <tbody>
+
+          <tr>
+            <td align="center"> 1</td>
+            <td align="center"> Bienvenido al TEC</td>
+            <td align="center"> Orientadora </td>
+            <td align="center"> Pedro Pérez G. </td>
+            <td align="center"> Presencial </td>
+            <td align="center"> Planeada </td>
+            <td>
+              <a style="text-decoration: none;padding: 6px;" href=""
+                ><img src="https://cdn-icons-png.flaticon.com/128/2274/2274790.png" width="25" height="25"></a>
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </div>
+      @if (ViewBag.eliminado == false){
+        <script>alert("No se pudo eliminar el estudiante");</script>
+    }
+</div>

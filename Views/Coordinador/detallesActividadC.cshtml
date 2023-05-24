@@ -1,0 +1,175 @@
+@{
+    Layout = "CoordinadorLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function img_pathUrl(input){
+        $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+</script>
+
+<head>
+	<style>
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+	</style>
+
+	<title>Login V3</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100">
+                
+                <span class="login100-form-logo">
+                    <i class="zmdi zmdi-landscape"></i>
+                </span>
+                <title>Registro</title>
+                <h1 style="color:#004879">Detalles de la actividad </h1><br><br>
+                <div style="display: flex; justify-content:space-between">
+                    <div>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Nombre</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Sede</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Tipo</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Responsable</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Fecha y hora</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Modalidad</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                    
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Fecha de anuncio</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                    
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Fecha de anuncio</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Días previos de aviso</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Estado</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+                    
+                    </div>
+                    
+                    <div>
+                        <img src="https://edit.org/photos/img/blog/3j8-bienvenido-colegio-cartel-plantilla-editable-online.jpg-840.jpg" style="width:475px;height:690;">
+
+
+
+                    </div>          
+                </div>   
+
+                <div style="display:flex;justify-content:space-between;">
+                    <button style="align-self: center;" class="btn-not" type="submit">Activar notificaciones</button><br><br><br>
+                    <button style="align-self: center;" class="btn-rlz" type="submit">Realizada</button><br><br><br>
+                    <button style="align-self: center;" class="btn-delete" type="submit">Cancelar</button><br><br><br>
+                </div>
+
+                <hr><br>
+
+                <div>
+                    <h4 style="color:#004879">Sección de comentarios</h4><br>
+                    <div class="container bootstrap snippets bootdey">
+                        <div class="row">
+                            
+                            <div class="col-md-12">
+                                <div class="blog-comment">
+                                    <ul class="comments">
+                                    <li class="clearfix">
+                                    <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+                                    <div class="post-comments">
+                                        <p class="meta">Dec 18, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Etiam a sapien odio, sit amet
+                                        </p>
+                                    </div>
+                                    </li>
+                                    <li class="clearfix">
+                                    <img src="https://bootdey.com/img/Content/user_2.jpg" class="avatar" alt="">
+                                    <div class="post-comments">
+                                        <p class="meta">Dec 19, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Etiam a sapien odio, sit amet
+                                        </p>
+                                    </div>
+                                    
+                                    <ul class="comments">
+                                        <li class="clearfix">
+                                            <img src="https://bootdey.com/img/Content/user_3.jpg" class="avatar" alt="">
+                                            <div class="post-comments">
+                                                <p class="meta">Dec 20, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                                                <p>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                    Etiam a sapien odio, sit amet
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+  <div class="panel-body">
+    <textarea class="form-control" rows="2" placeholder="Escribe tu comentario"></textarea>
+    <div class="mar-top clearfix">
+      <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i> Publicar </button>
+    </div>
+  </div>
+
+                       
+			</div>
+            
+		</div>
+    </div>	
+</body>
+
+</html>

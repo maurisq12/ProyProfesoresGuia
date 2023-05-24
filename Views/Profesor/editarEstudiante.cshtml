@@ -1,5 +1,5 @@
 @{
-    Layout = "AsistenteLayout";
+    Layout = "CoordinadorLayout";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -38,17 +38,18 @@
                     <i class="zmdi zmdi-landscape"></i>
                 </span>
                 <title>Registro</title>
-                <h1 style="color:#004879"> Editar información de profesor </h1>
-                <div class="cont-formulario">
+                <h1 style="color:#004879"> Editar información de estudiante</h1>
+                <div>
                     <div>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Código: CA-001</h3>
+                            <h3 style="font-size: 20px;">Carne</h3><br>
+                            <h3> <input class = "login-entry" type="text" id="carne" name="carne"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Nombre</h3><br>
+                            <h3 style="font-size: 20px;">Nombre completo</h3><br>
                             <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
@@ -71,37 +72,12 @@
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Teléfono oficina</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div><br>
-
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Teléfono celular</h3><br>
                             <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
-
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fotografía:</h3><br>
-
-                            <img src="" id="img_url" alt="your image" style="width:400px; height:300px;"><br> <br>    
-                            <input type="file" id="fotografía" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div><br>
-                    </div>
-
-
-
-                    <div>
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <button style="align-self: center;" class="btn-delete" type="submit">Dar de baja</button><br><br><br>
-                        </div><br>
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <button style="align-self: center;" class="btn-not" type="submit">Definir como coordinador</button><br><br><br>
-                        </div><br>
                         
-                    </div>                    
+                    </div>              
                 </div>                
 			</div>
             

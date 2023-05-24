@@ -1,4 +1,4 @@
-using ProfesoresGuia.Models;
+/*using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
 
@@ -37,4 +37,4 @@ public class AdminProfesores
     {
         return SingletonDAO.getInstance().getTodosProfesores();
     }
-}
+}*/

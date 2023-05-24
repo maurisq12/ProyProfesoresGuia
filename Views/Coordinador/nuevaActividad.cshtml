@@ -9,7 +9,7 @@
 <script>
     function img_pathUrl(input){
         $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
-    }
+    };
 </script>
 
 <head>
@@ -23,6 +23,22 @@
 			-moz-appearance: textfield;
 		}
 	</style>
+
+    <link href="https://assets.website-files.com/5d9634c22ae9dfc2bb59b291/5d976f9728d2062ef47f4ffb_VD%20Favicon.png" rel="shortcut icon" type="image/x-icon"/>
+        <link href="https://assets.website-files.com/5d9634c22ae9dfc2bb59b291/5d976f9a6f21d7f891d74966_VD%20Webclip.jpg" rel="apple-touch-icon"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+
+            var Webflow = Webflow || [];
+            Webflow.push(function() {
+                document.getElementsByClassName('date').flatpickr({
+                    mode: "multiple",
+                    dateFormat: "Y-m-d",
+                    defaultDate: "2019-10-01"
+                });
+            });
+        </script>
 
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -126,10 +142,12 @@
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fechas para notificar</h3><br>
-                            <h3> <input type="text" id="datePick" /> </h3>
+                            <h3 style="font-size: 20px;">Días en que se notifica:</h3><br>
+                            <h3>                                 
+                                <input type="date" id="fechaNoti" />
+                            </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div><br>
+                        </div><br>                        
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Modalidad: </h3><br>
@@ -155,7 +173,9 @@
 			</div>
             
 		</div>
-        <button style="align-self: center;" class="btn-accept" type="submit">Registrar nuevo profesor</button>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button style="align-self: center;" class="btn-accept" type="submit">Modificar información</button>
+        </div>
     </div>
 	</form>
 	

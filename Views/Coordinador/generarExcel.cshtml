@@ -1,0 +1,29 @@
+@{
+    Layout = "ProfesoresLayout";
+}
+
+<!DOCTYPE html>
+<style>
+            .display-4{
+                font-family: Helvetica; 
+                font-weight: bold;
+                color: #084e7d !important;  
+            }
+        </style>
+<html lang="en">
+    <body style= "background-color: #E6F4F1;">
+            <div>
+                <h5 class="display-4" style="margin-top: 10px;">Generar Excel</h5><br>
+                <p>Se generará un archivo de Excel con los estudiantes</p>
+                <p>¿Desea que estos sean de su sede únicamente o de todas las sedes?</p>
+            </div><br><br>
+            <div>
+                <select name="cars" id="cars" class = "login-entry">
+                    <option value="1">Mi sede</option>
+                    <option value="2">Todas las sedes</option>
+                </select><br><br><br>
+                <button style="align-self: center;" class="btn-not" type="submit">Generar archivo</button><br><br><br>
+            </div>
+    </body>
+        
+</html>
