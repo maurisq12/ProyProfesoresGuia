@@ -1,4 +1,6 @@
 
+using System.Text;
+
 namespace ProfesoresGuia.Models;
 
 public class Actividad
@@ -18,8 +20,28 @@ public class Actividad
     public EstadoActividad estado { get; set; }
     public List<Comentario> listaComentarios { get; set; }
 
-    
-    
+    public Actividad()
+    {
+    }
+
+    public Actividad(int idActividad, int semana, TipoActividad tipo, string nombre, DateTime fechaHora, List<ProfesorGuia> responsables, DateTime fechaAnuncio, int diasPreviosAnuncio, List<DateTime> recordatorios, Modalidad modalidad, string enlaceRemoto, string afiche, EstadoActividad estado, List<Comentario> listaComentarios)
+    {
+        this.idActividad = idActividad;
+        this.semana = semana;
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.fechaHora = fechaHora;
+        this.responsables = responsables;
+        this.fechaAnuncio = fechaAnuncio;
+        this.diasPreviosAnuncio = diasPreviosAnuncio;
+        this.recordatorios = recordatorios;
+        this.modalidad = modalidad;
+        this.enlaceRemoto = enlaceRemoto;
+        this.afiche = afiche;
+        this.estado = estado;
+        this.listaComentarios = listaComentarios;
+    }
+
     public Actividad(int idActividad, int semana, TipoActividad tipo, String nombre, DateTime fechaHora, DateTime fechaAnuncio, int diasPreviosAnuncio, Modalidad modalidad, String enlaceRemoto, String afiche, EstadoActividad estado)
     {
         this.idActividad = idActividad;
@@ -69,5 +91,37 @@ public class Actividad
     public void RemoveComentario(Comentario comentario)
     {
         listaComentarios.Remove(comentario);
+    }
+    
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"ID: {idActividad}");
+        sb.AppendLine($"Semana: {semana}");
+        sb.AppendLine($"Tipo: {tipo}");
+        sb.AppendLine($"Nombre: {nombre}");
+        sb.AppendLine($"Fecha y hora: {fechaHora}");
+        sb.AppendLine("Responsables:");
+        foreach (var responsable in responsables)
+        {
+            sb.AppendLine($"- {responsable}");
+        }
+        sb.AppendLine($"Fecha de anuncio: {fechaAnuncio}");
+        sb.AppendLine($"Días previos de anuncio: {diasPreviosAnuncio}");
+        sb.AppendLine("Recordatorios:");
+        foreach (var recordatorio in recordatorios)
+        {
+            sb.AppendLine($"- {recordatorio}");
+        }
+        sb.AppendLine($"Modalidad: {modalidad}");
+        sb.AppendLine($"Enlace remoto: {enlaceRemoto}");
+        sb.AppendLine($"Afiche: {afiche}");
+        sb.AppendLine($"Estado: {estado}");
+        sb.AppendLine("Comentarios:");
+        foreach (var comentario in listaComentarios)
+        {
+            sb.AppendLine($"- {comentario}");
+        }
+        return sb.ToString();
     }
 }

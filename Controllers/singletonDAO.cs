@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using ProfesoresGuia.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using System.Data;
 
 namespace ProfesoresGuia.Controllers;
 
@@ -134,38 +135,289 @@ public class SingletonDAO
         return objeto;
     }
 
-    public List<ProfesorGuia> getTodosProfesores(){
-        var listaResultado = new List<ProfesorGuia>();
+
+     public bool insertarProfesor(ProfesorGuia p)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_profesor", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            command.Parameters.AddWithValue("@in_codigo", p.codigo);
+            command.Parameters.AddWithValue("@in_nombreCompleto", p.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", p.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoOficina", p.telefonoOficina);
+            command.Parameters.AddWithValue("@in_telefonoCelular", p.telefonoCelular);
+            command.Parameters.AddWithValue("@in_fotografia", p.fotografia);
+            command.Parameters.AddWithValue("@in_activo", p.activo);
+        try
+        {
+                    
+            
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+            
+            
+    }
+    
+    
+    public bool insertarCentroAcademico(CentroAcademico c)
+    {
+        
         SingletonDB basedatos = SingletonDB.getInstance();
         basedatos.getConnection().Open();        
 
-        string query= "SELECT codigo, nombreCompleto,telefonoCelular, telefonoOficina, correoElectronico, activo FROM Profesor  ";        
-
-        SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
         
-        using (SqlDataReader dr = cmd.ExecuteReader()){
-            while(dr.Read()){
-                ProfesorGuia objeto = new ProfesorGuia(){
-                    codigo=dr["codigo"].ToString(),
-                    nombreCompleto= dr["nombreCompleto"].ToString(),
-                    telefonoCelular= dr["telefonoCelular"].ToString(),
-                    telefonoOficina= dr["telefonoOficina"].ToString(),
-                    //fotografia= dr["fotografia"].ToString(),
-                    correoElectronico=dr["correoElectronico"].ToString()};
-                    if (Convert.ToBoolean((dr["activo"].ToString())))
-                        objeto.activo="Activo";
-                    else
-                        objeto.activo="Inactivo";
-                listaResultado.Add(objeto);
-            }
-        }
-        basedatos.getConnection().Close();
-        return listaResultado; 
+        string storedProcedure = "insertar_centroAcademico";
+        SqlCommand commandCentro = new SqlCommand(storedProcedure ,basedatos.getConnection());
+        commandCentro.CommandType = System.Data.CommandType.StoredProcedure;
 
+            //commandCentro.CommandType = CommandType.StoredProcedure;
+            commandCentro.Parameters.AddWithValue("@in_idCentroAcademico", c.idCentro);
+            commandCentro.Parameters.AddWithValue("@in_Siglas", c.siglas.ToString());
+            commandCentro.Parameters.AddWithValue("@in_nombre", c.nombre);
+            commandCentro.Parameters.AddWithValue("@in_cantProfesores", c.cantidadProfesores);
+           try
+        {
+                    
+            commandCentro.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+             
+    }
+    public bool insertarEstudiante(Estudiante e)
+    {
+        this.insertarCentroAcademico(e.centroEstudio);
+        SingletonDB basedatos = SingletonDB.getInstance();
+        
+        basedatos.getConnection().Open();        
+
+        
+        string storedProcedure = "insertar_estudiante";
+        SqlCommand command = new SqlCommand(storedProcedure ,basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            
+            command.Parameters.AddWithValue("@in_idEstudiante", e.idEstudiante);
+            command.Parameters.AddWithValue("@in_carne", e.carne);
+            command.Parameters.AddWithValue("@in_nombreCompleto", e.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", e.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoCelular", e.telefonoCelular);
+            command.Parameters.AddWithValue("@in_idCentroAcademico", e.centroEstudio.idCentro);
+            
+            
+        try
+        {     
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+             
+    }
+    public void insertarEquipoGuia(EquipoGuia eq)
+    {
+    
+    string storedProcedure = "insertar_equipoGuia";
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open(); 
+
+    
+    
+    SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+    command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@in_idEquipoGuia", eq.idEquipoGuia);
+        command.Parameters.AddWithValue("@in_anno", eq.anno);
+        command.Parameters.AddWithValue("@in_idProfesorCoordinador", eq.profesorCoordinador.codigo);
+        command.Parameters.AddWithValue("@in_ultimaModificacion", eq.ultimaModificacion);
+
+        try
+        {
+        
+            command.ExecuteNonQuery();
+            Console.WriteLine("Equipo Guía insertado correctamente.");
+            basedatos.getConnection().Close();
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+             basedatos.getConnection().Close();
+        }
     }
 
 
+   public List<ProfesorGuia> getTodosProfesores(){
 
+    List<ProfesorGuia> profesores = new List<ProfesorGuia>();
+    
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("consultar_profesor", basedatos.getConnection());
+        //command.CommandType = CommandType.StoredProcedure;
+        
+        
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read()){
+            ProfesorGuia profesor = new ProfesorGuia();
+            
+                profesor.codigo = reader["codigo"].ToString();
+                profesor.nombreCompleto = reader["nombrecompleto"].ToString();
+                profesor.correoElectronico = reader["correoelectronico"].ToString();
+                profesor.telefonoOficina = reader["telefonooficina"].ToString();
+                profesor.telefonoCelular = reader["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])reader["fotografia"];
+                profesor.activo = reader["activo"].ToString();
+
+            
+            profesores.Add(profesor);
+        }
+    }
+    basedatos.getConnection().Close();
+    return profesores;
+    }
+
+   public List<Estudiante> getEstudiantes()
+    {
+        var estudiantes = new List<Estudiante>();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();        
+
+        
+        string storedProcedure = "consultar_estudiante";
+        SqlCommand cmd = new SqlCommand(storedProcedure ,basedatos.getConnection());
+
+
+        using (SqlDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                Estudiante estudiante = new Estudiante();
+
+                estudiante.idEstudiante = Convert.ToInt32(reader["idEstudiante"]);
+                estudiante.carne = reader["carne"].ToString();
+                estudiante.nombreCompleto = reader["nombreCompleto"].ToString();
+                estudiante.correoElectronico = reader["correoElectronico"].ToString();
+                estudiante.telefonoCelular = reader["telefonoCelular"].ToString();
+
+                CentroAcademico centroAcademico = new CentroAcademico();
+                centroAcademico.idCentro = Convert.ToInt32(reader["idCentroAcademico"]);
+
+                centroAcademico.siglas = (SiglasCentros)Enum.Parse(typeof(SiglasCentros),reader["Siglas"].ToString()); 
+                centroAcademico.nombre = reader["nombreCentroAcademico"].ToString();
+                centroAcademico.cantidadProfesores = Convert.ToInt32(reader["cantProfesores"]);
+
+                estudiante.centroEstudio = centroAcademico;
+
+                estudiantes.Add(estudiante);
+                
+            }
+                basedatos.getConnection().Close();
+        }
+            
+        
+       
+        return estudiantes;
+    }
+
+    public List<EquipoGuia> getEquiposGuia()
+    {
+    var equiposGuia = new List<EquipoGuia>();
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open();   
+    string storedProcedure = "consultar_equipoGuia";
+
+    SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+    //command.CommandType = CommandType.StoredProcedure;
+
+        try
+        {
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                EquipoGuia equipoGuia = new EquipoGuia();
+                equipoGuia.idEquipoGuia = Convert.ToInt32(reader["idEquipoGuia"]);
+                equipoGuia.anno = Convert.ToInt32(reader["anno"]);
+                equipoGuia.ultimaModificacion = reader["ultimaModificacion"].ToString();
+
+                ProfesorGuia coordinador = new ProfesorGuia();
+                coordinador.codigo = reader["idProfesorCoordinador"].ToString();
+                coordinador.nombreCompleto = reader["nombreCompleto"].ToString();
+                coordinador.correoElectronico = reader["correoElectronico"].ToString();
+                coordinador.telefonoOficina = reader["telefonoOficina"].ToString();
+                coordinador.telefonoCelular = reader["telefonoCelular"].ToString();
+                coordinador.fotografia = (byte[])reader["fotografia"];
+                coordinador.activo = reader["activo"].ToString();
+
+                equipoGuia.profesorCoordinador= coordinador;
+
+                equiposGuia.Add(equipoGuia);
+            }
+
+            reader.Close();
+            basedatos.getConnection().Close();
+            return equiposGuia;
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+            basedatos.getConnection().Close();
+            return equiposGuia;
+            
+        }
+    }
 
 
 

@@ -9,11 +9,12 @@ public class ProfesorGuia
     public String telefonoCelular { get; set; }
     public String fotografia { get; set; }
     public String activo { get; set; }
+    public Siglas sede { get; set; }
 
     public ProfesorGuia(){}
 
 
-    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo)
+    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo,Siglas sede)
     {
         this.codigo = codigo;
         this.nombreCompleto = nombreCompleto;
@@ -22,5 +23,11 @@ public class ProfesorGuia
         this.telefonoCelular = telefonoCelular;
         this.fotografia = fotografia;
         this.activo = activo;
+        this.sede = sede;
+    }
+    
+    public override string ToString()
+    {
+        return $"Código: {codigo}\nNombre: {nombreCompleto}\nCorreo Electrónico: {correoElectronico}\nTeléfono Oficina: {telefonoOficina}\nTeléfono Celular: {telefonoCelular}\nFotografía: {fotografia}\nActivo: {activo}\nSede: "+ sede.ToString();
     }
 }

@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ProfesoresGuia.Models;
 
 public class Evidencia
@@ -8,6 +10,11 @@ public class Evidencia
     public String listaAsistencia { get; set; }
     public String linkGrabacion { get; set; }
 
+
+    public Evidencia()
+    {
+    }
+    
 
     public Evidencia(int idEvidencia, int idActividad, List<Imagen> imagenes, String listaAsistencia, String linkGrabacion)
     {
@@ -28,5 +35,22 @@ public class Evidencia
     public void RemoveImagen(Imagen imagen)
     {
         imagenes.Remove(imagen);
+    }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"ID Evidencia: {idEvidencia}");
+        sb.AppendLine($"ID Actividad: {idActividad}");
+        sb.AppendLine($"Lista de Asistencia: {listaAsistencia}");
+        sb.AppendLine($"Link de Grabación: {linkGrabacion}");
+
+        sb.AppendLine("Imágenes:");
+        foreach (var imagen in imagenes)
+        {
+            sb.AppendLine(imagen.ToString());
+        }
+
+        return sb.ToString();
     }
 }

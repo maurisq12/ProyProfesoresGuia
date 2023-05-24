@@ -1,3 +1,4 @@
+using System.Text;
 using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
@@ -19,6 +20,26 @@ public class DTOActividad
     public EstadoActividad estado { get; set; }
 
 
+    public DTOActividad()
+    {
+    }
+
+    public DTOActividad(int idActividad, int semana, TipoActividad tipo, string nombre, DateTime fechaHora, List<ProfesorGuia> responsables, DateTime fechaAnuncio, int diasPreviosAnuncio, List<DateTime> recordatorios, Modalidad modalidad, string enlaceRemoto, string afiche, EstadoActividad estado)
+    {
+        this.idActividad = idActividad;
+        this.semana = semana;
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.fechaHora = fechaHora;
+        this.responsables = responsables;
+        this.fechaAnuncio = fechaAnuncio;
+        this.diasPreviosAnuncio = diasPreviosAnuncio;
+        this.recordatorios = recordatorios;
+        this.modalidad = modalidad;
+        this.enlaceRemoto = enlaceRemoto;
+        this.afiche = afiche;
+        this.estado = estado;
+    }
 
     public DTOActividad(int idActividad, int semana, TipoActividad tipo, String nombre, DateTime fechaHora, DateTime fechaAnuncio, int diasPreviosAnuncio, Modalidad modalidad, String enlaceRemoto, String afiche, EstadoActividad estado)
     {
@@ -60,4 +81,30 @@ public class DTOActividad
         recordatorios.Remove(recordatorio);
     }
     
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"ID DTOActividad: {idActividad}");
+        sb.AppendLine($"Semana: {semana}");
+        sb.AppendLine($"Tipo: {tipo}");
+        sb.AppendLine($"Nombre: {nombre}");
+        sb.AppendLine($"Fecha y hora: {fechaHora}");
+        sb.AppendLine("Responsables:");
+        foreach (var responsable in responsables)
+        {
+            sb.AppendLine($"- {responsable}");
+        }
+        sb.AppendLine($"Fecha de anuncio: {fechaAnuncio}");
+        sb.AppendLine($"Días previos de anuncio: {diasPreviosAnuncio}");
+        sb.AppendLine("Recordatorios:");
+        foreach (var recordatorio in recordatorios)
+        {
+            sb.AppendLine($"- {recordatorio}");
+        }
+        sb.AppendLine($"Modalidad: {modalidad}");
+        sb.AppendLine($"Enlace remoto: {enlaceRemoto}");
+        sb.AppendLine($"Afiche: {afiche}");
+        sb.AppendLine($"Estado: {estado}");
+        return sb.ToString();
+    }
 }

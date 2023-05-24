@@ -10,6 +10,10 @@ public class Estudiante
     public CentroAcademico centroEstudio { get; set; }
 
 
+    public Estudiante()
+    {
+    }
+
     public Estudiante(int idEstudiante, String carne, String nombreCompleto, String correoElectronico, String telefonoCelular, CentroAcademico centroEstudio)
     {
         this.idEstudiante = idEstudiante;
@@ -18,5 +22,10 @@ public class Estudiante
         this.correoElectronico = correoElectronico;
         this.telefonoCelular = telefonoCelular;
         this.centroEstudio = centroEstudio;
+    }
+    
+    public override string ToString()
+    {
+        return $"ID Estudiante: {idEstudiante}\nCarne: {carne}\nNombre Completo: {nombreCompleto}\nCorreo Electrónico: {correoElectronico}\nTeléfono Celular: {telefonoCelular}\nCentro de Estudio: {centroEstudio}";
     }
 }
