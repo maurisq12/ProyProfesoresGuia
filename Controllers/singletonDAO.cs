@@ -122,6 +122,47 @@ public class SingletonDAO
         return true;
     }
 
+     public bool insertarProfesor(ProfesorGuia p)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_profesor", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            command.Parameters.AddWithValue("@in_codigo", p.codigo);
+            command.Parameters.AddWithValue("@in_nombreCompleto", p.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", p.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoOficina", p.telefonoOficina);
+            command.Parameters.AddWithValue("@in_telefonoCelular", p.telefonoCelular);
+            command.Parameters.AddWithValue("@in_fotografia", p.fotografia);
+            command.Parameters.AddWithValue("@in_activo", p.activo);
+        try
+        {
+                    
+            
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+            
+            
+    }
+    
+    
     public bool insertarCentroAcademico(CentroAcademico c)
     {
         
@@ -204,8 +245,8 @@ public class SingletonDAO
         }
              
     }
-    public void InsertarEquipoGuia(EquipoGuia eq)
-{
+    public void insertarEquipoGuia(EquipoGuia eq)
+    {
     
     string storedProcedure = "insertar_equipoGuia";
     SingletonDB basedatos = SingletonDB.getInstance();
