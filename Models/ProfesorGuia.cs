@@ -9,12 +9,12 @@ public class ProfesorGuia
     public String telefonoCelular { get; set; }
     public String fotografia { get; set; }
     public String activo { get; set; }
-    public Siglas sede { get; set; }
+    public SiglasCentros sede { get; set; }
 
     public ProfesorGuia(){}
 
 
-    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo,Siglas sede)
+    public ProfesorGuia(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo,SiglasCentros sede)
     {
         this.codigo = codigo;
         this.nombreCompleto = nombreCompleto;
