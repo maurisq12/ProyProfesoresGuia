@@ -11,17 +11,17 @@ public class AdminProfesores
         return SingletonDAO.getInstance().agregarProfesor(profe);
     }
 
-    public bool editarProfesor(int idProfesor, DTOProfesor pProfesor)
+    public bool editarProfesor(DTOProfesor pProfesor)
     {
         ProfesorGuia profe = new ProfesorGuia(pProfesor.codigo, pProfesor.nombreCompleto, pProfesor.correoElectronico,
             pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo);
-        return SingletonDAO.getInstance().modificarProfesor(idProfesor, profe);
+        return SingletonDAO.getInstance().modificarProfesor(profe);
     }
 
-    public bool modificarEstadoProfesor(int pProfesor, bool pEstado)
+   /* public bool modificarEstadoProfesor(int pProfesor, String pEstado)
     {
         return SingletonDAO.getInstance().modificarEstadoProfesor(pProfesor, pEstado);
-    }
+    }*/
 
     public List<ProfesorGuia> obtenerProfesoresSede(int pSede)
     {

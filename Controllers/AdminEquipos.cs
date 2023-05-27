@@ -14,7 +14,7 @@ public class AdminEquipos
         return SingletonDAO.getInstance().eliminarProfesorEquipo(pProfesor, pEquipo);
     }
 
-    public bool definirCoordinador(int pEquipo, int pProfesor)
+    public bool definirCoordinador(int pEquipo, String pProfesor)
     {
         return SingletonDAO.getInstance().definirCoordinador(pProfesor, pEquipo);
     }
