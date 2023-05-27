@@ -1,3 +1,5 @@
+using ProfesoresGuia.Models;
+
 namespace ProfesoresGuia.Controllers;
 
 public class DTOProfesor
@@ -9,11 +11,13 @@ public class DTOProfesor
     public String telefonoCelular { get; set; }
     public String fotografia { get; set; }
     public String activo { get; set; }
+    
+    public SiglasCentros sede { get; set; }
 
     public DTOProfesor(){}
 
 
-    public DTOProfesor(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo)
+    public DTOProfesor(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo, SiglasCentros sede)
     {
         this.codigo = codigo;
         this.nombreCompleto = nombreCompleto;
@@ -22,6 +26,7 @@ public class DTOProfesor
         this.telefonoCelular = telefonoCelular;
         this.fotografia = fotografia;
         this.activo = activo;
+        this.sede = sede;
     }
     
     public override string ToString()
@@ -32,6 +37,7 @@ public class DTOProfesor
                $"Teléfono de oficina: {telefonoOficina}\n" +
                $"Teléfono celular: {telefonoCelular}\n" +
                $"Fotografía: {fotografia}\n" +
-               $"Activo: {activo}";
+               $"Activo: {activo}\n" +
+               $"Sede: {sede.ToString()}";
     }
 }

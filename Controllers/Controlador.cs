@@ -18,7 +18,9 @@ public class Controlador : Controller
     private AdminEquipos admEquipos = new AdminEquipos();
     
     private AdminEstudiantes admEstudiantes = new AdminEstudiantes();
-    //private AdminProfesores admProfesores = new AdminProfesores();
+    private AdminProfesores admProfesores = new AdminProfesores();
+
+    private ProcesadorExcel pExcel = new ProcesadorExcel();
     
     
     public IActionResult InicioSesion(){
@@ -191,8 +193,8 @@ public class Controlador : Controller
     {
         //   agrega el profesor a la base de datos
         int num_prof = admProfesores.obtenerProfesores().Count + 1;
-        var sede = Request.Form["sede"];
-        DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], "Activo");
+        var sede = string.Join("", Request.Form["sede"]);
+        DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], "Activo", (SiglasCentros)Enum.Parse(typeof(SiglasCentros), sede.ToUpper()));
         admProfesores.agregarProfesor(profe);
         //   regresa a la pantalla anterior
         return View(se devuelve);
@@ -203,25 +205,7 @@ public class Controlador : Controller
 
     
     
-   /* public IActionResult agregarProfesorEquipo(int pProfesor, int pEquipo)
-    {
-        
-    }
-    
-    public IActionResult agregarProfesorEquipoConf(int pProfesor, int pEquipo)
-    {
-        
-    }*/
-    
-  /*  public IActionResult agregarEstudianteEquipo(int pProfesor, int pEquipo)
-    {
-        
-    }
-    
-    public IActionResult agregarEstudianteEquipoConf(int pProfesor, int pEquipo)
-    {
-        
-    }*/
+   
     
     
     
@@ -243,39 +227,20 @@ public class Controlador : Controller
         return View();
     }
     
+    [HttpPost]
     public IActionResult editarProfesorConf()
     {
         //   obtiene info del profe
         ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
-        DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], Request.Form["activo"]);
+        DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], Request.Form["activo"], profeGuia.sede);
         admProfesores.editarProfesor(profe);
 
         
         return View(se devuelve);
     }
-    
-   /* public IActionResult modificarEstadoProfesor(int pProfesor, bool pEstado)
-    {
-        
-        ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Query["codigo"]);
-        ViewBag.Profesor = profe;
-        
-        
-        return View(el de editarProfesor);
-    }
-    
-    public IActionResult modificarEstadoProfesorConf(int pProfesor, bool pEstado)
-    {
-        
-        ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
-        DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], Request.Form["activo"]);
-        admProfesores.editarProfesor(profe);
 
-        
-        return View(se devuelve);
-    }*/
-
-   public IActionResult definirCoordinador()
+    [HttpPost]
+    public IActionResult definirCoordinador()
     {
         ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
         admEquipos.definirCoordinador(1, profeGuia.codigo);
@@ -292,11 +257,12 @@ public class Controlador : Controller
         return View();
     }
     
+    [HttpPost]
     public IActionResult editarSusDatosProfesorConf()
     {
         //   obtiene info del profe
         ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
-        DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], profeGuia.activo);
+        DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], profeGuia.activo, profeGuia.sede);
         admProfesores.editarProfesor(profe);
 
         
@@ -313,6 +279,7 @@ public class Controlador : Controller
         return View();
     }
     
+    [HttpPost]
     public IActionResult modificarEstudianteConf()
     {
         Estudiante est = (Estudiante)ViewBag.Estudiante;
@@ -349,10 +316,7 @@ public class Controlador : Controller
         return View(el de consultarProfesores());
     }
 
-   /* public IActionResult consultarProfesoresEquipo(int pequipo)
-    {
-        View()
-    }*/
+   
     
     public IActionResult consultarProximaActividad()
     {
@@ -360,10 +324,7 @@ public class Controlador : Controller
         return View();
     }
 
-  /*  public IActionResult consultarEstudiantesEquipo()
-    {
-        View()
-    }*/
+  
 
     public IActionResult consultarEstudiantesCentro()
     {
@@ -411,51 +372,26 @@ public class Controlador : Controller
         return View();
     }
 
-    
-    
-    
-    
-   /* 
-    public IActionResult eliminarProfesor(int pProfesor, int pEquipo)
+    public IActionResult marcarCancelada()
     {
-        
-    }
-    
-    public IActionResult eliminarProfesorConf(int pProfesor, int pEquipo)
-    {
-        
-    }
-    
-    public IActionResult eliminarEstudiante(int pProfesor, int pEquipo)
-    {
-        
-    }
-    
-    public IActionResult eliminarEstudianteConf(int pProfesor, int pEquipo)
-    {
-        
-    }
-    */
-    
-   public IActionResult marcarCancelada()
-   {
 
-       return View();
-   }
+        return View();
+    }
     
-   public IActionResult marcarCanceladaJustificacion(String justificacion, int pActividad)
-   {
-       Actividad act = (Actividad)ViewBag.Actividad;
-       admPlanes.marcarCancelada(act.idActividad, Request.Form["justificacion"], DateTime.Now);
+    [HttpPost]
+    public IActionResult marcarCanceladaJustificacion(String justificacion, int pActividad)
+    {
+        Actividad act = (Actividad)ViewBag.Actividad;
+        admPlanes.marcarCancelada(act.idActividad, Request.Form["justificacion"], DateTime.Now);
        return View(se devuelve);
-   }
+    }
    
-   public IActionResult realizarComentario(int pActividad, String pComentario)
-   {
-       int idActividad = (int)ViewBag.IdActividad;
-       admComentarios.realizarComentario(idActividad, Request.Form["comentario"]);
-       return View(el de consultarComentarios);
-   }
+    public IActionResult realizarComentario(int pActividad, String pComentario)
+    {
+        int idActividad = (int)ViewBag.IdActividad;
+        admComentarios.realizarComentario(idActividad, Request.Form["comentario"]);
+        return View(el de consultarComentarios);
+    }
    
    
    
@@ -488,6 +424,7 @@ public class Controlador : Controller
        return View();
    }
     
+   [HttpPost]
    public IActionResult marcarRealizadaEvidencia(int pActividad, Evidencia pEvidencia)
    {
         
@@ -508,6 +445,7 @@ public class Controlador : Controller
        return View();
    }
     
+   [HttpPost]
    public IActionResult cambiarContrasenaConf(String pCorreo, String nuevaContrasena)
    {
        
