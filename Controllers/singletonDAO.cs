@@ -666,7 +666,32 @@ public class SingletonDAO
     basedatos.getConnection().Close();
     return profesores;
     }
+    
+    public ProfesorGuia getProfesorXcodigo(String codigo){
 
+    ProfesorGuia profesor = new ProfesorGuia();
+    
+    SingletonDB basedatos = SingletonDB.getInstance();
+    basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@codigo_Profesor",codigo);
+        
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            
+                profesor.codigo = reader["codigo"].ToString();
+                profesor.nombreCompleto = reader["nombrecompleto"].ToString();
+                profesor.correoElectronico = reader["correoelectronico"].ToString();
+                profesor.telefonoOficina = reader["telefonooficina"].ToString();
+                profesor.telefonoCelular = reader["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])reader["fotografia"];
+                profesor.activo = reader["activo"].ToString();
+        }
+    
+    basedatos.getConnection().Close();
+    return profesor;
+    }
    public List<Estudiante> getEstudiantes()
     {
         var estudiantes = new List<Estudiante>();
