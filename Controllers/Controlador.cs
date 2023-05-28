@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.HttpSys;
 using ProfesoresGuia.Models;
@@ -193,7 +194,7 @@ public class Controlador : Controller
     {
         //   agrega el profesor a la base de datos
         int num_prof = admProfesores.obtenerProfesores().Count + 1;
-        var sede = string.Join("", Request.Form["sede"]);
+        string sede = Request.Form["sede"];
         DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], "Activo", (SiglasCentros)Enum.Parse(typeof(SiglasCentros), sede.ToUpper()));
         admProfesores.agregarProfesor(profe);
         //   regresa a la pantalla anterior
@@ -343,8 +344,21 @@ public class Controlador : Controller
     public IActionResult consultarComentarios()
     {
         int idActividad = Int32.Parse(Request.Query["id"]);
+        List<Comentario> comentarios = admComentarios.consultarComentarios(idActividad);
+        List<Respuesta> respuestas = new List<Respuesta>();
+        List<Respuesta> found = new List<Respuesta>();
+        foreach (var comentario in comentarios)
+        {
+            found = admRespuestas.consultarRespuestas(comentario.idComentario);
+            if (found != null && found.Count > 0)
+            {
+                respuestas = respuestas.Union(found).ToList();
+            }
+        }
+        
         ViewBag.IdActividad = idActividad;
-        ViewBag.Comentarios = admComentarios.consultarComentarios(idActividad);
+        ViewBag.Comentarios = comentarios;
+        ViewBag.Respuestas = respuestas;
         return View();
     }
 
@@ -374,19 +388,18 @@ public class Controlador : Controller
 
     public IActionResult marcarCancelada()
     {
-
         return View();
     }
     
     [HttpPost]
-    public IActionResult marcarCanceladaJustificacion(String justificacion, int pActividad)
+    public IActionResult marcarCanceladaJustificacion()
     {
         Actividad act = (Actividad)ViewBag.Actividad;
         admPlanes.marcarCancelada(act.idActividad, Request.Form["justificacion"], DateTime.Now);
        return View(se devuelve);
     }
    
-    public IActionResult realizarComentario(int pActividad, String pComentario)
+    public IActionResult realizarComentario()
     {
         int idActividad = (int)ViewBag.IdActividad;
         admComentarios.realizarComentario(idActividad, Request.Form["comentario"]);
@@ -408,14 +421,41 @@ public class Controlador : Controller
     
    public IActionResult agregarActividad()
    {
-       ViewBag.Plan = admPlanes.consultarPlan(Int32.Parse(Request.Query["id"]));
+       ViewBag.Plan = admPlanes.consultarPlan(1);
        return View();
    }
     
-   public IActionResult agregarActividadConf(int pPlan, DTOActividad pActividades)
+   public IActionResult agregarActividadConf()
    {
        int idAct = admPlanes.consultarActividades().Count + 1;
-       DTOActividad act = new DTOActividad(idAct, Int32.Parse(Request.Form["semana"]), poner el TipoActividad, Request.Form["nombre"], pasar stirng a DateTime, );
+       string recordatorios = Request.Form["recordatorios"];
+       string tipo = Request.Form["tipo"];
+       string modalidad = Request.Form["modalidad"];
+       string estado = Request.Form["estado"];
+       
+       string[] responsables = string.Join("", Request.Form["responsables"]).Split(new[] { ". ", "." }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+       List<ProfesorGuia> profes = admProfesores.obtenerProfesores();
+       List<ProfesorGuia> responsablesList = new List<ProfesorGuia>();
+
+       ProfesorGuia found = null;
+       foreach (var profe in responsables)
+       {
+           found = profes.FirstOrDefault(p => p.nombreCompleto == profe);
+           if (found is not null)
+           {
+               responsablesList.Add(found);
+           }
+       }
+       
+       DTOActividad act = new DTOActividad(idAct, Int32.Parse(Request.Form["semana"]), (TipoActividad)Enum.Parse(typeof(TipoActividad), tipo.ToUpper()), 
+           Request.Form["nombre"], DateTime.Parse(Request.Form["fechaActividad"] + " " + Request.Form["horaActividad"]), 
+           responsablesList, DateTime.Parse(Request.Form["fechaAnuncio"] + " " + Request.Form["horaAnuncio"]), 
+           Int32.Parse(Request.Form["diasPreviosAnuncio"]), 
+           recordatorios.Split(new[] { ". ", "." }, StringSplitOptions.RemoveEmptyEntries).Select(s => DateTime.Parse(s.Trim())).ToList(), 
+           (Modalidad)Enum.Parse(typeof(Modalidad), modalidad.ToUpper()), Request.Form["enlace"], Request.Form["afiche"], 
+           (EstadoActividad)Enum.Parse(typeof(EstadoActividad), estado.ToUpper()));
+
+       admPlanes.agregarActividadPlan((PlanTrabajo)ViewBag.Plan, act);
        return View(se devuelve);
    }
 
@@ -425,19 +465,31 @@ public class Controlador : Controller
    }
     
    [HttpPost]
-   public IActionResult marcarRealizadaEvidencia(int pActividad, Evidencia pEvidencia)
+   public IActionResult marcarRealizadaEvidencia()
    {
-        
+       Actividad act = (Actividad)ViewBag.Actividad;
+       string[] imagenes = string.Join("", Request.Form["imagenes"]).Split(new[] { ". ", "." }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+       List<Imagen> imagenesList = new List<Imagen>();
+
+       foreach (var imagen in imagenes)
+       {
+           imagenesList.Add(new Imagen(, , imagen));
+       }
+       
+       admPlanes.marcarRealizada(new Evidencia(, act.idActividad, imagenesList, Request.Form["asistencias"], Request.Form["linkGrabacion"]));
+       return View(se devuelve);
    }
     
-   public IActionResult realizarRespuesta(int pComentario, String pRespuesta)
+   public IActionResult realizarRespuesta()
    {
-       
+       ViewBag.IdComentario = Int32.Parse(Request.Query["idComentario"]);
+       return View();
    }
     
-   public IActionResult realizarRespuestaConf(int pComentario, String pRespuesta)
+   public IActionResult realizarRespuestaConf()
    {
-       
+       admRespuestas.realizarRespuesta((int)ViewBag.IdComentario, Request.Form["respuesta"]);
+       return View(al de consultarComentarios);
    }
    
    public IActionResult cambiarContrasena()
@@ -446,9 +498,12 @@ public class Controlador : Controller
    }
     
    [HttpPost]
-   public IActionResult cambiarContrasenaConf(String pCorreo, String nuevaContrasena)
+   public IActionResult cambiarContrasenaConf()
    {
-       
+       String correo = Request.Form["correo"];
+       String contrasena = Request.Form["contrasena"];
+       SingletonDAO.getInstance().cambiarContrasena(correo, contrasena);
+       return View(se va a inicio sesion);
    }
    
    

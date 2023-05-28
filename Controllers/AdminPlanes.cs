@@ -28,6 +28,11 @@ public class AdminPlanes
     {
         
     }
+    
+    public bool marcarRealizada(Evidencia evidencia)
+    {
+        
+    }
 
     public Actividad consultarActividad(int idActividad)
     {
