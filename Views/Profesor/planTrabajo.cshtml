@@ -1,6 +1,9 @@
 @{
   ViewData["Title"] = "Gestión de profesores";
-  Layout = "CoordinadorLayout";
+  if(ViewBag.usuario=="Profesor"){
+    Layout = "ProfesoresLayout";}
+  else{
+    Layout = "CoordinadorLayout";}
 }
 
 
@@ -65,7 +68,7 @@ table, th, td {
             <td align="center"> Presencial </td>
             <td align="center"> Planeada </td>
             <td>
-              <a style="text-decoration: none;padding: 6px;" href=""
+              <a style="text-decoration: none;padding: 6px;" href="/Controlador/ProfesorDetallesActividad?id=5"
                 ><img src="https://cdn-icons-png.flaticon.com/128/2274/2274790.png" width="25" height="25"></a>
             </td>
           </tr>

@@ -115,13 +115,16 @@ table, th, td {
       </thead>
       <tbody>
 
+          @foreach (var unEstudiante in ViewBag.estudiantes)
+        {
           <tr>
-            <td align="center"> estado</td>
-            <td align="center"> nombre</td>
-            <td align="center"> campus </td>
-            <td align="center"> correo </td>
-            <td align="center"> estado </td>
+            <td align="center"> @unEstudiante.id </td>
+            <td align="center"> @unEstudiante.nombreCompleto</td>
+            <td align="center"> @unEstudiante.centroAcademico </td>
+            <td align="center"> @unEstudiante.correoElectronico </td>
+            <td align="center"> @unEstudiante.carnet </td>
           </tr>
+        }  
         
       </tbody>
     </table>

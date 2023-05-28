@@ -196,9 +196,218 @@ li {
   }
 }
 
-/* CSS para el selector de varias fechas*/
 
-.datepicker {
+/*Sección de comentarios*/
+
+body{
+  background:#ebeef0;
+}
+
+.img-sm {
+  width: 46px;
+  height: 46px;
+}
+
+.panel {
+  box-shadow: 0 2px 0 rgba(0,0,0,0.075);
+  border-radius: 0;
+  border: 0;
+  margin-bottom: 15px;
+}
+
+.panel .panel-footer, .panel>:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.panel .panel-heading, .panel>:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.panel-body {
+  padding: 25px 20px;
+}
+
+
+.media-block .media-left {
+  display: block;
+  float: left
+}
+
+.media-block .media-right {
+  float: right
+}
+
+.media-block .media-body {
+  display: block;
+  overflow: hidden;
+  width: auto
+}
+
+.middle .media-left,
+.middle .media-right,
+.middle .media-body {
+  vertical-align: middle
+}
+
+.thumbnail {
+  border-radius: 0;
+  border-color: #e9e9e9
+}
+
+.tag.tag-sm, .btn-group-sm>.tag {
+  padding: 5px 10px;
+}
+
+.tag:not(.label) {
+  background-color: #fff;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid #cdd6e1;
+  font-size: 12px;
+  line-height: 1.42857;
+  vertical-align: middle;
+  -webkit-transition: all .15s;
+  transition: all .15s;
+}
+.text-muted, a.text-muted:hover, a.text-muted:focus {
+  color: #acacac;
+}
+.text-sm {
+  font-size: 0.9em;
+}
+.text-5x, .text-4x, .text-5x, .text-2x, .text-lg, .text-sm, .text-xs {
+  line-height: 1.25;
+}
+
+.btn-trans {
+  background-color: transparent;
+  border-color: transparent;
+  color: #929292;
+}
+
+.btn-icon {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.btn-sm, .btn-group-sm>.btn, .btn-icon.btn-sm {
+  padding: 5px 10px !important;
+}
+
+.mar-top {
+  margin-top: 15px;
+}
+
+/*Segunda opción*/
+
+
+body{
+  background:#eee;
+}
+
+hrc {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #FFFFFF;
+}
+a {
+  color: #82b440;
+  text-decoration: none;
+}
+.blog-comment::before,
+.blog-comment::after,
+.blog-comment-form::before,
+.blog-comment-form::after{
+  content: "";
+display: table;
+clear: both;
+}
+
+.blog-comment{
+  padding-left: 15%;
+padding-right: 15%;
+}
+
+.blog-comment ul{
+list-style-type: none;
+padding: 0;
+}
+
+.blog-comment img{
+opacity: 1;
+filter: Alpha(opacity=100);
+-webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+     -o-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.blog-comment img.avatar {
+position: relative;
+float: left;
+margin-left: 0;
+margin-top: 0;
+width: 65px;
+height: 65px;
+}
+
+.blog-comment .post-comments{
+border: 1px solid #eee;
+  margin-bottom: 20px;
+  margin-left: 85px;
+margin-right: 0px;
+  padding: 10px 20px;
+  position: relative;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+        -o-border-radius: 4px;
+      border-radius: 4px;
+background: #fff;
+color: #6b6e80;
+position: relative;
+}
+
+.blog-comment .meta {
+font-size: 13px;
+color: #aaaaaa;
+padding-bottom: 8px;
+margin-bottom: 10px !important;
+border-bottom: 1px solid #eee;
+}
+
+.blog-comment ul.comments ul{
+list-style-type: none;
+padding: 0;
+margin-left: 85px;
+}
+
+.blog-comment-form{
+padding-left: 15%;
+padding-right: 15%;
+padding-top: 40px;
+}
+
+.blog-comment h3,
+.blog-comment-form h3{
+margin-bottom: 40px;
+font-size: 26px;
+line-height: 30px;
+font-weight: 800;
+}
+
+/*Sección de comentarios*/
+
+/*!
+ * Datepicker for Bootstrap v1.5.0 (https://github.com/eternicode/bootstrap-datepicker)
+ *
+ * Copyright 2012 Stefan Petre
+ * Improvements by Andrew Rowls
+ * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ */
+ .datepicker {
   padding: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -664,203 +873,51 @@ li {
   margin-right: -5px;
 }
 
-/*Sección de comentarios*/
-
-body{
-  background:#ebeef0;
-}
-
-.img-sm {
-  width: 46px;
-  height: 46px;
-}
-
-.panel {
-  box-shadow: 0 2px 0 rgba(0,0,0,0.075);
-  border-radius: 0;
-  border: 0;
-  margin-bottom: 15px;
-}
-
-.panel .panel-footer, .panel>:last-child {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.panel .panel-heading, .panel>:first-child {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.panel-body {
-  padding: 25px 20px;
-}
-
-
-.media-block .media-left {
+.cajitaResp{
   display: block;
-  float: left
-}
-
-.media-block .media-right {
-  float: right
-}
-
-.media-block .media-body {
-  display: block;
-  overflow: hidden;
-  width: auto
-}
-
-.middle .media-left,
-.middle .media-right,
-.middle .media-body {
-  vertical-align: middle
-}
-
-.thumbnail {
-  border-radius: 0;
-  border-color: #e9e9e9
-}
-
-.tag.tag-sm, .btn-group-sm>.tag {
-  padding: 5px 10px;
-}
-
-.tag:not(.label) {
-  background-color: #fff;
-  padding: 6px 12px;
-  border-radius: 2px;
-  border: 1px solid #cdd6e1;
-  font-size: 12px;
-  line-height: 1.42857;
-  vertical-align: middle;
-  -webkit-transition: all .15s;
-  transition: all .15s;
-}
-.text-muted, a.text-muted:hover, a.text-muted:focus {
-  color: #acacac;
-}
-.text-sm {
-  font-size: 0.9em;
-}
-.text-5x, .text-4x, .text-5x, .text-2x, .text-lg, .text-sm, .text-xs {
-  line-height: 1.25;
-}
-
-.btn-trans {
-  background-color: transparent;
-  border-color: transparent;
-  color: #929292;
-}
-
-.btn-icon {
-  padding-left: 9px;
-  padding-right: 9px;
-}
-
-.btn-sm, .btn-group-sm>.btn, .btn-icon.btn-sm {
-  padding: 5px 10px !important;
-}
-
-.mar-top {
-  margin-top: 15px;
-}
-
-/*Segunda opción*/
-
-
-body{
-  background:#eee;
-}
-
-hrc {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 0;
-  border-top: 1px solid #FFFFFF;
-}
-a {
-  color: #82b440;
-  text-decoration: none;
-}
-.blog-comment::before,
-.blog-comment::after,
-.blog-comment-form::before,
-.blog-comment-form::after{
-  content: "";
-display: table;
-clear: both;
-}
-
-.blog-comment{
-  padding-left: 15%;
-padding-right: 15%;
-}
-
-.blog-comment ul{
-list-style-type: none;
-padding: 0;
-}
-
-.blog-comment img{
-opacity: 1;
-filter: Alpha(opacity=100);
--webkit-border-radius: 4px;
-   -moz-border-radius: 4px;
-     -o-border-radius: 4px;
-    border-radius: 4px;
-}
-
-.blog-comment img.avatar {
-position: relative;
-float: left;
-margin-left: 0;
-margin-top: 0;
-width: 65px;
-height: 65px;
-}
-
-.blog-comment .post-comments{
-border: 1px solid #eee;
-  margin-bottom: 20px;
   margin-left: 85px;
-margin-right: 0px;
-  padding: 10px 20px;
+  width: 675px;
+}
+
+
+
+output{
+  width: 100%;
+  min-height: 150px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
   position: relative;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-        -o-border-radius: 4px;
-      border-radius: 4px;
-background: #fff;
-color: #6b6e80;
-position: relative;
+  border-radius: 5px;
 }
 
-.blog-comment .meta {
-font-size: 13px;
-color: #aaaaaa;
-padding-bottom: 8px;
-margin-bottom: 10px !important;
-border-bottom: 1px solid #eee;
+output .image{
+  height: 150px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  position: relative;
 }
 
-.blog-comment ul.comments ul{
-list-style-type: none;
-padding: 0;
-margin-left: 85px;
+output .image img{
+  height: 100%;
+  width: 100%;
 }
 
-.blog-comment-form{
-padding-left: 15%;
-padding-right: 15%;
-padding-top: 40px;
+output .image span {
+  position: absolute;
+  top: -4px;
+  right: 4px;
+  cursor: pointer;
+  font-size: 22px;
+  color: white;
 }
 
-.blog-comment h3,
-.blog-comment-form h3{
-margin-bottom: 40px;
-font-size: 26px;
-line-height: 30px;
-font-weight: 800;
+output .image span:hover {
+  opacity: 0.8;
+}
+
+output .span--hidden{
+  visibility: hidden;
 }

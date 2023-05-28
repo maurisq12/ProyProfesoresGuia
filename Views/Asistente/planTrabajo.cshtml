@@ -56,21 +56,22 @@ table, th, td {
 
       </thead>
       <tbody>
-
+        @foreach (var unaActividad in ViewBag.actividades)
+        {
           <tr>
-            <td align="center"> 1</td>
-            <td align="center"> Bienvenido al TEC</td>
-            <td align="center"> Orientadora </td>
-            <td align="center"> Pedro Pérez G. </td>
-            <td align="center"> Presencial </td>
-            <td align="center"> Planeada </td>
+            <td align="center"> @unaActividad.semana </td>
+            <td align="center"> @unaActividad.nombre</td>
+            <td align="center"> @unaActividad.tipo.nombre </td>
+            <td align="center"> @unaActividad.responsables[0].nombreCompleto </td>
+            <td align="center"> @unaActividad.modalidad </td>
+            <td align="center"> @unaActividad.estado </td>
             <td>
               <a onclick="location.href='@Url.Action("AsistenteDetallesActividad", "Controlador")'" style="text-decoration: none;padding: 6px;cursor:pointer;" 
                 ><img src="https://cdn-icons-png.flaticon.com/128/2274/2274790.png" width="25" height="25"
                 ></a>
             </td>
           </tr>
-        
+        }          
       </tbody>
     </table>
   </div>

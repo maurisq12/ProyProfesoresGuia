@@ -1,6 +1,9 @@
 @{
   ViewData["Title"] = "Gestión de profesores";
-  Layout = "CoordinadorLayout";
+  if(ViewBag.usuario=="Profesor"){
+    Layout = "ProfesoresLayout";}
+  else{
+    Layout = "CoordinadorLayout";}
 }
 
 
@@ -91,15 +94,15 @@ table, th, td {
 </style>
 
 <div class="text-center">
-  <div style="display: flex; justify-content: space-between;">
-  <span><button type="button" class = "button-67">Estudiantes de la sede</button></span>
-  <span></span><h1 style="color: #004879; font-size: 80x">Todos los estudiantes</h1></span>
+  <div style="display: flex;">
+  <span><button type="button" class = "button-67" onclick="location.href='@Url.Action("ProfesorEstudiantesSede", "Controlador")'">Estudiantes de la sede</button></span>
+  <span></span><h1 style="color: #004879; font-size: 80x;margin-left:250px">Todos los estudiantes</h1></span>
   </div><br>
   <div style="display: flex; flex-direction: column " class="justify">
     <div style="align-self: start;">
-    <span><input class="search-bar" type="text" id="busq" onkeyup="buscar()" placeholder="Buscar profesor..."></span>
+    <span><input class="search-bar" type="text" id="busq" onkeyup="buscar()" placeholder="Buscar estudiante..."></span>
     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    <span><button type="button" class = "button-66">Modificar equipo guía</button></span>
+    <span><button type="button" class = "button-66" onclick="location.href='@Url.Action("ProfesorGenerarExcel", "Controlador")'">Generar Excel</button></span>
     </div>
     <table id="tablaProfesores" style="margin-top: 60px;" class="table">
       <thead>

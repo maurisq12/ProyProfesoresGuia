@@ -12,16 +12,16 @@
         </style>
 <html lang="en">
     <body style= "background-color: #E6F4F1;">
-        <form method="post" action="@Url.Action("pruebaImg", "Controlador")">
             <div>
                 <h5 class="display-4" style="margin-top: 10px;">Evidencias de actividad realizada</h5><br>
                 <p>Por favor agregue las evidencias de la actividad que conluyó:</p>
             </div><br><br>
             <div>
                 <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Lista asistentes:</h3><br> 
-                            <output></output>  <br> 
-                            <input type="file" name="lista" id="lista" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);" multiple="multiple">
+                            <h3 style="font-size: 20px;">Lista asistentes:</h3><br>
+
+                            <img src="" id="img_url" alt="your image" style="width:400px; height:300px;"><br> <br>    
+                            <input type="file" id="lista" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);" multiple="multiple">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div><br>
                 <br><br><br>
@@ -39,17 +39,10 @@
                 </div><br><br>
                 
                 <button style="align-self: center;" class="button-66" type="submit">Marcar como realizada</button><br><br><br>
-                </form>
             </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-
-        const output = document.querySelector("output")
-const input = document.querySelector("input")
-let imagesArray = []
-
-
         function img_pathUrl(input){
             $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
         }
@@ -57,30 +50,6 @@ let imagesArray = []
         function img_pathUrl2(input){
             $('#img_url2')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
         }
-
-        function displayImages() {
-  let images = ""
-  imagesArray.forEach((image, index) => {
-    images += `<div class="image">
-                <img src="${URL.createObjectURL(image)}" alt="image">
-                <span onclick="deleteImage(${index})">&times;</span>
-              </div>`
-  })
-  output.innerHTML = images
-}
-
-function deleteImage(index) {
-  imagesArray.splice(index, 1)
-  displayImages()
-}
-
-input.addEventListener("change", () => {
-  const files = input.files
-  for (let i = 0; i < files.length; i++) {
-    imagesArray.push(files[i])
-  }
-  displayImages()
-})
     </script>
     </body>
         

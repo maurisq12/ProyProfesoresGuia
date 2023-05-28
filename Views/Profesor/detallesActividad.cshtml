@@ -112,30 +112,29 @@
                                 <div class="blog-comment">
                                     <ul class="comments">
                                     <li class="clearfix">
-                                    <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
-                                    <div class="post-comments">
-                                        <p class="meta">Dec 18, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
-                                        <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Etiam a sapien odio, sit amet
-                                        </p>
-                                    </div>
-                                    </li>
-                                    <li class="clearfix">
+
                                     <img src="https://bootdey.com/img/Content/user_2.jpg" class="avatar" alt="">
                                     <div class="post-comments">
-                                        <p class="meta">Dec 19, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                                        <p class="meta">Dec 19, 2014 <a >Jorge Mora</a> dice : <i class="pull-right"><a><small id="rep1" style="float:right;color:blue;cursor:pointer;" >Reply</small></a></i></p>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                             Etiam a sapien odio, sit amet
-                                        </p>
+                                        </p>                                        
+                                    </div>
+                                    <div >
+                                    <form style="display:flex;justify-content:space-between" action="@Url.Action("responderComent", "Controlador")" method="post">
+                                            <textarea class="form-control cajitaResp" name="respuesta"rows="2" placeholder="Respuesta..." id="respuesta" style="display: none;margin-left:85px;"></textarea>
+                                            <input type="hidden" id="postId" name="postId" value="34657" />
+                                    
+                                    <button id="btnResp" style="display: none;height:100%;" class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i> Responder </button>
+                                    </form>
                                     </div>
                                     
                                     <ul class="comments">
                                         <li class="clearfix">
                                             <img src="https://bootdey.com/img/Content/user_3.jpg" class="avatar" alt="">
                                             <div class="post-comments">
-                                                <p class="meta">Dec 20, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                                                <p class="meta">Dec 20, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"></i></p>
                                                 <p>
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                                     Etiam a sapien odio, sit amet
@@ -155,7 +154,7 @@
   <div class="panel-body">
     <textarea class="form-control" name="comentario"rows="2" placeholder="Escribe tu comentario"></textarea>
     <div class="mar-top clearfix">
-      <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i> Publicar </button>
+      <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i> Comentar </button>
     </div>
   </div>
 
@@ -164,6 +163,14 @@
             
 		</div>
     </div>	
+
+
+<script>
+    document.getElementById("rep1").onclick = function() {
+document.getElementById("respuesta").style.display = "block";
+document.getElementById("btnResp").style.display = "block";
+}
+</script>
 </body>
 
 </html>
