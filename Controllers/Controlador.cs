@@ -470,13 +470,16 @@ public class Controlador : Controller
        Actividad act = (Actividad)ViewBag.Actividad;
        string[] imagenes = string.Join("", Request.Form["imagenes"]).Split(new[] { ". ", "." }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
        List<Imagen> imagenesList = new List<Imagen>();
+       int idEvidencia = admPlanes.getEvidencias().Count + 1;
+       int idImagen = admPlanes.getImagenes().Count + 1;
 
        foreach (var imagen in imagenes)
        {
-           imagenesList.Add(new Imagen(, , imagen));
+           imagenesList.Add(new Imagen(idImagen, idEvidencia, imagen));
+           idImagen++;
        }
        
-       admPlanes.marcarRealizada(new Evidencia(, act.idActividad, imagenesList, Request.Form["asistencias"], Request.Form["linkGrabacion"]));
+       admPlanes.marcarRealizada(new Evidencia(idEvidencia, act.idActividad, imagenesList, Request.Form["asistencias"], Request.Form["linkGrabacion"]));
        return View(se devuelve);
    }
     
@@ -523,7 +526,8 @@ public class Controlador : Controller
     
    public IActionResult cargarEstudiantesConf()
    {
-       admEstudiantes.convertirEstudiantes(Request.Form["ruta"]);
+       List<Estudiante> estudiantes = pExcel.procesarExcel(Request.Form["ruta"]);
+       admEstudiantes.agregarEstudiantes(estudiantes);
        return View(se devuelve);
    }
    
@@ -534,7 +538,6 @@ public class Controlador : Controller
    
    public IActionResult generarExcelEstudiantesSede()
    {
-       //// no se si es asi
        return View();
    }
    
@@ -546,7 +549,6 @@ public class Controlador : Controller
     
     public IActionResult generarExcelPestanas()
     {
-        //// no se si es asi
         return View();
     }
     
@@ -557,16 +559,6 @@ public class Controlador : Controller
     }
     
     
-    
- /*   public IActionResult cargarEstudiantesCentro(String pRuta, int pCentro)
-    {
-        
-    }
-    
-    public IActionResult cargarEstudiantesPestanas(String pRuta)
-    {
-        
-    }*/
 
 
 

@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
@@ -9,16 +10,20 @@ public class AdminEstudiantes
         return SingletonDAO.getInstance().getEstudiantesEquipo(pEquipo);
     }
 
-    public bool convertirEstudiantes(String ruta)
-    {
-        
-    }
-
     public List<Estudiante> obtenerEstudiantes()
     {
         return SingletonDAO.getInstance().getEstudiantes();
     }
-    
+
+    public bool agregarEstudiantes(List<Estudiante> estudiantes)
+    {
+        foreach (var estudiante in estudiantes)
+        {
+            SingletonDAO.getInstance().insertarEstudiante(estudiante);
+        }
+
+        return true;
+    }
 
     public List<Estudiante> consultarEstudiantesCentro(int pCentro)
     {

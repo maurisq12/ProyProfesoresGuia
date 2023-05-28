@@ -11,6 +11,6 @@ public class AdmRespuestas
     
     public List<Respuesta> consultarRespuestas(int idComentario)
     {
-        
+        return SingletonDB.getInstance().getRespuestas(idComentario);
     }
 }

@@ -11,6 +11,6 @@ public class AdmComentarios
 
     public List<Comentario> consultarComentarios(int idActividad)
     {
-        
+        return SingletonDAO.getInstance().getComentarios(idActividad);
     }
 }
