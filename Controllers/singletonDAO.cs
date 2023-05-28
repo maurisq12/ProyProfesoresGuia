@@ -136,7 +136,400 @@ public class SingletonDAO
     }
 
 
-     public bool insertarProfesor(ProfesorGuia p)
+         public bool InsertarRespuesta(Respuesta r, int idComentario)
+    {   
+        //se supone que el profesor ya esta ingresado en la tablas profesores
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_respuesta", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@respuesta_id", r.idRespuesta);
+            command.Parameters.AddWithValue("@profesor_guia_id", r.emisor.codigo);
+            command.Parameters.AddWithValue("@fecha_hora", r.fechaHora);
+            command.Parameters.AddWithValue("@cuerpo_respuesta", r.cuerpo);
+            command.Parameters.AddWithValue("@comentario_id", idComentario);
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }       
+    }
+    public bool InsertarComentario(Comentario c, int idActividad)
+    {   
+        //se supone que el profesor ya esta ingresado en la tablas profesores
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_comentario", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@profesor_guia_id", c.emisor.codigo);
+            command.Parameters.AddWithValue("@idActividad", idActividad);
+            command.Parameters.AddWithValue("@fecha_hora", c.fechaHora);
+            command.Parameters.AddWithValue("@comentario_cuerpo", c.cuerpo);
+           
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+
+            foreach (Respuesta r in c.listaRespuestas){
+                InsertarRespuesta(r,c.idComentario);
+
+            }
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }       
+    }
+   public bool InsertarResponsables(ProfesorGuia p, int idActividad)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_ActividadXresponsables", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@profesor_guia_id", p.codigo);
+            command.Parameters.AddWithValue("@actividad_id", idActividad);
+           
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }       
+    }
+    public bool InsertarRecordatorios (DateTime r, int idActividad)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_recordatorio", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@fecha_recordatorio", r);
+            command.Parameters.AddWithValue("@actividad_id", idActividad);
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }       
+    }
+    public bool InsertarActividad(Actividad a)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("insertar_actividad", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            
+            command.Parameters.AddWithValue("@id_actividad", a.idActividad);
+            command.Parameters.AddWithValue("@semana_num", a.semana);
+            command.Parameters.AddWithValue("@tipo_actividad", a.tipo.ToString());
+            command.Parameters.AddWithValue("@nombre", a.nombre);
+            
+            command.Parameters.AddWithValue("@fecha_hora", a.fechaHora);
+            
+            command.Parameters.AddWithValue("@fecha_anuncio", a.fechaAnuncio);
+            command.Parameters.AddWithValue("@dias_previos_anuncio", a.diasPreviosAnuncio);
+            command.Parameters.AddWithValue("@modalidad", a.modalidad.ToString());
+            command.Parameters.AddWithValue("@enlace_remoto", a.enlaceRemoto);
+            command.Parameters.AddWithValue("@afiche_bytea", new byte[0]); // Se asume que el afiche es una imagen convertida a byte array
+            command.Parameters.AddWithValue("@estado_actividad", a.estado.ToString());
+            
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            foreach (ProfesorGuia p in a.responsables){
+                InsertarResponsables(p,a.idActividad);
+            }
+            foreach (DateTime r in a.recordatorios){
+                InsertarRecordatorios(r,a.idActividad);
+            }
+            foreach (Comentario c in a.listaComentarios){
+                InsertarComentario(c,a.idActividad);
+            }
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }       
+    }
+    
+    
+
+    private byte[] ConvertToByteArray(string filePath)
+    {
+        // Aquí se puede implementar la lógica para convertir un archivo en byte array,
+        // si el atributo afiche representa una imagen o archivo adjunto.
+        // Por ejemplo:
+        return System.IO.File.ReadAllBytes(filePath);
+    }
+    public Actividad getActividadXid(int id)
+    {
+     Actividad actividad = new Actividad();
+     SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("consultar_actividades_xid", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@id_actividad", id);
+
+        SqlDataReader reader = command.ExecuteReader();
+
+        if (reader.Read())
+        {
+            
+            actividad.idActividad = (int)reader["idActividad"];
+            actividad.semana = (int)reader["semana"];
+            actividad.nombre = (string)reader["nombre"];
+            actividad.fechaHora = (DateTime)reader["fechaHora"];
+            actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
+            actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
+            actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
+            actividad.afiche = reader["afiche"].ToString();
+            actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
+            actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
+            actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
+            actividad.responsables = new List<ProfesorGuia>();
+            actividad.recordatorios = new List<DateTime>();
+            actividad.listaComentarios = new List<Comentario>();
+            SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
+            commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
+            commandResponsables.Parameters.AddWithValue("@idActividad", id);
+            SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
+            
+
+            while (readerResponsables.Read()){
+                ProfesorGuia profesor = new ProfesorGuia();
+                profesor.codigo = readerResponsables["codigo"].ToString();
+                profesor.nombreCompleto = readerResponsables["nombrecompleto"].ToString();
+                profesor.correoElectronico = readerResponsables["correoelectronico"].ToString();
+                profesor.telefonoOficina = readerResponsables["telefonooficina"].ToString();
+                profesor.telefonoCelular = readerResponsables["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])readerResponsables["fotografia"];
+                profesor.activo = readerResponsables["activo"].ToString();
+                    
+                actividad.responsables.Add(profesor);
+                
+            }
+            readerResponsables.Close();
+
+            SqlCommand commandRecordatorios = new SqlCommand("consultar_recordatorio", basedatos.getConnection());
+            commandRecordatorios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandRecordatorios.Parameters.AddWithValue("@idActividad", id);
+
+            SqlDataReader readerRecordatorios = commandRecordatorios.ExecuteReader();
+            while (readerRecordatorios.Read()){
+
+                actividad.recordatorios.Add((DateTime)readerRecordatorios["fechaRecordatorio"]);
+            }
+            readerRecordatorios.Close();
+
+            SqlCommand commandComentarios = new SqlCommand("consultar_comentarios", basedatos.getConnection());
+            commandComentarios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandComentarios.Parameters.AddWithValue("@idActividad", id);
+
+            SqlDataReader readerComentarios = commandComentarios.ExecuteReader();
+        
+            while (readerComentarios.Read()){
+                Comentario c = new Comentario();
+                c.listaRespuestas = new List<Respuesta>();
+                c.idComentario = (Int32)readerComentarios["idComentario"];
+                   
+
+                c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
+                c.cuerpo = (String)readerComentarios["cuerpo"];
+                c.fechaHora = (DateTime)readerComentarios["fechaHora"];
+
+                SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
+                commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
+
+                SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
+                while (readerRespuestas.Read()){
+                    Respuesta r = new Respuesta(); 
+                    r.idRespuesta = (Int32)readerRespuestas["idRespuesta"];
+                    r.fechaHora = (DateTime)readerRespuestas["fechaHora"];
+                    r.cuerpo = (String)readerRespuestas["cuerpo"];
+                      
+                    r.emisor = getProfesorXcodigo((String)readerRespuestas["idProfesorGuia"]);
+                    
+                    c.listaRespuestas.Add(r);  
+                    
+                }
+
+                actividad.listaComentarios.Add(c);
+            }
+
+        }
+
+        reader.Close();
+        basedatos.getConnection().Close();
+        return actividad;
+    } 
+    public List<Actividad> getActividades()
+   {
+    List<Actividad> actividades = new List<Actividad>();
+
+     SingletonDB basedatos = SingletonDB.getInstance();
+        basedatos.getConnection().Open();
+        SqlCommand command = new SqlCommand("consultar_actividades", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+        SqlDataReader reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+            Actividad actividad = new Actividad();
+            actividad.idActividad = (int)reader["idActividad"];
+            actividad.semana = (int)reader["semana"];
+            actividad.nombre = (string)reader["nombre"];
+            actividad.fechaHora = (DateTime)reader["fechaHora"];
+            actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
+            actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
+            actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
+            actividad.afiche = reader["afiche"].ToString();
+            actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
+            actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
+            actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
+            actividad.responsables = new List<ProfesorGuia>();
+            actividad.recordatorios = new List<DateTime>();
+            actividad.listaComentarios = new List<Comentario>();
+            SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
+            commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
+            commandResponsables.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+            SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
+            
+
+            while (readerResponsables.Read()){
+                ProfesorGuia profesor = new ProfesorGuia();
+                profesor.codigo = readerResponsables["codigo"].ToString();
+                profesor.nombreCompleto = readerResponsables["nombrecompleto"].ToString();
+                profesor.correoElectronico = readerResponsables["correoelectronico"].ToString();
+                profesor.telefonoOficina = readerResponsables["telefonooficina"].ToString();
+                profesor.telefonoCelular = readerResponsables["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])readerResponsables["fotografia"];
+                profesor.activo = readerResponsables["activo"].ToString();
+                    
+                actividad.responsables.Add(profesor);
+                
+            }
+            readerResponsables.Close();
+
+            SqlCommand commandRecordatorios = new SqlCommand("consultar_recordatorio", basedatos.getConnection());
+            commandRecordatorios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandRecordatorios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+
+            SqlDataReader readerRecordatorios = commandRecordatorios.ExecuteReader();
+            while (readerRecordatorios.Read()){
+
+                actividad.recordatorios.Add((DateTime)readerRecordatorios["fechaRecordatorio"]);
+            }
+            readerRecordatorios.Close();
+
+            SqlCommand commandComentarios = new SqlCommand("consultar_comentarios", basedatos.getConnection());
+            commandComentarios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandComentarios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+
+            SqlDataReader readerComentarios = commandComentarios.ExecuteReader();
+        
+            while (readerComentarios.Read()){
+                Comentario c = new Comentario();
+                c.listaRespuestas = new List<Respuesta>();
+                c.idComentario = (Int32)readerComentarios["idComentario"];
+                   
+
+                c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
+                c.cuerpo = (String)readerComentarios["cuerpo"];
+                c.fechaHora = (DateTime)readerComentarios["fechaHora"];
+
+                SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
+                commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
+
+                SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
+                while (readerRespuestas.Read()){
+                    Respuesta r = new Respuesta(); 
+                    r.idRespuesta = (Int32)readerRespuestas["idRespuesta"];
+                    r.fechaHora = (DateTime)readerRespuestas["fechaHora"];
+                    r.cuerpo = (String)readerRespuestas["cuerpo"];
+                      
+                    r.emisor = getProfesorXcodigo((String)readerRespuestas["idProfesorGuia"]);
+                    
+                    c.listaRespuestas.Add(r);  
+                    
+                }
+
+                actividad.listaComentarios.Add(c);
+            }
+
+            actividades.Add(actividad);
+        }
+
+        reader.Close();
+        basedatos.getConnection().Close();
+        return actividades;
+    } 
+   
+    public bool insertarProfesor(ProfesorGuia p)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
         basedatos.getConnection().Open();
@@ -149,6 +542,7 @@ public class SingletonDAO
             command.Parameters.AddWithValue("@in_telefonoOficina", p.telefonoOficina);
             command.Parameters.AddWithValue("@in_telefonoCelular", p.telefonoCelular);
             command.Parameters.AddWithValue("@in_fotografia", p.fotografia);
+        
             command.Parameters.AddWithValue("@in_activo", p.activo);
         try
         {
@@ -174,7 +568,7 @@ public class SingletonDAO
         }
             
             
-    }
+        }
     
     
     public bool insertarCentroAcademico(CentroAcademico c)
@@ -260,7 +654,7 @@ public class SingletonDAO
              
     }
     public void insertarEquipoGuia(EquipoGuia eq)
-    {
+{
     
     string storedProcedure = "insertar_equipoGuia";
     SingletonDB basedatos = SingletonDB.getInstance();
@@ -295,355 +689,14 @@ public class SingletonDAO
              basedatos.getConnection().Close();
         }
     }
-   public bool InsertarResponsables(ProfesorGuia p, int idActividad)
-    {
-        SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("insertar_ActividadXresponsables", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@profesor_guia_id", p.codigo);
-            command.Parameters.AddWithValue("@actividad_id", idActividad);
-           
-        try
-        {
-            command.ExecuteNonQuery();
-            basedatos.getConnection().Close();
-            return true;
-        }
-        catch (SqlException ex)
-        {
-            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
-            {
-                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
-            }
-            else
-            {
-                Console.WriteLine("Error al insertar el registro: " + ex.Message);
-            }
-            basedatos.getConnection().Close();
-            return false;
-        }       
-    }
-    
-    public bool InsertarComentario(Comentario c, int idActividad)
-    {
-        SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("insertar_comentario", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@profesor_guia_id", c.emisor.codigo);
-            command.Parameters.AddWithValue("@idActividad", idActividad);
-            command.Parameters.AddWithValue("@fecha_hora", c.fechaHora);
-            command.Parameters.AddWithValue("@comentario_cuerpo", c.cuerpo);
-           
-        try
-        {
-            command.ExecuteNonQuery();
-            basedatos.getConnection().Close();
-            return true;
-        }
-        catch (SqlException ex)
-        {
-            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
-            {
-                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
-            }
-            else
-            {
-                Console.WriteLine("Error al insertar el registro: " + ex.Message);
-            }
-            basedatos.getConnection().Close();
-            return false;
-        }       
-    }
-    public bool InsertarRecordatorios (DateTime r, int idActividad)
-    {
-        SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("insertar_recordatorio", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@fecha_recordatorio", r);
-            command.Parameters.AddWithValue("@actividad_id", idActividad);
-        try
-        {
-            command.ExecuteNonQuery();
-            basedatos.getConnection().Close();
-            return true;
-        }
-        catch (SqlException ex)
-        {
-            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
-            {
-                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
-            }
-            else
-            {
-                Console.WriteLine("Error al insertar el registro: " + ex.Message);
-            }
-            basedatos.getConnection().Close();
-            return false;
-        }       
-    }
-    public bool InsertarActividad(Actividad a)
-    {
-        SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("insertar_actividad", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-            
-            
-            command.Parameters.AddWithValue("@id_actividad", a.idActividad);
-            command.Parameters.AddWithValue("@semana_num", a.semana);
-            command.Parameters.AddWithValue("@tipo_actividad", a.tipo.ToString());
-            command.Parameters.AddWithValue("@nombre", a.nombre);
-            Console.WriteLine("____________");
-            command.Parameters.AddWithValue("@fecha_hora", a.fechaHora);
-            
-            command.Parameters.AddWithValue("@fecha_anuncio", a.fechaAnuncio);
-            command.Parameters.AddWithValue("@dias_previos_anuncio", a.diasPreviosAnuncio);
-            command.Parameters.AddWithValue("@modalidad", a.modalidad.ToString());
-            command.Parameters.AddWithValue("@enlace_remoto", a.enlaceRemoto);
-            command.Parameters.AddWithValue("@afiche_bytea", new byte[0]); // Se asume que el afiche es una imagen convertida a byte array
-            command.Parameters.AddWithValue("@estado_actividad", a.estado.ToString());
-            
-        try
-        {
-            command.ExecuteNonQuery();
-            basedatos.getConnection().Close();
-            foreach (ProfesorGuia p in a.responsables){
-                InsertarResponsables(p,a.idActividad);
-            }
-            foreach (DateTime r in a.recordatorios){
-                InsertarRecordatorios(r,a.idActividad);
-            }
-            return true;
-        }
-        catch (SqlException ex)
-        {
-            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
-            {
-                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
-            }
-            else
-            {
-                Console.WriteLine("Error al insertar el registro: " + ex.Message);
-            }
-            basedatos.getConnection().Close();
-            return false;
-        }       
-    } 
-    
-   public Actividad getActividadXid(int id)
-    {
-     Actividad actividad = new Actividad();
-     SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("consultar_actividades_xid", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("@id_actividad", id);
-
-        SqlDataReader reader = command.ExecuteReader();
-
-        if (reader.Read())
-        {
-            
-            actividad.idActividad = (int)reader["idActividad"];
-            actividad.semana = (int)reader["semana"];
-            actividad.nombre = (string)reader["nombre"];
-            actividad.fechaHora = (DateTime)reader["fechaHora"];
-            actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
-            actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
-            actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
-            actividad.afiche = reader["afiche"].ToString();
-            actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
-            actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
-            actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
-            actividad.responsables = new List<ProfesorGuia>();
-            actividad.recordatorios = new List<DateTime>();
-            actividad.listaComentarios = new List<Comentario>();
-            SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
-            commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
-            commandResponsables.Parameters.AddWithValue("@idActividad", id);
-            SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
-            
-
-            while (readerResponsables.Read()){
-                ProfesorGuia profesor = new ProfesorGuia();
-                profesor.codigo = readerResponsables["codigo"].ToString();
-                profesor.nombreCompleto = readerResponsables["nombrecompleto"].ToString();
-                profesor.correoElectronico = readerResponsables["correoelectronico"].ToString();
-                profesor.telefonoOficina = readerResponsables["telefonooficina"].ToString();
-                profesor.telefonoCelular = readerResponsables["telefonocelular"].ToString();
-                profesor.fotografia = (byte[])readerResponsables["fotografia"];
-                profesor.activo = readerResponsables["activo"].ToString();
-                    
-                actividad.responsables.Add(profesor);
-                
-            }
-            readerResponsables.Close();
-
-            SqlCommand commandRecordatorios = new SqlCommand("consultar_recordatorio", basedatos.getConnection());
-            commandRecordatorios.CommandType = System.Data.CommandType.StoredProcedure;
-            commandRecordatorios.Parameters.AddWithValue("@idActividad", id);
-
-            SqlDataReader readerRecordatorios = commandRecordatorios.ExecuteReader();
-            while (readerRecordatorios.Read()){
-
-                actividad.recordatorios.Add((DateTime)readerRecordatorios["fechaRecordatorio"]);
-            }
-            readerRecordatorios.Close();
-
-            SqlCommand commandComentarios = new SqlCommand("consultar_comentarios", basedatos.getConnection());
-            commandComentarios.CommandType = System.Data.CommandType.StoredProcedure;
-            commandComentarios.Parameters.AddWithValue("@idActividad", id);
-
-            SqlDataReader readerComentarios = commandComentarios.ExecuteReader();
-        
-            while (readerComentarios.Read()){
-                Comentario c = new Comentario();
-                c.idComentario = (Int32)readerComentarios["idComentario"];
-                   
-                SqlCommand commandP = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
-                commandP.CommandType = System.Data.CommandType.StoredProcedure;
-                 commandP.Parameters.AddWithValue("@codigo_Profesor",(String)readerComentarios["idProfesorGuia"]);
-                ProfesorGuia profesor = new ProfesorGuia();
-            using (SqlDataReader readerP = commandP.ExecuteReader())
-             {
-                if (readerP.Read()){
-                profesor.codigo = readerP["codigo"].ToString();
-                profesor.nombreCompleto = readerP["nombrecompleto"].ToString();
-                profesor.correoElectronico = readerP["correoelectronico"].ToString();
-                profesor.telefonoOficina = readerP["telefonooficina"].ToString();
-                profesor.telefonoCelular = readerP["telefonocelular"].ToString();
-                profesor.fotografia = (byte[])readerP["fotografia"];
-                profesor.activo = readerP["activo"].ToString();
-                
-                }
-            }   
-                c.emisor = profesor;
-                c.cuerpo = (String)readerComentarios["cuerpo"];
-                c.fechaHora = (DateTime)readerComentarios["fechaHora"];
-
-                actividad.listaComentarios.Add(c);
-            }
-
-        }
-
-        reader.Close();
-        basedatos.getConnection().Close();
-        return actividad;
-    } 
-    public List<Actividad> getActividades()
-   {
-    List<Actividad> actividades = new List<Actividad>();
-
-     SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
-        SqlCommand command = new SqlCommand("consultar_actividades", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-
-        SqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            Actividad actividad = new Actividad();
-            actividad.idActividad = (int)reader["idActividad"];
-            actividad.semana = (int)reader["semana"];
-            actividad.nombre = (string)reader["nombre"];
-            actividad.fechaHora = (DateTime)reader["fechaHora"];
-            actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
-            actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
-            actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
-            actividad.afiche = reader["afiche"].ToString();
-            actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
-            actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
-            actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
-            actividad.responsables = new List<ProfesorGuia>();
-            actividad.recordatorios = new List<DateTime>();
-            actividad.listaComentarios = new List<Comentario>();
-            SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
-            commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
-            commandResponsables.Parameters.AddWithValue("@idActividad", actividad.idActividad);
-            SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
-            
-
-            while (readerResponsables.Read()){
-                ProfesorGuia profesor = new ProfesorGuia();
-                profesor.codigo = readerResponsables["codigo"].ToString();
-                profesor.nombreCompleto = readerResponsables["nombrecompleto"].ToString();
-                profesor.correoElectronico = readerResponsables["correoelectronico"].ToString();
-                profesor.telefonoOficina = readerResponsables["telefonooficina"].ToString();
-                profesor.telefonoCelular = readerResponsables["telefonocelular"].ToString();
-                profesor.fotografia = (byte[])readerResponsables["fotografia"];
-                profesor.activo = readerResponsables["activo"].ToString();
-                    
-                actividad.responsables.Add(profesor);
-                
-            }
-            readerResponsables.Close();
-
-            SqlCommand commandRecordatorios = new SqlCommand("consultar_recordatorio", basedatos.getConnection());
-            commandRecordatorios.CommandType = System.Data.CommandType.StoredProcedure;
-            commandRecordatorios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
-
-            SqlDataReader readerRecordatorios = commandRecordatorios.ExecuteReader();
-            while (readerRecordatorios.Read()){
-
-                actividad.recordatorios.Add((DateTime)readerRecordatorios["fechaRecordatorio"]);
-            }
-            readerRecordatorios.Close();
-
-            SqlCommand commandComentarios = new SqlCommand("consultar_comentarios", basedatos.getConnection());
-            commandComentarios.CommandType = System.Data.CommandType.StoredProcedure;
-            commandComentarios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
-
-            SqlDataReader readerComentarios = commandComentarios.ExecuteReader();
-        
-            while (readerComentarios.Read()){
-                Comentario c = new Comentario();
-                c.idComentario = (Int32)readerComentarios["idComentario"];
-                //c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
-                   
-                SqlCommand commandP = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
-                commandP.CommandType = System.Data.CommandType.StoredProcedure;
-                 commandP.Parameters.AddWithValue("@codigo_Profesor",(String)readerComentarios["idProfesorGuia"]);
-                ProfesorGuia profesor = new ProfesorGuia();
-            using (SqlDataReader readerP = commandP.ExecuteReader())
-             {
-                if (readerP.Read()){
-                profesor.codigo = readerP["codigo"].ToString();
-                profesor.nombreCompleto = readerP["nombrecompleto"].ToString();
-                profesor.correoElectronico = readerP["correoelectronico"].ToString();
-                profesor.telefonoOficina = readerP["telefonooficina"].ToString();
-                profesor.telefonoCelular = readerP["telefonocelular"].ToString();
-                profesor.fotografia = (byte[])readerP["fotografia"];
-                profesor.activo = readerP["activo"].ToString();
-                
-                }
-            }   
-                c.emisor = profesor;
-                c.cuerpo = (String)readerComentarios["cuerpo"];
-                c.fechaHora = (DateTime)readerComentarios["fechaHora"];
-
-                actividad.listaComentarios.Add(c);
-            }
-
-            actividades.Add(actividad);
-        }
-
-        reader.Close();
-        basedatos.getConnection().Close();
-        return actividades;
-    } 
-    
-   public List<ProfesorGuia> getTodosProfesores(){
+    public List<ProfesorGuia> getTodosProfesores(){
 
     List<ProfesorGuia> profesores = new List<ProfesorGuia>();
     
     SingletonDB basedatos = SingletonDB.getInstance();
     basedatos.getConnection().Open();
         SqlCommand command = new SqlCommand("consultar_profesor", basedatos.getConnection());
-        //command.CommandType = CommandType.StoredProcedure;
+        command.CommandType = System.Data.CommandType.StoredProcedure;
         
         
         using (SqlDataReader reader = command.ExecuteReader())
@@ -666,19 +719,21 @@ public class SingletonDAO
     basedatos.getConnection().Close();
     return profesores;
     }
-    
     public ProfesorGuia getProfesorXcodigo(String codigo){
 
     ProfesorGuia profesor = new ProfesorGuia();
-    
     SingletonDB basedatos = SingletonDB.getInstance();
-    basedatos.getConnection().Open();
+    if (basedatos.IsConnectionOpen() == false){
+        basedatos.getConnection().Open();
+    }
+
         SqlCommand command = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
         command.Parameters.AddWithValue("@codigo_Profesor",codigo);
         
         using (SqlDataReader reader = command.ExecuteReader())
         {
+            if (reader.Read()){
             
                 profesor.codigo = reader["codigo"].ToString();
                 profesor.nombreCompleto = reader["nombrecompleto"].ToString();
@@ -687,11 +742,12 @@ public class SingletonDAO
                 profesor.telefonoCelular = reader["telefonocelular"].ToString();
                 profesor.fotografia = (byte[])reader["fotografia"];
                 profesor.activo = reader["activo"].ToString();
+                }
         }
-    
-    basedatos.getConnection().Close();
+   
     return profesor;
     }
+
    public List<Estudiante> getEstudiantes()
     {
         var estudiantes = new List<Estudiante>();
@@ -734,7 +790,8 @@ public class SingletonDAO
        
         return estudiantes;
     }
-
+    
+    
     public List<EquipoGuia> getEquiposGuia()
     {
     var equiposGuia = new List<EquipoGuia>();
@@ -743,7 +800,7 @@ public class SingletonDAO
     string storedProcedure = "consultar_equipoGuia";
 
     SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
-    //command.CommandType = CommandType.StoredProcedure;
+    command.CommandType = System.Data.CommandType.StoredProcedure;
 
         try
         {
