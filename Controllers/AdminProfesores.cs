@@ -1,4 +1,4 @@
-/*using ProfesoresGuia.Models;
+using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
 
@@ -7,18 +7,18 @@ public class AdminProfesores
     public bool agregarProfesor(DTOProfesor pProfesor)
     {
         ProfesorGuia profe = new ProfesorGuia(pProfesor.codigo, pProfesor.nombreCompleto, pProfesor.correoElectronico,
-            pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo);
+            pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo, pProfesor.sede);
         return SingletonDAO.getInstance().agregarProfesor(profe);
     }
 
-    public bool editarProfesor(int idProfesor, DTOProfesor pProfesor)
+    public bool editarProfesor(DTOProfesor pProfesor)
     {
         ProfesorGuia profe = new ProfesorGuia(pProfesor.codigo, pProfesor.nombreCompleto, pProfesor.correoElectronico,
-            pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo);
-        return SingletonDAO.getInstance().modificarProfesor(idProfesor, profe);
+            pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo, pProfesor.sede);
+        return SingletonDAO.getInstance().modificarProfesor(profe);
     }
 
-    public bool modificarEstadoProfesor(int pProfesor, bool pEstado)
+    public bool modificarEstadoProfesor(int pProfesor, String pEstado)
     {
         return SingletonDAO.getInstance().modificarEstadoProfesor(pProfesor, pEstado);
     }
@@ -37,4 +37,4 @@ public class AdminProfesores
     {
         return SingletonDAO.getInstance().getTodosProfesores();
     }
-}*/
+}

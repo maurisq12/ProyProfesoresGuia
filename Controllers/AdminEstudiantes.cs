@@ -14,27 +14,11 @@ public class AdminEstudiantes
         
     }
 
-    public List<Estudiante> obtenerEstudiantesAlfabeticoAsc()
+    public List<Estudiante> obtenerEstudiantes()
     {
-        List<Estudiante> estudiantes = SingletonDAO.getInstance().getEstudiantes();
-        if (estudiantes != null)
-        {
-            return estudiantes.OrderBy(est => est.nombreCompleto).ToList();
-        }
-
-        return null;
+        return SingletonDAO.getInstance().getEstudiantes();
     }
     
-    public List<Estudiante> obtenerEstudiantesAlfabeticoDes()
-    {
-        List<Estudiante> estudiantes = SingletonDAO.getInstance().getEstudiantes();
-        if (estudiantes != null)
-        {
-            return estudiantes.OrderByDescending(est => est.nombreCompleto).ToList();
-        }
-
-        return null;
-    }
 
     public List<Estudiante> consultarEstudiantesCentro(int pCentro)
     {

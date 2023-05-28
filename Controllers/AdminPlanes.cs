@@ -18,4 +18,29 @@ public class AdminPlanes
     {
         return SingletonDAO.getInstance().agregarActividadPlan(pId, pActividad);
     }
+
+    public bool activarPublicacion(int idActividad)
+    {
+        
+    }
+
+    public bool marcarCancelada(int idActividad, String justificacion, DateTime fecha)
+    {
+        
+    }
+    
+    public bool marcarRealizada(Evidencia evidencia)
+    {
+        
+    }
+
+    public Actividad consultarActividad(int idActividad)
+    {
+        
+    }
+
+    public List<Actividad> consultarActividades()
+    {
+        
+    }
 }
