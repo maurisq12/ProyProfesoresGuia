@@ -199,7 +199,7 @@ public class Controlador : Controller
         DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], "Activo", (SiglasCentros)Enum.Parse(typeof(SiglasCentros), sede.ToUpper()));
         admProfesores.agregarProfesor(profe);
         //   regresa a la pantalla anterior
-        return View(se devuelve);
+        return View(se devuelve);/// consultarProfesoresAsistente()
     }
     
     
@@ -215,7 +215,7 @@ public class Controlador : Controller
     {
         List<Estudiante> estudiantes = pExcel.procesarExcel(Request.Form["ruta"]);
         admEstudiantes.agregarEstudiantes(estudiantes);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarEstudiantesCentro()
     }
     
     
@@ -245,7 +245,7 @@ public class Controlador : Controller
         admProfesores.editarProfesor(profe);
 
         
-        return View(se devuelve);
+        return View(se devuelve);/// consultarProfesoresAsistente()
     }
     
     
@@ -256,7 +256,7 @@ public class Controlador : Controller
     {
         ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
         admEquipos.definirCoordinador(1, profeGuia.codigo);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarProfesoresAsistente()
     }
 
 
@@ -267,7 +267,24 @@ public class Controlador : Controller
         ViewBag.Plan = admPlanes.consultarPlan(1);
         return View("../Asistente/planTrabajo");
     }
+    
+    
+    
+    
+    public IActionResult consultarProfesoresAsistente()
+    {
+        ViewBag.Profesores = admProfesores.obtenerProfesores();
+        return View("../Asistente/profesoresEquipo");
+    }
+    
 
+    
+    public IActionResult consultarProfesorAsistente()
+    {
+        ViewBag.Profesor = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Form["codigo"]);
+        return View("../Asistente/profesoresEquipo");
+    }
+    
     
     
     
@@ -297,7 +314,7 @@ public class Controlador : Controller
         admProfesores.editarProfesor(profe);
 
         
-        return View(se devuelve);
+        return View(se devuelve);/// no se
     }
     
     
@@ -308,6 +325,24 @@ public class Controlador : Controller
         ViewBag.Plan = admPlanes.consultarPlan(1);
         return View("../Profesor/planTrabajo");
     }
+    
+    
+    
+    
+    public IActionResult consultarProfesoresProfesorGuia()
+    {
+        ViewBag.Profesores = admProfesores.obtenerProfesores();
+        return View("../Profesor/profesoresEquipo");
+    }
+    
+    
+    
+    public IActionResult consultarProfesorProfesorGuia()
+    {
+        ViewBag.Profesor = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Form["codigo"]);
+        return View("../Profesor/profesoresEquipo");
+    }
+    
     
     
     
@@ -355,7 +390,7 @@ public class Controlador : Controller
             (EstadoActividad)Enum.Parse(typeof(EstadoActividad), estado.ToUpper()));
 
         admPlanes.agregarActividadPlan((PlanTrabajo)ViewBag.Plan, act);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarPlanCoord()
     }
     
     
@@ -368,7 +403,7 @@ public class Controlador : Controller
     {
         Actividad act = (Actividad)ViewBag.Actividad;
         admPlanes.activarPublicacion(act.idActividad);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarPlanCoord()
     }
     
     
@@ -387,7 +422,7 @@ public class Controlador : Controller
     {
         Actividad act = (Actividad)ViewBag.Actividad;
         admPlanes.marcarCancelada(act.idActividad, Request.Form["justificacion"], DateTime.Now);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarPlanCoord()
     }
 
 
@@ -416,7 +451,7 @@ public class Controlador : Controller
         }
        
         admPlanes.marcarRealizada(new Evidencia(idEvidencia, act.idActividad, imagenesList, Request.Form["asistencias"], Request.Form["linkGrabacion"]));
-        return View(se devuelve);
+        return View(se devuelve);/// consultarPlanCoord()
     }
     
     
@@ -425,8 +460,27 @@ public class Controlador : Controller
     public IActionResult consultarPlanCoord()
     {
         ViewBag.Plan = admPlanes.consultarPlan(1);
-        return View();
+        return View();/// no se
     }
+    
+    
+    
+    
+    
+    public IActionResult consultarProfesoresCoordinador()
+    {
+        ViewBag.Profesores = admProfesores.obtenerProfesores();
+        return View("../Coordinador/profesoresEquipo");
+    }
+    
+    
+    
+    public IActionResult consultarProfesorCoordinador()
+    {
+        ViewBag.Profesor = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Form["codigo"]);
+        return View("../Coordinador/profesoresEquipo");
+    }
+    
     
     
     
@@ -448,7 +502,7 @@ public class Controlador : Controller
         int idComentario = admComentarios.getComentarios().Count + 1;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admComentarios.realizarComentario(new Comentario(idComentario, profe, DateTime.Now, Request.Form["comentario"]), idActividad);
-        return View(el de consultarComentarios);
+        return View(el de consultarComentarios);/// consultarComentarios()
     }
     
     
@@ -461,7 +515,7 @@ public class Controlador : Controller
     {
         ViewBag.IdComentario = Int32.Parse(Request.Query["idComentario"]);
         ViewBag.IdProfesor = Request.Query["idProfesor"];
-        return View();
+        return View();/// no se
     }
     //// revisar view de respuesta
     public IActionResult realizarRespuestaConf()
@@ -471,7 +525,7 @@ public class Controlador : Controller
         String idProfesor = (String)ViewBag.IdProfesor;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admRespuestas.realizarRespuesta(new Respuesta(idRespuesta, idComentario, profe, DateTime.Now, Request.Form["respuesta"]));
-        return View(al de consultarComentarios);
+        return View(al de consultarComentarios);/// consultarComentarios()
     }
     
     
@@ -499,7 +553,7 @@ public class Controlador : Controller
         admEstudiantes.modificarEstudiante(est.idEstudiante, estudiante);
 
         
-        return View(se devuelve);
+        return View(se devuelve);/// consultarEstudiantesCentro()
     }
     
     
@@ -510,7 +564,7 @@ public class Controlador : Controller
     // Asistente, Profe Guia, Coordinador
     public IActionResult cambiarContrasena()
     {
-        return View();
+        return View();/// no se
     }
     //// revisar view de cambiar contrasena
     [HttpPost]
@@ -519,7 +573,7 @@ public class Controlador : Controller
         String correo = Request.Form["correo"];
         String contrasena = Request.Form["contrasena"];
         SingletonDAO.getInstance().cambiarContrasena(correo, contrasena);
-        return View(se va a inicio sesion);
+        return View("../Acceso/IniciarSesion");
     }
     
     
@@ -535,44 +589,34 @@ public class Controlador : Controller
         ViewBag.Actividad = admPlanes.consultarProxActividad(1);
         return View("../Asistente/proximaActividad");
     }
-    
-    
-    
-    
-    
-    
-    
-    // Asistente, Profe Guia, Coordinador
-    public IActionResult consultarProfesores()
-    {
-        ViewBag.Profesores = admProfesores.obtenerProfesores();
-        return View("../Asistente/gestProfesores");
-    }
-    
-    
-    
-    
-    
-    
-    // Asistente, Profe Guia, Coordinador
-    public IActionResult consultarProfesor()
-    {
-        ViewBag.Profesor = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Form["codigo"]);
-        return View(el de consultarProfesores());
-    }
+
+
 
     
 
-    
-    
-  
-    // Asistente, Profe Guia, Coordinador
-    public IActionResult consultarEstudiantesCentro()
+
+
+
+
+    // Asistente
+    public IActionResult consultarEstudiantesCentroAsistente()
     {
         //  obtiene estudiantes del centro y despliega su pantalla
         ViewBag.Estudiantes = admEstudiantes.consultarEstudiantesCentro(Int32.Parse(Request.Query["id"]));
         return View("../Asistente/estudiantesSede");
     }
+    
+    
+    
+    
+    // Profe Guia, Coordinador
+    public IActionResult consultarEstudiantesCentroProfeGuiaCoordinador()
+    {
+        //  obtiene estudiantes del centro y despliega su pantalla
+        ViewBag.Estudiantes = admEstudiantes.consultarEstudiantesCentro(Int32.Parse(Request.Query["id"]));
+        return View("../Profesor/estudiantesSede");
+    }
+    
     
     
     
@@ -583,7 +627,7 @@ public class Controlador : Controller
     {
         //   obtiene estudiantes y despliega su pantalla
         ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
-        return View("../Asistente/estudiantesEquipo");
+        return View("../Asistente/estudiantesEquipo");/// no se
     }
 
     
@@ -622,7 +666,7 @@ public class Controlador : Controller
     public IActionResult consultarActividad()
     {
         ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
-        return View("../Asistente/detallesActividad");
+        return View("../Asistente/detallesActividad");/// no se
     }
 
     
@@ -645,24 +689,24 @@ public class Controlador : Controller
    
    public IActionResult generarExcelEstudiantesSede()
    {
-       return View();
+       return View();/// no se
    }
    
    public IActionResult generarExcelEstudiantesSedeConf()
    {
        pExcel.generarExcelEstudiantes(Request.Form["ruta"]);
-       return View(se devuelve);
+       return View(se devuelve);/// consultarEstudiantesCentroProfeGuiaCoordinador()
    }
     
     public IActionResult generarExcelPestanas()
     {
-        return View();
+        return View();/// no se
     }
     
     public IActionResult generarExcelPestanasConf()
     {
         pExcel.generarExcelPestanas(Request.Form["ruta"]);
-        return View(se devuelve);
+        return View(se devuelve);/// consultarEstudiantesCentroProfeGuiaCoordinador()
     }
     
     
