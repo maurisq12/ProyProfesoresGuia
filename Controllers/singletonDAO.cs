@@ -136,11 +136,37 @@ public class SingletonDAO
     }
 
 
-         public bool InsertarRespuesta(Respuesta r, int idComentario)
+    public int getCountComentarios(){
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        SqlCommand command = new SqlCommand("SELECT COUNT(idComentario) FROM Comentario", basedatos.getConnection());
+        //SqlDataReader readerComentarios = command.ExecuteReader();
+    
+            int count = (int)command.ExecuteScalar();
+
+        return count;
+    }
+    public int getRespuestas(){
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        SqlCommand command = new SqlCommand("SELECT COUNT(idRespuesta) FROM Respuesta", basedatos.getConnection());
+        //SqlDataReader readerComentarios = command.ExecuteReader();
+    
+            int count = (int)command.ExecuteScalar();
+
+        return count;
+    }
+    public bool InsertarRespuesta(Respuesta r, int idComentario)
     {   
         //se supone que el profesor ya esta ingresado en la tablas profesores
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_respuesta", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@respuesta_id", r.idRespuesta);
@@ -172,7 +198,9 @@ public class SingletonDAO
     {   
         //se supone que el profesor ya esta ingresado en la tablas profesores
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_comentario", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@profesor_guia_id", c.emisor.codigo);
@@ -208,7 +236,9 @@ public class SingletonDAO
    public bool InsertarResponsables(ProfesorGuia p, int idActividad)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_ActividadXresponsables", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@profesor_guia_id", p.codigo);
@@ -237,7 +267,9 @@ public class SingletonDAO
     public bool InsertarRecordatorios (DateTime r, int idActividad)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_recordatorio", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@fecha_recordatorio", r);
@@ -265,7 +297,9 @@ public class SingletonDAO
     public bool InsertarActividad(Actividad a)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_actividad", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             
@@ -314,20 +348,19 @@ public class SingletonDAO
         }       
     }
     
-    
-
-    private byte[] ConvertToByteArray(string filePath)
-    {
-        // Aquí se puede implementar la lógica para convertir un archivo en byte array,
-        // si el atributo afiche representa una imagen o archivo adjunto.
-        // Por ejemplo:
-        return System.IO.File.ReadAllBytes(filePath);
+    public List<Estudiante> getEstudiantesCentro(int idCentro){
+        List<Estudiante> estudiantes = new List<Estudiante>(); 
+        estudiantes = getEstudiantes();
+        List<Estudiante> estudiantesFiltrados = estudiantes.Where(e => e.centroEstudio.idCentro == idCentro).ToList();
+        return estudiantesFiltrados;
     }
     public Actividad getActividadXid(int id)
     {
      Actividad actividad = new Actividad();
      SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("consultar_actividades_xid", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
         command.Parameters.AddWithValue("@id_actividad", id);
@@ -396,12 +429,13 @@ public class SingletonDAO
                    
 
                 c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
+            
                 c.cuerpo = (String)readerComentarios["cuerpo"];
                 c.fechaHora = (DateTime)readerComentarios["fechaHora"];
 
                 SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
                 commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
-                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", id);
 
                 SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
                 while (readerRespuestas.Read()){
@@ -411,7 +445,7 @@ public class SingletonDAO
                     r.cuerpo = (String)readerRespuestas["cuerpo"];
                       
                     r.emisor = getProfesorXcodigo((String)readerRespuestas["idProfesorGuia"]);
-                    
+                 
                     c.listaRespuestas.Add(r);  
                     
                 }
@@ -430,7 +464,9 @@ public class SingletonDAO
     List<Actividad> actividades = new List<Actividad>();
 
      SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("consultar_actividades", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -498,6 +534,7 @@ public class SingletonDAO
                    
 
                 c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
+       
                 c.cuerpo = (String)readerComentarios["cuerpo"];
                 c.fechaHora = (DateTime)readerComentarios["fechaHora"];
 
@@ -513,7 +550,7 @@ public class SingletonDAO
                     r.cuerpo = (String)readerRespuestas["cuerpo"];
                       
                     r.emisor = getProfesorXcodigo((String)readerRespuestas["idProfesorGuia"]);
-                    
+                   
                     c.listaRespuestas.Add(r);  
                     
                 }
@@ -532,7 +569,9 @@ public class SingletonDAO
     public bool insertarProfesor(ProfesorGuia p)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("insertar_profesor", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
             
@@ -565,17 +604,54 @@ public class SingletonDAO
             }
             basedatos.getConnection().Close();
             return false;
+        }  
+    }
+    public bool modificarProfesor(ProfesorGuia p)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
         }
+        SqlCommand command = new SqlCommand("actualizar_profesor", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
             
+            command.Parameters.AddWithValue("@in_codigo", p.codigo);
+            command.Parameters.AddWithValue("@in_nombreCompleto", p.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", p.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoOficina", p.telefonoOficina);
+            command.Parameters.AddWithValue("@in_telefonoCelular", p.telefonoCelular);
+            command.Parameters.AddWithValue("@in_fotografia", p.fotografia);
+        
+            command.Parameters.AddWithValue("@in_activo", p.activo);
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
             
         }
-    
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
     
     public bool insertarCentroAcademico(CentroAcademico c)
     {
         
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();        
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }        
 
         
         string storedProcedure = "insertar_centroAcademico";
@@ -615,10 +691,57 @@ public class SingletonDAO
         this.insertarCentroAcademico(e.centroEstudio);
         SingletonDB basedatos = SingletonDB.getInstance();
         
-        basedatos.getConnection().Open();        
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }        
 
         
         string storedProcedure = "insertar_estudiante";
+        SqlCommand command = new SqlCommand(storedProcedure ,basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            
+            command.Parameters.AddWithValue("@in_idEstudiante", e.idEstudiante);
+            command.Parameters.AddWithValue("@in_carne", e.carne);
+            command.Parameters.AddWithValue("@in_nombreCompleto", e.nombreCompleto);
+            command.Parameters.AddWithValue("@in_correoElectronico", e.correoElectronico);
+            command.Parameters.AddWithValue("@in_telefonoCelular", e.telefonoCelular);
+            command.Parameters.AddWithValue("@in_idCentroAcademico", e.centroEstudio.idCentro);
+            
+            
+        try
+        {     
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }
+             
+    }
+    public bool modificarEstudiante(Estudiante e)
+    {
+        this.insertarCentroAcademico(e.centroEstudio);
+        SingletonDB basedatos = SingletonDB.getInstance();
+        
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }        
+
+        
+        string storedProcedure = "actualizar_estudiante";
         SqlCommand command = new SqlCommand(storedProcedure ,basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -658,7 +781,9 @@ public class SingletonDAO
     
     string storedProcedure = "insertar_equipoGuia";
     SingletonDB basedatos = SingletonDB.getInstance();
-    basedatos.getConnection().Open(); 
+    if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        } 
 
     
     
@@ -694,7 +819,9 @@ public class SingletonDAO
     List<ProfesorGuia> profesores = new List<ProfesorGuia>();
     
     SingletonDB basedatos = SingletonDB.getInstance();
-    basedatos.getConnection().Open();
+    if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
         SqlCommand command = new SqlCommand("consultar_profesor", basedatos.getConnection());
         command.CommandType = System.Data.CommandType.StoredProcedure;
         
@@ -719,40 +846,70 @@ public class SingletonDAO
     basedatos.getConnection().Close();
     return profesores;
     }
-    public ProfesorGuia getProfesorXcodigo(String codigo){
+    public ProfesorGuia getProfesorPorcodigo(String codigo){
 
-    ProfesorGuia profesor = new ProfesorGuia();
-    SingletonDB basedatos = SingletonDB.getInstance();
-    if (basedatos.IsConnectionOpen() == false){
-        basedatos.getConnection().Open();
-    }
-
-        SqlCommand command = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("@codigo_Profesor",codigo);
-        
-        using (SqlDataReader reader = command.ExecuteReader())
-        {
-            if (reader.Read()){
-            
-                profesor.codigo = reader["codigo"].ToString();
-                profesor.nombreCompleto = reader["nombrecompleto"].ToString();
-                profesor.correoElectronico = reader["correoelectronico"].ToString();
-                profesor.telefonoOficina = reader["telefonooficina"].ToString();
-                profesor.telefonoCelular = reader["telefonocelular"].ToString();
-                profesor.fotografia = (byte[])reader["fotografia"];
-                profesor.activo = reader["activo"].ToString();
-                }
+        ProfesorGuia profesor = new ProfesorGuia();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
         }
-   
-    return profesor;
+
+            SqlCommand command = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@codigo_Profesor",codigo);
+            
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read()){
+                
+                    profesor.codigo = reader["codigo"].ToString();
+                    profesor.nombreCompleto = reader["nombrecompleto"].ToString();
+                    profesor.correoElectronico = reader["correoelectronico"].ToString();
+                    profesor.telefonoOficina = reader["telefonooficina"].ToString();
+                    profesor.telefonoCelular = reader["telefonocelular"].ToString();
+                    profesor.fotografia = (byte[])reader["fotografia"];
+                    profesor.activo = reader["activo"].ToString();
+                    }
+            }
+        basedatos.getConnection().Close();
+        return profesor;
+    }
+    private ProfesorGuia getProfesorXcodigo(String codigo){
+
+        ProfesorGuia profesor = new ProfesorGuia();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+
+            SqlCommand command = new SqlCommand("consultar_profesor_codigo", basedatos.getConnection());
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@codigo_Profesor",codigo);
+            
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read()){
+                
+                    profesor.codigo = reader["codigo"].ToString();
+                    profesor.nombreCompleto = reader["nombrecompleto"].ToString();
+                    profesor.correoElectronico = reader["correoelectronico"].ToString();
+                    profesor.telefonoOficina = reader["telefonooficina"].ToString();
+                    profesor.telefonoCelular = reader["telefonocelular"].ToString();
+                    profesor.fotografia = (byte[])reader["fotografia"];
+                    profesor.activo = reader["activo"].ToString();
+                    }
+            }
+  
+        return profesor;
     }
 
    public List<Estudiante> getEstudiantes()
     {
         var estudiantes = new List<Estudiante>();
         SingletonDB basedatos = SingletonDB.getInstance();
-        basedatos.getConnection().Open();        
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }        
 
         
         string storedProcedure = "consultar_estudiante";
@@ -796,7 +953,9 @@ public class SingletonDAO
     {
     var equiposGuia = new List<EquipoGuia>();
     SingletonDB basedatos = SingletonDB.getInstance();
-    basedatos.getConnection().Open();   
+    if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }   
     string storedProcedure = "consultar_equipoGuia";
 
     SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
