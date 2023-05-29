@@ -4,13 +4,14 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdmComentarios
 {
-    public bool realizarComentario(int pActividad, String pComentario)
+    public bool realizarComentario(Comentario comentario, int pActividad)
     {
-        return SingletonDAO.getInstance().realizarComentario(pActividad, pComentario);
+        return SingletonDAO.getInstance().InsertarComentario(comentario, pActividad);
     }
 
-    public List<Comentario> consultarComentarios(int idActividad)
+    public List<Comentario> getComentarios()
     {
-        return SingletonDAO.getInstance().getComentarios(idActividad);
+        return SingletonDAO.getInstance().getComentarios();
     }
+
 }

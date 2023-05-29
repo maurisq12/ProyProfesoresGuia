@@ -4,13 +4,14 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdmRespuestas
 {
-    public bool realizarRespuesta(int pComentario, String pRespuesta)
+    public bool realizarRespuesta(Respuesta respuesta)
     {
-        return SingletonDAO.getInstance().realizarRespuesta(pComentario, pRespuesta);
+        return SingletonDAO.getInstance().InsertarRespuesta(respuesta, respuesta.idComentario);
     }
-    
-    public List<Respuesta> consultarRespuestas(int idComentario)
+
+    public List<Respuesta> getRespuestas()
     {
-        return SingletonDB.getInstance().getRespuestas(idComentario);
+        return SingletonDAO.getInstance().getRespuestas();
     }
+
 }

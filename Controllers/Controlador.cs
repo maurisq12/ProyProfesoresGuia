@@ -188,7 +188,7 @@ public class Controlador : Controller
     
     public IActionResult agregarProfesor()
     {
-        return View();           // se va a la pantalla para ingresar la informacion del profesor
+        return View("../Asistente/registrarProfesor");           // se va a la pantalla para ingresar la informacion del profesor
     }
     
     public IActionResult agregarProfesorConf()
@@ -208,7 +208,7 @@ public class Controlador : Controller
     
     public IActionResult cargarEstudiantes()
     {
-        return View();
+        return View("../Asistente/cargarEstudiantes");
     }
     
     public IActionResult cargarEstudiantesConf()
@@ -233,7 +233,7 @@ public class Controlador : Controller
         ViewBag.Profesor = profe;
         
         //  se va a la pantalla para editar la info del profe
-        return View();
+        return View("../Asistente/editarProfesor");
     }
     
     [HttpPost]
@@ -265,7 +265,7 @@ public class Controlador : Controller
     public IActionResult consultarPlanSinComentarios()
     {
         ViewBag.Plan = admPlanes.consultarPlan(1);
-        return View();
+        return View("../Asistente/planTrabajo");
     }
 
     
@@ -285,7 +285,7 @@ public class Controlador : Controller
         ViewBag.Profesor = profe;
         
         //  se va a la pantalla para editar la info del profe
-        return View();
+        return View("../Profesor/editarProfesor");
     }
     
     [HttpPost]
@@ -306,7 +306,7 @@ public class Controlador : Controller
     public IActionResult consultarPlanConComentarios()
     {
         ViewBag.Plan = admPlanes.consultarPlan(1);
-        return View();
+        return View("../Profesor/planTrabajo");
     }
     
     
@@ -321,7 +321,7 @@ public class Controlador : Controller
     public IActionResult agregarActividad()
     {
         ViewBag.Plan = admPlanes.consultarPlan(1);
-        return View();
+        return View("../Coordinador/nuevaActividad");
     }
     
     public IActionResult agregarActividadConf()
@@ -379,7 +379,7 @@ public class Controlador : Controller
     
     public IActionResult marcarCancelada()
     {
-        return View();
+        return View("../Coordinador/CancelarActividad");
     }
     
     [HttpPost]
@@ -397,7 +397,7 @@ public class Controlador : Controller
 
     public IActionResult marcarRealizada()
     {
-        return View();
+        return View("../Coordinador/ActividadRealizada");
     }
     
     [HttpPost]
@@ -444,7 +444,10 @@ public class Controlador : Controller
     public IActionResult realizarComentario()
     {
         int idActividad = (int)ViewBag.IdActividad;
-        admComentarios.realizarComentario(idActividad, Request.Form["comentario"]);
+        String idProfesor = Request.Query["idProfesor"];
+        int idComentario = admComentarios.getComentarios().Count + 1;
+        ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
+        admComentarios.realizarComentario(new Comentario(idComentario, profe, DateTime.Now, Request.Form["comentario"]), idActividad);
         return View(el de consultarComentarios);
     }
     
@@ -457,12 +460,17 @@ public class Controlador : Controller
     public IActionResult realizarRespuesta()
     {
         ViewBag.IdComentario = Int32.Parse(Request.Query["idComentario"]);
+        ViewBag.IdProfesor = Request.Query["idProfesor"];
         return View();
     }
     //// revisar view de respuesta
     public IActionResult realizarRespuestaConf()
     {
-        admRespuestas.realizarRespuesta((int)ViewBag.IdComentario, Request.Form["respuesta"]);
+        int idRespuesta = admRespuestas.getRespuestas().Count + 1;
+        int idComentario = (int)ViewBag.IdComentario;
+        String idProfesor = (String)ViewBag.IdProfesor;
+        ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
+        admRespuestas.realizarRespuesta(new Respuesta(idRespuesta, idComentario, profe, DateTime.Now, Request.Form["respuesta"]));
         return View(al de consultarComentarios);
     }
     
@@ -480,7 +488,7 @@ public class Controlador : Controller
         ViewBag.Estudiante = est;
         
         //  se va a la pantalla para editar la info del estudiante
-        return View();
+        return View("../Profesor/editarEstudiante");
     }
     
     [HttpPost]
@@ -525,7 +533,7 @@ public class Controlador : Controller
     public IActionResult consultarProximaActividad()
     {
         ViewBag.Actividad = admPlanes.consultarProxActividad(1);
-        return View();
+        return View("../Asistente/proximaActividad");
     }
     
     
@@ -538,7 +546,7 @@ public class Controlador : Controller
     public IActionResult consultarProfesores()
     {
         ViewBag.Profesores = admProfesores.obtenerProfesores();
-        return View();
+        return View("../Asistente/gestProfesores");
     }
     
     
@@ -563,7 +571,7 @@ public class Controlador : Controller
     {
         //  obtiene estudiantes del centro y despliega su pantalla
         ViewBag.Estudiantes = admEstudiantes.consultarEstudiantesCentro(Int32.Parse(Request.Query["id"]));
-        return View();
+        return View("../Asistente/estudiantesSede");
     }
     
     
@@ -575,7 +583,7 @@ public class Controlador : Controller
     {
         //   obtiene estudiantes y despliega su pantalla
         ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
-        return View();
+        return View("../Asistente/estudiantesEquipo");
     }
 
     
@@ -586,12 +594,13 @@ public class Controlador : Controller
     public IActionResult consultarComentarios()
     {
         int idActividad = Int32.Parse(Request.Query["id"]);
-        List<Comentario> comentarios = admComentarios.consultarComentarios(idActividad);
+        Actividad act = admPlanes.consultarActividad(idActividad);
+        List<Comentario> comentarios = act.listaComentarios;
         List<Respuesta> respuestas = new List<Respuesta>();
         List<Respuesta> found = new List<Respuesta>();
         foreach (var comentario in comentarios)
         {
-            found = admRespuestas.consultarRespuestas(comentario.idComentario);
+            found = comentario.listaRespuestas;
             if (found != null && found.Count > 0)
             {
                 respuestas = respuestas.Union(found).ToList();
@@ -601,7 +610,7 @@ public class Controlador : Controller
         ViewBag.IdActividad = idActividad;
         ViewBag.Comentarios = comentarios;
         ViewBag.Respuestas = respuestas;
-        return View();
+        return View("../Profesor/comentariosActividad");
     }
 
     
@@ -613,7 +622,7 @@ public class Controlador : Controller
     public IActionResult consultarActividad()
     {
         ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
-        return View();
+        return View("../Asistente/detallesActividad");
     }
 
     
@@ -631,7 +640,7 @@ public class Controlador : Controller
    // Profe Guia, Coordinador
    public IActionResult generarExcelEstudiantes()
    {
-       return View();
+       return View("../Profesor/generarExcel");
    }
    
    public IActionResult generarExcelEstudiantesSede()

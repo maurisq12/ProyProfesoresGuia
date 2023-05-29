@@ -8,7 +8,7 @@ public class AdminProfesores
     {
         ProfesorGuia profe = new ProfesorGuia(pProfesor.codigo, pProfesor.nombreCompleto, pProfesor.correoElectronico,
             pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo, pProfesor.sede);
-        return SingletonDAO.getInstance().agregarProfesor(profe);
+        return SingletonDAO.getInstance().insertarProfesor(profe);
     }
 
     public bool editarProfesor(DTOProfesor pProfesor)
@@ -18,7 +18,7 @@ public class AdminProfesores
         return SingletonDAO.getInstance().modificarProfesor(profe);
     }
 
-    public bool modificarEstadoProfesor(int pProfesor, String pEstado)
+    /*public bool modificarEstadoProfesor(int pProfesor, String pEstado)
     {
         return SingletonDAO.getInstance().modificarEstadoProfesor(pProfesor, pEstado);
     }
@@ -31,7 +31,7 @@ public class AdminProfesores
     public List<ProfesorGuia> obtenerProfesoresEquipo(int pEquipo)
     {
         return SingletonDAO.getInstance().getProfesoresEquipo(pEquipo);
-    }
+    }*/
 
     public List<ProfesorGuia> obtenerProfesores()
     {

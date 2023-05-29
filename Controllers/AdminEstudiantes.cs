@@ -5,10 +5,10 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdminEstudiantes
 {
-    public List<Estudiante> obtenerEstudiantesEquipo(int pEquipo)
+   /* public List<Estudiante> obtenerEstudiantesEquipo(int pEquipo)
     {
         return SingletonDAO.getInstance().getEstudiantesEquipo(pEquipo);
-    }
+    }*/
 
     public List<Estudiante> obtenerEstudiantes()
     {
