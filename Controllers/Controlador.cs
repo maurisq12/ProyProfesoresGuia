@@ -199,7 +199,7 @@ public class Controlador : Controller
         DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], Request.Form["fotografia"], "Activo", (SiglasCentros)Enum.Parse(typeof(SiglasCentros), sede.ToUpper()));
         admProfesores.agregarProfesor(profe);
         //   regresa a la pantalla anterior
-        return View(se devuelve);/// consultarProfesoresAsistente()
+        return consultarProfesoresAsistente();
     }
     
     
@@ -215,7 +215,7 @@ public class Controlador : Controller
     {
         List<Estudiante> estudiantes = pExcel.procesarExcel(Request.Form["ruta"]);
         admEstudiantes.agregarEstudiantes(estudiantes);
-        return View(se devuelve);/// consultarEstudiantesCentro()
+        return consultarEstudiantesCentroAsistente();
     }
     
     
@@ -245,7 +245,7 @@ public class Controlador : Controller
         admProfesores.editarProfesor(profe);
 
         
-        return View(se devuelve);/// consultarProfesoresAsistente()
+        return consultarProfesoresAsistente();
     }
     
     
@@ -256,7 +256,7 @@ public class Controlador : Controller
     {
         ProfesorGuia profeGuia = (ProfesorGuia)ViewBag.Profesor;
         admEquipos.definirCoordinador(1, profeGuia.codigo);
-        return View(se devuelve);/// consultarProfesoresAsistente()
+        return consultarProfesoresAsistente();
     }
 
 
@@ -288,6 +288,20 @@ public class Controlador : Controller
     
     
     
+    public IActionResult consultarActividadAsistente()
+    {
+        ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
+        return View("../Asistente/detallesActividad");
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //////////////////////////////////////////////////                                //////////////////////////////////////////////////
     //////////////////////////////////////////////////                                //////////////////////////////////////////////////
     //////////////////////////////////////////////////         Profesor Guia          //////////////////////////////////////////////////
@@ -314,7 +328,7 @@ public class Controlador : Controller
         admProfesores.editarProfesor(profe);
 
         
-        return View(se devuelve);/// no se
+        return View("../Profesor/Inicio");
     }
     
     
@@ -342,6 +356,16 @@ public class Controlador : Controller
         ViewBag.Profesor = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Form["codigo"]);
         return View("../Profesor/profesoresEquipo");
     }
+    
+    
+    
+    
+    public IActionResult consultarActividadProfesorGuia()
+    {
+        ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
+        return View("../Profesor/detallesActividad");
+    }
+    
     
     
     
@@ -390,7 +414,7 @@ public class Controlador : Controller
             (EstadoActividad)Enum.Parse(typeof(EstadoActividad), estado.ToUpper()));
 
         admPlanes.agregarActividadPlan((PlanTrabajo)ViewBag.Plan, act);
-        return View(se devuelve);/// consultarPlanCoord()
+        return consultarPlanCoord();
     }
     
     
@@ -403,7 +427,7 @@ public class Controlador : Controller
     {
         Actividad act = (Actividad)ViewBag.Actividad;
         admPlanes.activarPublicacion(act.idActividad);
-        return View(se devuelve);/// consultarPlanCoord()
+        return consultarPlanCoord();
     }
     
     
@@ -422,7 +446,7 @@ public class Controlador : Controller
     {
         Actividad act = (Actividad)ViewBag.Actividad;
         admPlanes.marcarCancelada(act.idActividad, Request.Form["justificacion"], DateTime.Now);
-        return View(se devuelve);/// consultarPlanCoord()
+        return consultarPlanCoord();
     }
 
 
@@ -451,7 +475,7 @@ public class Controlador : Controller
         }
        
         admPlanes.marcarRealizada(new Evidencia(idEvidencia, act.idActividad, imagenesList, Request.Form["asistencias"], Request.Form["linkGrabacion"]));
-        return View(se devuelve);/// consultarPlanCoord()
+        return consultarPlanCoord();
     }
     
     
@@ -483,6 +507,14 @@ public class Controlador : Controller
     
     
     
+    public IActionResult consultarActividadCoordinador()
+    {
+        ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
+        return View("../Coordinador/detallesActividadC");
+    }
+    
+    
+    
     
     
     
@@ -502,7 +534,7 @@ public class Controlador : Controller
         int idComentario = admComentarios.getComentariosCount() + 1;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admComentarios.realizarComentario(new Comentario(idComentario, profe, DateTime.Now, Request.Form["comentario"]), idActividad);
-        return View(el de consultarComentarios);/// consultarComentarios()
+        return consultarComentarios();
     }
     
     
@@ -525,7 +557,7 @@ public class Controlador : Controller
         String idProfesor = (String)ViewBag.IdProfesor;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admRespuestas.realizarRespuesta(new Respuesta(idRespuesta, idComentario, profe, DateTime.Now, Request.Form["respuesta"]));
-        return View(al de consultarComentarios);/// consultarComentarios()
+        return consultarComentarios();
     }
     
     
@@ -553,7 +585,7 @@ public class Controlador : Controller
         admEstudiantes.modificarEstudiante(estudiante);
 
         
-        return View(se devuelve);/// consultarEstudiantesCentro()
+        return consultarEstudiantesCentroProfeGuiaCoordinador();
     }
     
     
@@ -622,13 +654,25 @@ public class Controlador : Controller
     
     
     
-    // Asistente, Profe Guia, Coordinador
-    public IActionResult consultarEstudiantes()
+    // Asistente
+    public IActionResult consultarEstudiantesAsistente()
     {
         //   obtiene estudiantes y despliega su pantalla
         ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
-        return View("../Asistente/estudiantesEquipo");/// no se
+        return View("../Asistente/estudiantesEquipo");
     }
+    
+    
+    
+    
+    // Profe Guia, Coordinador
+    public IActionResult consultarEstudiantesProfeGuiaCoordinador()
+    {
+        //   obtiene estudiantes y despliega su pantalla
+        ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
+        return View("../Profesor/estudiantesEquipo");
+    }
+    
 
     
     
@@ -659,15 +703,6 @@ public class Controlador : Controller
 
     
     
-    
-    
-    
-    // Asistente, Profe Guia, Coordinador
-    public IActionResult consultarActividad()
-    {
-        ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
-        return View("../Asistente/detallesActividad");/// no se
-    }
 
     
     
@@ -695,7 +730,7 @@ public class Controlador : Controller
    public IActionResult generarExcelEstudiantesSedeConf()
    {
        pExcel.generarExcelEstudiantes(Request.Form["ruta"]);
-       return View(se devuelve);/// consultarEstudiantesCentroProfeGuiaCoordinador()
+       return consultarEstudiantesCentroProfeGuiaCoordinador();
    }
     
     public IActionResult generarExcelPestanas()
@@ -706,7 +741,7 @@ public class Controlador : Controller
     public IActionResult generarExcelPestanasConf()
     {
         pExcel.generarExcelPestanas(Request.Form["ruta"]);
-        return View(se devuelve);/// consultarEstudiantesCentroProfeGuiaCoordinador()
+        return consultarEstudiantesCentroProfeGuiaCoordinador();
     }
     
     
