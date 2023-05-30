@@ -499,7 +499,7 @@ public class Controlador : Controller
     {
         int idActividad = (int)ViewBag.IdActividad;
         String idProfesor = Request.Query["idProfesor"];
-        int idComentario = admComentarios.getComentarios().Count + 1;
+        int idComentario = admComentarios.getComentariosCount() + 1;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admComentarios.realizarComentario(new Comentario(idComentario, profe, DateTime.Now, Request.Form["comentario"]), idActividad);
         return View(el de consultarComentarios);/// consultarComentarios()
@@ -520,7 +520,7 @@ public class Controlador : Controller
     //// revisar view de respuesta
     public IActionResult realizarRespuestaConf()
     {
-        int idRespuesta = admRespuestas.getRespuestas().Count + 1;
+        int idRespuesta = admRespuestas.getRespuestasCount() + 1;
         int idComentario = (int)ViewBag.IdComentario;
         String idProfesor = (String)ViewBag.IdProfesor;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
@@ -549,8 +549,8 @@ public class Controlador : Controller
     public IActionResult modificarEstudianteConf()
     {
         Estudiante est = (Estudiante)ViewBag.Estudiante;
-        DTOEstudiante estudiante = new DTOEstudiante(est.idEstudiante, est.carne, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoCelular"], admEstudiantes.getCentros().FirstOrDefault(c => c.nombre == Request.Form["Centro"]));
-        admEstudiantes.modificarEstudiante(est.idEstudiante, estudiante);
+        DTOEstudiante estudiante = new DTOEstudiante(est.idEstudiante, est.carne, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoCelular"], admEstudiantes.getCentro(Int32.Parse(Request.Query["Centro"])));
+        admEstudiantes.modificarEstudiante(estudiante);
 
         
         return View(se devuelve);/// consultarEstudiantesCentro()

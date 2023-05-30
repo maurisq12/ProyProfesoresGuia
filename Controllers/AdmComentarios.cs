@@ -9,9 +9,9 @@ public class AdmComentarios
         return SingletonDAO.getInstance().InsertarComentario(comentario, pActividad);
     }
 
-    public List<Comentario> getComentarios()
+    public int getComentariosCount()
     {
-        return SingletonDAO.getInstance().getComentarios();
+        return SingletonDAO.getInstance().getCountComentarios();
     }
 
 }

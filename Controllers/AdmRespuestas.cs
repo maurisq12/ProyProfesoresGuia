@@ -9,7 +9,7 @@ public class AdmRespuestas
         return SingletonDAO.getInstance().InsertarRespuesta(respuesta, respuesta.idComentario);
     }
 
-    public List<Respuesta> getRespuestas()
+    public int getRespuestasCount()
     {
         return SingletonDAO.getInstance().getRespuestas();
     }

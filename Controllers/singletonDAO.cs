@@ -82,6 +82,35 @@ public class SingletonDAO
         }
         return null;
     }
+    
+    public bool cambiarContrasena(String correo, String contrasena)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        string query= "UPDATE Usuario SET contrasena = @pContrasena WHERE correo=@pCorreo";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.Text;
+
+        command.Parameters.AddWithValue("@pCorreo",correo);
+        command.Parameters.AddWithValue("@pContrasena",contrasena);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error al cambiar la contrasena: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+    
 
     //
 

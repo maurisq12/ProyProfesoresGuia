@@ -27,13 +27,18 @@ public class AdminEstudiantes
 
     public List<Estudiante> consultarEstudiantesCentro(int pCentro)
     {
-        return SingletonDAO.getInstance().getEstudiantesSede(pCentro);
+        return SingletonDAO.getInstance().getEstudiantesCentro(pCentro);
     }
 
-    public bool modificarEstudiante(int pId, DTOEstudiante pEstudiante)
+    public bool modificarEstudiante(DTOEstudiante pEstudiante)
     {
         Estudiante est = new Estudiante(pEstudiante.idEstudiante, pEstudiante.carne, pEstudiante.nombreCompleto, 
             pEstudiante.correoElectronico, pEstudiante.telefonoCelular, pEstudiante.centroEstudio);
-        return SingletonDAO.getInstance().modificarEstudiante(pId, est);
+        return SingletonDAO.getInstance().modificarEstudiante(est);
+    }
+
+    public CentroAcademico getCentro(int idCentro)
+    {
+        return SingletonDAO.getInstance().getCentro(idCentro);
     }
 }
