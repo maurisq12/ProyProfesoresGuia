@@ -347,7 +347,27 @@ public class SingletonDAO
             return false;
         }       
     }
-    
+    public CentroAcademico getCentro(int idCentro){
+        SingletonDB basedatos = SingletonDB.getInstance();
+        CentroAcademico centroAcademico = new CentroAcademico();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }        
+        SqlCommand command = new SqlCommand("consultar_centroAcademico" ,basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@in_idCentroAcademico", idCentro);
+
+        using (SqlDataReader reader = command.ExecuteReader()){
+        if (reader.Read()){
+        
+        centroAcademico.idCentro = Convert.ToInt32(reader["idCentroAcademico"]);
+
+        centroAcademico.siglas = (SiglasCentros)Enum.Parse(typeof(SiglasCentros),reader["Siglas"].ToString()); 
+        centroAcademico.nombre = reader["nombre"].ToString();
+        centroAcademico.cantidadProfesores = Convert.ToInt32(reader["cantProfesores"]);
+        }}
+        return centroAcademico;
+    }
     public List<Estudiante> getEstudiantesCentro(int idCentro){
         List<Estudiante> estudiantes = new List<Estudiante>(); 
         estudiantes = getEstudiantes();
