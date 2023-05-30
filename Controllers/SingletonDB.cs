@@ -31,6 +31,11 @@ public class SingletonDB
     {
         
     }
+    
+    public bool IsConnectionOpen()
+    {
+       return con.State == ConnectionState.Open;
+    }
 
 
 }
