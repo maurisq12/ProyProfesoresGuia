@@ -17,7 +17,7 @@ public class AdminPlanes
 
     public bool agregarActividadPlan( DTOActividad pActividad)
     {
-        return SingletonDAO.getInstance().agregarActividadPlan(pId, pActividad);
+        return SingletonDAO.getInstance().agregarActividadPlan( pActividad);
     }
 
     public bool activarPublicacion(int idActividad)
