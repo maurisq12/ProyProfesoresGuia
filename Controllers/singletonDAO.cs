@@ -891,9 +891,17 @@ public class SingletonDAO
             command.Parameters.AddWithValue("@in_telefonoCelular", e.telefonoCelular);
             command.Parameters.AddWithValue("@in_idCentroAcademico", e.centroEstudio.idCentro);
             
-            
+            SqlCommand commandCentro = new SqlCommand("actualizar_centroAcademico" ,basedatos.getConnection());
+            commandCentro.CommandType = System.Data.CommandType.StoredProcedure;
+
+            //commandCentro.CommandType = CommandType.StoredProcedure;
+            commandCentro.Parameters.AddWithValue("@in_idCentroAcademico", e.centroEstudio.idCentro);
+            commandCentro.Parameters.AddWithValue("@in_Siglas", e.centroEstudio.siglas.ToString());
+            commandCentro.Parameters.AddWithValue("@in_nombre", e.centroEstudio.nombre);
+            commandCentro.Parameters.AddWithValue("@in_cantProfesores", e.centroEstudio.cantidadProfesores);
         try
         {     
+            commandCentro.ExecuteNonQuery();
             command.ExecuteNonQuery();
             basedatos.getConnection().Close();
             return true;
@@ -1144,7 +1152,7 @@ public class SingletonDAO
         if (basedatos.IsConnectionOpen() == false){
             basedatos.getConnection().Open();
         }
-        string query= "UPDATE Actividad SET EstadoActividad = \"NOTIFICADA\" WHERE idActividad=@pidActividad";
+        string query= "UPDATE Actividad SET EstadoActividad = 'NOTIFICADA' WHERE idActividad=@pidActividad";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
         //command.CommandType = System.Data.CommandType.Text;
 
