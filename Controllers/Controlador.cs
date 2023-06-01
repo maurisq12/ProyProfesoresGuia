@@ -303,6 +303,7 @@ public class Controlador : Controller
         //   obtiene info del profe
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Query["codigo"]);
         ViewBag.Profesor = profe;
+        TempData["Profesor"] = profe;
         
         //  se va a la pantalla para editar la info del profe
         return View("../Asistente/editarProfesor");
@@ -312,7 +313,7 @@ public class Controlador : Controller
     public async Task<IActionResult> editarProfesorConfAsync()
     {
         //   obtiene info del profe
-        Console.WriteLine("La sede es: "+Request.Form["sede"]);
+       /* Console.WriteLine("La sede es: "+Request.Form["sede"]);
         DTOProfesor profe = new DTOProfesor(Request.Form["codigo"], Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], null, Request.Form["activo"], Enum.Parse<SiglasCentros>(Request.Form["sede"].ToString()));
         profe.activo=Request.Form["activo"];
         if (HttpContext.Request.Form.Files.GetFile("fotografia") != null && HttpContext.Request.Form.Files.GetFile("fotografia").Length > 0){
@@ -323,7 +324,10 @@ public class Controlador : Controller
         else{
             profe.fotografia= Encoding.ASCII.GetBytes(Request.Form["fotografiaV"]);
         }
-        Console.WriteLine("3");
+        Console.WriteLine("3");*/
+       
+       ProfesorGuia profeGuia = (ProfesorGuia)TempData["Profesor"];
+       DTOProfesor profe = new DTOProfesor(profeGuia.codigo, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], null, Request.Form["activo"], profeGuia.sede);
         admProfesores.editarProfesor(profe);
         return consultarProfesoresAsistente();
     }
@@ -785,8 +789,5 @@ public class Controlador : Controller
     }*/
     
     
-
-
-
-   
+    
 }

@@ -433,11 +433,11 @@ public class SingletonDAO
             actividad.responsables = new List<ProfesorGuia>();
             actividad.recordatorios = new List<DateTime>();
             actividad.listaComentarios = new List<Comentario>();
+            
             SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
             commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
             commandResponsables.Parameters.AddWithValue("@idActividad", id);
             SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
-            
 
             while (readerResponsables.Read()){
                 ProfesorGuia profesor = new ProfesorGuia();
@@ -484,7 +484,7 @@ public class SingletonDAO
 
                 SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
                 commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
-                commandRespuestas.Parameters.AddWithValue("@id_comentario", id);
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
 
                 SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
                 while (readerRespuestas.Read()){
@@ -498,8 +498,35 @@ public class SingletonDAO
                     c.listaRespuestas.Add(r);  
                     
                 }
-
                 actividad.listaComentarios.Add(c);
+
+                SqlCommand commandEvidencias = new SqlCommand("consultar_evidencias", basedatos.getConnection());
+                commandEvidencias.CommandType = System.Data.CommandType.StoredProcedure;
+                commandEvidencias.Parameters.AddWithValue("@idActividad", id);
+
+                SqlDataReader readerEvidencias = commandEvidencias.ExecuteReader();
+                Evidencia evidencia = new Evidencia();
+                evidencia.imagenes = new List<Imagen>();
+                if (readerEvidencias.Read()){
+                    evidencia.idActividad = id;
+                    evidencia.idEvidencia = (Int32)readerEvidencias["idEvidencia"];
+                    evidencia.listaAsistencia= (String)readerEvidencias["listaAsistencia"];
+                    evidencia.linkGrabacion = (String)readerEvidencias["linkGrabacion"];
+
+                    SqlCommand commandImagen = new SqlCommand("consultar_Imagen", basedatos.getConnection());
+                    commandImagen.CommandType = System.Data.CommandType.StoredProcedure;
+                    commandImagen.Parameters.AddWithValue("@idEvidencia", evidencia.idEvidencia);
+                    SqlDataReader readerImagen = commandImagen.ExecuteReader();
+                    
+                        while (readerImagen.Read()){
+                            Imagen img = new Imagen();
+                            img.idEvidencia = evidencia.idEvidencia;
+                            img.idImagen = (Int32)readerImagen["idImagen"];
+                            img.imagen = (byte[])readerImagen["Imagen"];
+                            evidencia.AddImagen(img);
+                        }
+                }
+                actividad.evidencia = evidencia;
             }
 
         }
@@ -603,8 +630,34 @@ public class SingletonDAO
                     c.listaRespuestas.Add(r);  
                     
                 }
-
                 actividad.listaComentarios.Add(c);
+
+                SqlCommand commandEvidencias = new SqlCommand("consultar_evidencias", basedatos.getConnection());
+                commandEvidencias.CommandType = System.Data.CommandType.StoredProcedure;
+                commandEvidencias.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+
+                SqlDataReader readerEvidencias = commandEvidencias.ExecuteReader();
+                Evidencia evidencia = new Evidencia();
+                if (readerEvidencias.Read()){
+                    evidencia.idActividad = actividad.idActividad;
+                    evidencia.idEvidencia = (Int32)readerEvidencias["idEvidencia"];
+                    evidencia.listaAsistencia= (String)readerEvidencias["listaAsistencia"];
+                    evidencia.linkGrabacion = (String)readerEvidencias["linkGrabacion"];
+
+                    SqlCommand commandImagen = new SqlCommand("consultar_Imagen", basedatos.getConnection());
+                    commandImagen.CommandType = System.Data.CommandType.StoredProcedure;
+                    commandImagen.Parameters.AddWithValue("@idEvidencia", evidencia.idEvidencia);
+                    SqlDataReader readerImagen = commandImagen.ExecuteReader();
+                    evidencia.imagenes = new List<Imagen>();
+                        while (readerImagen.Read()){
+                            Imagen img = new Imagen();
+                            img.idEvidencia = evidencia.idEvidencia;
+                            img.idImagen = (Int32)readerImagen["idImagen"];
+                            img.imagen = (byte[])readerImagen["Imagen"];
+                            evidencia.AddImagen(img);
+                        }
+                }
+                actividad.evidencia = evidencia;
             }
 
             actividades.Add(actividad);
@@ -614,6 +667,7 @@ public class SingletonDAO
         basedatos.getConnection().Close();
         return actividades;
     } 
+   
    
     public bool insertarProfesor(ProfesorGuia p)
     {
@@ -1086,7 +1140,7 @@ public class SingletonDAO
         }
         string query= "SELECT TOP 1 * FROM Actividad WHERE fechaHora >= GETDATE() ORDER BY fechaHora ASC";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
-        //--command.CommandType = System.Data.CommandType.StoredProcedure;
+        //command.CommandType = System.Data.CommandType.StoredProcedure;
 
         SqlDataReader reader = command.ExecuteReader();
 
@@ -1158,7 +1212,7 @@ public class SingletonDAO
 
                 SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
                 commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
-                commandRespuestas.Parameters.AddWithValue("@id_comentario", actividad.idActividad);
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
 
                 SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
                 while (readerRespuestas.Read()){
@@ -1211,6 +1265,149 @@ public class SingletonDAO
         }  
     }
     
+    public bool marcarCancelada(int idActividad, String justificacion, DateTime fecha)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+
+        int idJustificacion = 1;
+        string query= "UPDATE Actividad SET EstadoActividad = \"CANCELADA\" WHERE idActividad=@pidActividad";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        //command.CommandType = System.Data.CommandType.Text;
+
+        command.Parameters.AddWithValue("@pidActividad",idActividad);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            
+            query = "SELECT ISNULL(MAX(idJustificacion), 0) + 1 AS idJustificacion FROM Justificacion";
+            SqlCommand commandidJustificacion = new SqlCommand(query, basedatos.getConnection());
+            
+            using (SqlDataReader reader = commandidJustificacion.ExecuteReader())
+            {
+                if (reader.Read()){
+                    idJustificacion = (int)reader["idJustificacion"];
+                }
+            }
+            
+            query = "INSERT INTO Justificacion (idJustificacion, idActividad, cuerpo, fecha) VALUES (@idJustificacion,@idActividad, @cuerpo, @fecha)";
+            SqlCommand commandInsert = new SqlCommand(query, basedatos.getConnection());
+            commandInsert.Parameters.AddWithValue("@idJustificacion", idJustificacion);
+            commandInsert.Parameters.AddWithValue("@idActividad", idActividad);
+            commandInsert.Parameters.AddWithValue("@cuerpo", justificacion);
+            commandInsert.Parameters.AddWithValue("@fecha", fecha);
+            
+            commandInsert.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine($"Error al cancelar la actividad {idActividad}: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+    public bool InsertarImagen(Imagen imagen,int Evidencia){
+        string storedProcedure = "insertar_imagen";
+        SingletonDB basedatos = SingletonDB.getInstance();
+         if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        } 
+
+        SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@in_idEvidencia ", imagen.idEvidencia);
+        command.Parameters.AddWithValue("@in_idImagen", imagen.idImagen);
+        command.Parameters.AddWithValue("@in_Imagen", imagen.imagen);
+        try
+        {
+            command.ExecuteNonQuery();
+            Console.WriteLine("Imagen insertada correctamente.");
+            basedatos.getConnection().Close();
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+             basedatos.getConnection().Close();
+             return false;
+        }
+
+    }
+
+    public bool marcarRealizada(Evidencia evidencia,int idActividad){
+        foreach (Imagen imagen in evidencia.imagenes){
+            InsertarImagen(imagen,evidencia.idEvidencia);
+            }
+
+        string storedProcedure = "insertar_evidencia";
+        SingletonDB basedatos = SingletonDB.getInstance();
+         if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        } 
+
+        SqlCommand command = new SqlCommand(storedProcedure, basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@in_idEvidencia ", evidencia.idEvidencia);
+        command.Parameters.AddWithValue("@in_idActividad", evidencia.idActividad);
+        command.Parameters.AddWithValue("@in_listaAsistencia", evidencia.listaAsistencia);
+        command.Parameters.AddWithValue("@in_linkGrabacion", evidencia.linkGrabacion);
+        try
+        {
+            command.ExecuteNonQuery();
+            Console.WriteLine("Evidencia insertada correctamente.");
+            basedatos.getConnection().Close();
+            return true;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+             basedatos.getConnection().Close();
+             return false;
+        }
+        
+    }
+
+    public int getEvidencias(){
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        SqlCommand command = new SqlCommand("SELECT COUNT(idEvidencia) FROM Evidencias", basedatos.getConnection());
+            int count = (int)command.ExecuteScalar();
+
+        return count;
+    }
+    public int getImagenes(){
+            SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        SqlCommand command = new SqlCommand("SELECT COUNT(idImagen) FROM Imagen", basedatos.getConnection());
+        //SqlDataReader readerComentarios = command.ExecuteReader();
     
+            int count = (int)command.ExecuteScalar();
+
+        return count;
+    }
 
 }

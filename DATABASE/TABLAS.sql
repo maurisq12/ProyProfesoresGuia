@@ -138,3 +138,12 @@ CREATE TABLE EvidenciasXimagen
     idEvidencia INT FOREIGN KEY REFERENCES Evidencias(idEvidencia)
        
 );
+
+CREATE TABLE Justificacion
+(
+    idJustificacion INT IDENTITY (1,1) PRIMARY KEY,
+    idActividad INT FOREIGN KEY REFERENCES Actividad(idActividad),
+    cuerpo VARCHAR(200),
+    fecha DATETIME
+
+);

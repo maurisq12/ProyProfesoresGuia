@@ -120,9 +120,11 @@ END;
 
 --------READ----------------------
 CREATE OR ALTER PROCEDURE consultar_centroAcademico
+@in_idCentroAcademico INT
 AS
 BEGIN
-SELECT * FROM CentroAcademico
+SELECT idCentroAcademico, nombre, cantProfesores, Siglas FROM CentroAcademico
+WHERE CentroAcademico.idCentroAcademico = @in_idCentroAcademico
 END;
 
 --------UPDATE--------------------
@@ -193,7 +195,7 @@ nombreCompleto = @in_nombreCompleto,
 correoElectronico = @in_correoElectronico,
 telefonoCelular = @in_telefonoCelular,
 idCentroAcademico = @in_idCentroAcademico
-WHERE idEstudiante = @in_idEstudiante;
+WHERE idEstudiante = @in_idEstudiante
 END;
 
 --------DELETE--------------------
@@ -204,6 +206,161 @@ BEGIN
 DELETE FROM Estudiante WHERE idEstudiante = @in_idEstudiante;
 END;
 
+-------CRUD EquipoGuiaXprofesores------------------------
+--------CREATE--------------------
+CREATE PROCEDURE insertar_EquipoGuiaXprofesores
+@in_idEquipoGuiaXEstudiantes int,
+@in_idEquipoGuia int,
+@in_idProfesorGuia varchar(100)
+AS
+BEGIN
+INSERT INTO EquipoGuiaXprofesores (idEquipoGuiaXEstudiantes,idEquipoGuia,idProfesorGuia)
+VALUES (@in_idEquipoGuiaXEstudiantes,@in_idEquipoGuia,@in_idProfesorGuia);
+END;
+
+--------READ----------------------
+CREATE PROCEDURE consultar_EquipoGuiaXprofesores
+AS
+BEGIN
+SELECT * FROM EquipoGuiaXprofesores;
+END;
+
+--------UPDATE--------------------
+CREATE PROCEDURE actualizar_EquipoGuiaXprofesores
+@in_idEquipoGuiaXEstudiantes int,
+@in_idEquipoGuia int,
+@in_idProfesorGuia varchar(100)
+AS
+BEGIN
+UPDATE EquipoGuiaXprofesores SET
+idEquipoGuia = @in_idEquipoGuia,
+idProfesorGuia = @in_idProfesorGuia
+WHERE idEquipoGuiaXEstudiantes = @in_idEquipoGuiaXEstudiantes;
+END;
+
+--------DELETE--------------------
+CREATE PROCEDURE eliminar_EquipoGuiaXprofesores
+@in_idEquipoGuiaXEstudiantes int
+AS
+BEGIN
+DELETE FROM EquipoGuiaXprofesores WHERE idEquipoGuiaXEstudiantes = @in_idEquipoGuiaXEstudiantes;
+END;
+
+-------CRUD TipoActividad------------------------
+--------CREATE--------------------
+CREATE OR ALTER PROCEDURE insertar_TipoActividad(
+@in_id_tipo_actividad int,
+@in_tipo_actividad varchar(100)
+)
+AS
+BEGIN
+INSERT INTO TipoActividad (idTipoActividad, TipoActividad)
+VALUES (@in_id_tipo_actividad, @in_tipo_actividad);
+END;
+
+--------READ----------------------
+CREATE OR ALTER PROCEDURE consultar_TipoActividad
+AS
+BEGIN
+SELECT * FROM TipoActividad;
+END;
+
+--------UPDATE----------------------
+CREATE OR ALTER PROCEDURE actualizar_TipoActividad(
+@in_id_tipo_actividad int,
+@in_tipo_actividad varchar(100)
+)
+AS
+BEGIN
+UPDATE TipoActividad SET
+TipoActividad = @in_tipo_actividad
+WHERE idTipoActividad = @in_id_tipo_actividad;
+END;
+
+--------DELETE----------------------
+CREATE OR ALTER PROCEDURE eliminar_TipoActividad(
+@in_id_tipo_actividad int
+)
+AS
+BEGIN
+DELETE FROM TipoActividad WHERE idTipoActividad = @in_id_tipo_actividad;
+END;
+
+-------CRUD Modalidad------------------------
+--------CREATE---------------------
+CREATE OR ALTER PROCEDURE insertar_modalidad
+@id_modalidad INT,
+@modalidad_texto TEXT
+AS
+BEGIN
+INSERT INTO Modalidad (idModalidad,Modalidad) VALUES (@id_modalidad,@modalidad_texto);
+COMMIT;
+END;
+
+--------READ-----------------------
+CREATE OR ALTER PROCEDURE consultar_modalidad
+AS
+BEGIN
+SELECT * FROM Modalidad;
+END;
+
+--------UPDATE---------------------
+CREATE OR ALTER PROCEDURE actualizar_modalidad
+@id_modalidad INT,
+@modalidad_texto TEXT
+AS
+BEGIN
+UPDATE Modalidad SET Modalidad = @modalidad_texto WHERE idModalidad = @id_modalidad;
+COMMIT;
+END;
+
+--------DELETE----------------------
+CREATE OR ALTER PROCEDURE borrar_modalidad
+@id_modalidad INT
+AS
+BEGIN
+DELETE FROM Modalidad WHERE idModalidad = @id_modalidad;
+COMMIT;
+END;
+
+
+-------CRUD EstadoActividad------------------------
+--------CREATE---------------------
+CREATE OR ALTER PROCEDURE insertar_EstadoActividad
+@id_EstadoActividad INT,
+@estado_actividad_texto VARCHAR(100)
+AS
+BEGIN
+INSERT INTO EstadoActividad (idEstadoActividad, EstadoActividad)
+VALUES (@id_EstadoActividad, @estado_actividad_texto);
+END;
+
+--------READ-----------------------
+CREATE OR ALTER PROCEDURE consultar_EstadoActividad
+AS
+BEGIN
+SELECT * FROM EstadoActividad;
+END;
+
+--------UPDATE---------------------
+CREATE OR ALTER PROCEDURE actualizar_EstadoActividad
+@id_estado_actividad INT,
+@estado_actividad_texto VARCHAR(100)
+AS
+BEGIN
+UPDATE EstadoActividad
+SET EstadoActividad = @estado_actividad_texto
+WHERE idEstadoActividad = @id_estado_actividad;
+END;
+
+--------DELETE----------------------
+CREATE OR ALTER PROCEDURE borrar_EstadoActividad
+@id_estado_actividad INT
+AS
+BEGIN
+DELETE FROM EstadoActividad
+WHERE idEstadoActividad = @id_estado_actividad;
+END;
 
 -------CRUD Actividad------------------------
 --------CREATE---------------------
@@ -268,49 +425,49 @@ BEGIN
 DELETE FROM Actividad WHERE idActividad = @id_actividad;
 END;
 
--------CRUD PlanTrabajo------------------------
---------CREATE---------------------
-CREATE OR ALTER PROCEDURE insertar_planTrabajo
-@planTrabajo_id INT,
-@equipo_guia_id INT,
-@actividad_id INT
-AS
-BEGIN
-INSERT INTO PlanTrabajo (idPlanTrabajo, idEquipoGuia, idActividad)
-VALUES (@planTrabajo_id, @equipo_guia_id, @actividad_id);
-COMMIT;
-END;
-
---------READ-----------------------
-CREATE OR ALTER PROCEDURE consultar_planTrabajo
-AS
-BEGIN
-SELECT * FROM PlanTrabajo;
-END;
-
---------UPDATE---------------------
-CREATE OR ALTER PROCEDURE actualizar_planTrabajo
-@plan_trabajo_id INT,
-@equipo_guia_id INT,
-@actividad_id INT
-AS
-BEGIN
-UPDATE PlanTrabajo
-SET idEquipoGuia = @equipo_guia_id,
-idActividad = @actividad_id
-WHERE idPlanTrabajo = @plan_trabajo_id;
-COMMIT;
-END;
-
---------DELETE---------------------
-CREATE OR ALTER PROCEDURE borrar_planTrabajo
-@plan_trabajo_id INT
-AS
-BEGIN
-DELETE FROM PlanTrabajo WHERE idPlanTrabajo = @plan_trabajo_id;
-COMMIT;
-END;
-
+-- -------CRUD PlanTrabajo------------------------
+-- --------CREATE---------------------
+-- CREATE OR ALTER PROCEDURE insertar_planTrabajo
+-- @planTrabajo_id INT,
+-- @equipo_guia_id INT,
+-- @actividad_id INT
+-- AS
+-- BEGIN
+-- INSERT INTO PlanTrabajo (idPlanTrabajo, idEquipoGuia, idActividad)
+-- VALUES (@planTrabajo_id, @equipo_guia_id, @actividad_id);
+-- COMMIT;
+-- END;
+-- 
+-- --------READ-----------------------
+-- CREATE OR ALTER PROCEDURE consultar_planTrabajo
+-- AS
+-- BEGIN
+-- SELECT * FROM PlanTrabajo;
+-- END;
+-- 
+-- --------UPDATE---------------------
+-- CREATE OR ALTER PROCEDURE actualizar_planTrabajo
+-- @plan_trabajo_id INT,
+-- @equipo_guia_id INT,
+-- @actividad_id INT
+-- AS
+-- BEGIN
+-- UPDATE PlanTrabajo
+-- SET idEquipoGuia = @equipo_guia_id,
+-- idActividad = @actividad_id
+-- WHERE idPlanTrabajo = @plan_trabajo_id;
+-- COMMIT;
+-- END;
+-- 
+-- --------DELETE---------------------
+-- CREATE OR ALTER PROCEDURE borrar_planTrabajo
+-- @plan_trabajo_id INT
+-- AS
+-- BEGIN
+-- DELETE FROM PlanTrabajo WHERE idPlanTrabajo = @plan_trabajo_id;
+-- COMMIT;
+-- END;
+-- 
 -------CRUD ActividadXresponsables------------------------
 --------CREATE---------------------
 CREATE OR ALTER PROCEDURE insertar_ActividadXresponsables
@@ -530,20 +687,22 @@ END;
 CREATE OR ALTER PROCEDURE insertar_evidencia
 @in_idEvidencia INT,
 @in_idActividad INT,
-@in_listaAsistencia TEXT,
-@in_linkGrabacion TEXT
+@in_listaAsistencia VARCHAR(MAX),
+@in_linkGrabacion VARCHAR(1000)
 AS
 BEGIN
 INSERT INTO Evidencias (idEvidencia, idActividad, listaAsistencia, linkGrabacion)
-VALUES (@in_idEvidencia, @in_idActividad, @in_listaAsistencia, @in_linkGrabacion);
-COMMIT;
+VALUES (@in_idEvidencia, @in_idActividad, @in_listaAsistencia, @in_linkGrabacion)
+
 END;
 
 --------READ-----------------------
 CREATE OR ALTER PROCEDURE consultar_evidencias
+@idActividad INT 
 AS
 BEGIN
-SELECT * FROM Evidencias;
+SELECT idEvidencia, idActividad, listaAsistencia, linkGrabacion FROM Evidencias
+WHERE Evidencias.idActividad = @idActividad
 END;
 
 --------UPDATE---------------------
@@ -576,18 +735,20 @@ END;
 --------CREATE---------------------
 CREATE PROCEDURE insertar_imagen
 @in_idImagen int,
-@in_Imagen varbinary(MAX)
+@in_idEvidencia INT,
+@in_Imagen VARbinary(MAX) 
 AS
 BEGIN
-INSERT INTO Imagen (idImagen, Imagen)
-VALUES (@in_idImagen, @in_Imagen);
+INSERT Imagen (Imagen, idImagen, idEvidencia)
+VALUES (@in_Imagen, @in_idImagen, @in_idEvidencia)
 END;
 
 --------READ-----------------------
 CREATE PROCEDURE consultar_Imagen
+@idEvidencia INT
 AS
 BEGIN
-SELECT * FROM Imagen;
+SELECT Imagen, idImagen, idEvidencia FROM Imagen WHERE Imagen.idEvidencia = @idEvidencia
 END;
 
 --------UPDATE---------------------
@@ -609,40 +770,3 @@ BEGIN
 DELETE FROM Imagen WHERE idImagen = @in_idImagen;
 END;
 
--------CRUD EvidenciasXimagen------------------------
---------CREATE---------------------
-CREATE OR ALTER PROCEDURE insertar_evidenciasXimagen(
-@in_idEvidenciasXimagen INT,
-@in_idImagen int,
-@in_idEvidencia INT
-) AS
-BEGIN
-INSERT INTO EvidenciasXimagen (idEvidenciasXimagen, idImagen, idEvidencia)
-VALUES (@in_idEvidenciasXimagen, @in_idImagen, @in_idEvidencia);
-END;
-
---------READ-----------------------
-CREATE OR ALTER PROCEDURE consultar_evidenciasXimagen AS
-BEGIN
-SELECT * FROM EvidenciasXimagen;
-END;
-
---------UPDATE---------------------
-CREATE OR ALTER PROCEDURE actualizar_evidenciasXimagen(
-@in_idEvidenciasXimagen INT,
-@in_idImagen int,
-@in_idEvidencia INT
-) AS
-BEGIN
-UPDATE EvidenciasXimagen
-SET idImagen = @in_idImagen, idEvidencia = @in_idEvidencia
-WHERE idEvidenciasXimagen = @in_idEvidenciasXimagen;
-END;
-
---------DELETE---------------------
-CREATE OR ALTER PROCEDURE borrar_evidenciasXimagen(
-@in_idEvidenciasXimagen INT
-) AS
-BEGIN
-DELETE FROM EvidenciasXimagen WHERE idEvidenciasXimagen = @in_idEvidenciasXimagen;
-END;
