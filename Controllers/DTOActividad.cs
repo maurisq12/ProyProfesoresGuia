@@ -18,6 +18,7 @@ public class DTOActividad
     public String enlaceRemoto { get; set; }
     public String afiche { get; set; }
     public EstadoActividad estado { get; set; }
+    public List<Comentario> listaComentarios { get; set; }
 
 
     public DTOActividad()
