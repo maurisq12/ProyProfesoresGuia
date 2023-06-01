@@ -43,15 +43,15 @@ public class ProcesadorExcel
     excel.SaveAs(archivo);
     }
 
-    public List<Estudiante> LeerEstudiantesDesdeExcel(string rutaArchivo)
+   public List<Estudiante> LeerEstudiantesDesdeExcel(string rutaArchivo)
+{
+    List<Estudiante> estudiantes = new List<Estudiante>();
+
+    FileInfo archivo = new FileInfo(rutaArchivo);
+    using (ExcelPackage excel = new ExcelPackage(archivo))
     {
-        List<Estudiante> estudiantes = new List<Estudiante>();
-
-        FileInfo archivo = new FileInfo(rutaArchivo);
-        using (ExcelPackage excel = new ExcelPackage(archivo))
+        foreach (ExcelWorksheet hoja in excel.Workbook.Worksheets) // Iterar sobre todas las hojas
         {
-            ExcelWorksheet hoja = excel.Workbook.Worksheets[0]; // Leer la primera hoja
-
             int totalFilas = hoja.Dimension.Rows;
             for (int fila = 1; fila <= totalFilas; fila++)
             {
@@ -69,13 +69,14 @@ public class ProcesadorExcel
                 SiglasCentros siglasCentros = (SiglasCentros)Enum.Parse(typeof(SiglasCentros), siglas);
 
                 int cantProf = Convert.ToInt32(hoja.Cells[fila, 9].Value);
-                estudiante.centroEstudio = new CentroAcademico(idCentro,siglasCentros,nombreCentro,cantProf);
+                estudiante.centroEstudio = new CentroAcademico(idCentro, siglasCentros, nombreCentro, cantProf);
                 estudiantes.Add(estudiante);
             }
         }
-
-        return estudiantes;
     }
+
+    return estudiantes;
+}
 
     public void EscribirEstudiantesEnExcelSeparados(List<Estudiante> estudiantes, string rutaArchivo)
 {
