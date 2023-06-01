@@ -9,6 +9,7 @@ using SpreadsheetLight;
 using System.Data;
 using OfficeOpenXml;
 using ProfesoresGuia.Models;
+using ProfesoresGuia.Controllers;
 
 
 
@@ -75,6 +76,9 @@ public class ProcesadorExcel
         }
     }
 
+    foreach (Estudiante e in estudiantes){
+        SingletonDAO.getInstance().insertarEstudiante(e);
+    }
     return estudiantes;
 }
 

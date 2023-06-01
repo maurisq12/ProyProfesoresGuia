@@ -97,10 +97,7 @@ public class Controlador : Controller
     }
 
     public IActionResult AsistenteCargarEstudiantesConf(){
-        //string docE = document.getElementById('fileInput');
-        //Console.WriteLine("El arhcivo es"+Request.Form["archivoExcel"]);
-        //System.IO.Path.GetDirectoryName(FormatException.)
-        //IFormFile Excel = HttpContext.Request.Form.Files["archivoExcel"];
+        pExcel.LeerEstudiantesDesdeExcel(AppDomain.CurrentDomain.BaseDirectory + "estudiantes.xlsx");
         return AsistenteEstudiantes();
     }
 
@@ -159,8 +156,10 @@ public class Controlador : Controller
     
     
     public IActionResult ProfesorEstudiantesSede(){
-        var todosEstudiantes = admEstudiantes.obtenerEstudiantes();
-        ViewBag.estudiantes = todosEstudiantes;
+        var miSede=(User.Claims.Where(x=> x.Type == ClaimTypes.Locality).SingleOrDefault().Value); 
+        var estudiantes = admEstudiantes.obtenerEstudiantes();
+        List<Estudiante> estudiantesFiltrados = estudiantes.Where(estudiante => estudiante.centroEstudio.siglas == (SiglasCentros)Enum.Parse(typeof(SiglasCentros), miSede.ToUpper())).ToList();
+        ViewBag.estudiantes = estudiantesFiltrados;
         return View("../Profesor/estudiantesSede");
     }
 
@@ -173,11 +172,14 @@ public class Controlador : Controller
    public IActionResult generarExcelEstudiantesConf()
    {
     if(Request.Form["opc"]=="MiSede"){
-        //
+        var miSede=(User.Claims.Where(x=> x.Type == ClaimTypes.Locality).SingleOrDefault().Value);
+        var listaEstudiantes = admEstudiantes.obtenerEstudiantes();
+        pExcel.EscribirEstudiantesEnExcelXsede(listaEstudiantes,(SiglasCentros)Enum.Parse(typeof(SiglasCentros), miSede.ToUpper()),AppDomain.CurrentDomain.BaseDirectory + "estudiantes.xlsx");
     }
     else{
-        List<Estudiante> listaEstudiantes = admEstudiantes.obtenerEstudiantes();
-        pExcel.EscribirEstudiantesEnExcel(listaEstudiantes, "C:\'Users\'maurisq\'Desktop\'Diseño");
+
+        var listaEstudiantes = admEstudiantes.obtenerEstudiantes();
+        pExcel.EscribirEstudiantesEnExcelSeparados(listaEstudiantes,AppDomain.CurrentDomain.BaseDirectory + "estudiantes.xlsx");
     }
     return View("../Profesor/generarExcel");
    }
@@ -613,26 +615,26 @@ public class Controlador : Controller
     
     // Profe Guia, Coordinador
     [HttpPost]
-    public IActionResult realizarComentario()
+    public void realizarComentario()
     {
         int idActividad = Int32.Parse(Request.Form["idActividadc"]);
         String idProfesor = "1-04";//Int32.Parse(User.Claims.Where(x=> x.Type == ClaimTypes.NameIdentifier).SingleOrDefault().Value);
         int idComentario = admComentarios.getComentariosCount() + 1;
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admComentarios.realizarComentario(new Comentario(idComentario, profe, DateTime.Now, Request.Form["comentario"]), idActividad);
-        return View();
+        
     }
     
 
     //// revisar view de respuesta
-    public IActionResult realizarRespuestaConf()
+    public void realizarRespuestaConf()
     {
         int idRespuesta = admRespuestas.getRespuestasCount() + 1;
         int idComentario = Int32.Parse(Request.Form["idComentarioR"]);
         String idProfesor =  "1-04";//Int32.Parse(User.Claims.Where(x=> x.Type == ClaimTypes.NameIdentifier).SingleOrDefault().Value);
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == idProfesor);
         admRespuestas.realizarRespuesta(new Respuesta(idRespuesta, idComentario, profe, DateTime.Now, Request.Form["respuesta"]));
-        return View();
+        
     }
     
     
