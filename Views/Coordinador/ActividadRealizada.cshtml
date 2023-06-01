@@ -12,7 +12,7 @@
         </style>
 <html lang="en">
     <body style= "background-color: #E6F4F1;">
-        <form method="post" action="@Url.Action("pruebaImg", "Controlador")">
+        <form method="post" action="@Url.Action("pruebaImg", "Controlador")" enctype="multipart/form-data">
             <div>
                 <h5 class="display-4" style="margin-top: 10px;">Evidencias de actividad realizada</h5><br>
                 <p>Por favor agregue las evidencias de la actividad que conluyó:</p>
@@ -20,21 +20,20 @@
             <div>
                 <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Lista asistentes:</h3><br> 
-                            <output></output>  <br> 
+                            <output  id="output1"></output>  <br> 
                             <input type="file" name="lista" id="lista" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);" multiple="multiple">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div><br>
                 <br><br><br>
                 <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Participantes:</h3><br>
-
-                            <img src="" id="img_url2" alt="your image" style="width:400px; height:300px;"><br> <br>    
-                            <input type="file" id="partic" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl2(this);">
+                            <h3 style="font-size: 20px;">Participantes, expositores, estudiantes, o pruebas:</h3><br> 
+                            <output id="output2"></output>  <br> 
+                            <input type="file" name="pruebas" id="pruebas" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl2(this);" multiple="multiple">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div><br>
                 <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Link de la grabación:</h3><br>
-                            <input style="width:500px" type="text" id="grabacion">
+                            <input style="width:500px" type="url" id="grabacion">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div><br><br>
                 
@@ -45,17 +44,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
 
-        const output = document.querySelector("output")
-const input = document.querySelector("input")
+const output = document.getElementById("output1")
+const input = document.getElementById("lista")
 let imagesArray = []
 
 
         function img_pathUrl(input){
             $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
-        }
-
-        function img_pathUrl2(input){
-            $('#img_url2')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
         }
 
         function displayImages() {
@@ -80,6 +75,40 @@ input.addEventListener("change", () => {
     imagesArray.push(files[i])
   }
   displayImages()
+})
+    </script>
+    <script>
+const output2 = document.getElementById("output2")
+const input2 = document.getElementById("pruebas")
+let imagesArray2 = []
+
+
+        function img_pathUrl2(inputimg){
+            $('#img_url')[0].src= (window.URL ? URL : webkitURL).createObjectURL(inputimg.files[0]);
+        }
+
+        function displayImages2() {
+  let images2 = ""
+  imagesArray2.forEach((image, index) => {
+    images2 += `<div class="image">
+                <img src="${URL.createObjectURL(image)}" alt="image">
+                <span onclick="deleteImage(${index})">&times;</span>
+              </div>`
+  })
+  output2.innerHTML = images2
+}
+
+function deleteImage2(index) {
+  imagesArray2.splice(index, 1)
+  displayImages()
+}
+
+input2.addEventListener("change", () => {
+  const files = input2.files
+  for (let i = 0; i < files.length; i++) {
+    imagesArray2.push(files[i])
+  }
+  displayImages2()
 })
     </script>
     </body>

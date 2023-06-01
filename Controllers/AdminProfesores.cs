@@ -4,11 +4,11 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdminProfesores
 {
-    public bool agregarProfesor(DTOProfesor pProfesor)
+    public bool agregarProfesor(DTOProfesor pProfesor, string pContrasena)
     {
         ProfesorGuia profe = new ProfesorGuia(pProfesor.codigo, pProfesor.nombreCompleto, pProfesor.correoElectronico,
             pProfesor.telefonoOficina, pProfesor.telefonoCelular, pProfesor.fotografia, pProfesor.activo, pProfesor.sede);
-        return SingletonDAO.getInstance().insertarProfesor(profe);
+        return SingletonDAO.getInstance().insertarProfesor(profe,pContrasena);
     }
 
     public bool editarProfesor(DTOProfesor pProfesor)

@@ -669,7 +669,7 @@ public class SingletonDAO
     } 
    
    
-      public bool insertarUsuario(ProfesorGuia p,int contrasena)
+      public bool insertarUsuario(ProfesorGuia p,string contrasena)
     {
         SingletonDB basedatos = SingletonDB.getInstance();
         if (basedatos.IsConnectionOpen() == false){
@@ -704,7 +704,7 @@ public class SingletonDAO
             return false;
         }  
     }
-    public bool insertarProfesor(ProfesorGuia p,int contrasena)
+    public bool insertarProfesor(ProfesorGuia p,string contrasena)
     {   
         insertarUsuario(p,contrasena);
         SingletonDB basedatos = SingletonDB.getInstance();
