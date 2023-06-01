@@ -484,7 +484,7 @@ public class SingletonDAO
 
                 SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
                 commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
-                commandRespuestas.Parameters.AddWithValue("@id_comentario", id);
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
 
                 SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
                 while (readerRespuestas.Read()){
