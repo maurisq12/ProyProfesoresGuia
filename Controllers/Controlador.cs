@@ -336,7 +336,7 @@ public class Controlador : Controller
         //   obtiene info del profe
         ProfesorGuia profe = admProfesores.obtenerProfesores().FirstOrDefault(p => p.codigo == Request.Query["codigo"]);
         ViewBag.Profesor = profe;
-        TempData["Profesor"] = profe;
+       // TempData["Profesor"] = profe;
         
         //  se va a la pantalla para editar la info del profe
         return View("../Asistente/editarProfesor");
