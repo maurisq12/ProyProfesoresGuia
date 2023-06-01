@@ -1,21 +1,23 @@
 namespace ProfesoresGuia.Models;
 
-public class Coordinador
+public class Asistente
 {
     public String id { get; set; }
     public String nombreCompleto { get; set; }
     public String correoElectronico { get; set; }
+    public int idCentro { get; set; }
 
 
 
-    public Coordinador(){}
+    public Asistente(){}
 
 
-    public Coordinador(String id, String nombreCompleto, String correoElectronico)
+    public Asistente(String id, String nombreCompleto, String correoElectronico,int idCentro)
     {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
+        this.idCentro=idCentro;
     }
     
     public override string ToString()

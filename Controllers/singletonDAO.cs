@@ -54,28 +54,31 @@ public class SingletonDAO
         }
         else if (result==1 || result==2){
             Console.WriteLine("Retorno de claims para profesor");
-            ProfesorGuia profe = getProfesorCorreo(pCorreo);
+            ProfesorGuia profe = getProfesorCorreo(pCorreo);Console.WriteLine("aa");
             var claims = new List<Claim> {
                     new Claim(ClaimTypes.NameIdentifier, profe.codigo.ToString()),
-                    new Claim(ClaimTypes.Email, profe.correoElectronico)                    
+                    new Claim(ClaimTypes.Email, profe.correoElectronico),
+                    new Claim(ClaimTypes.Locality, profe.sede.ToString()),           
             };
+            Console.WriteLine("1");
             if(result==1)
                 claims.Add(new Claim(ClaimTypes.Role, "Profesor"));
             else
                 claims.Add(new Claim(ClaimTypes.Role, "ProfesorCoordinador"));
             var claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+            Console.WriteLine("2");
             return claimsIdentity;
         }
         else if (result==3 || result==4){
-            Coordinador coord = getCoordinadorCorreo(pCorreo);
+            Asistente coord = getAsistenteCorreo(pCorreo);
             var claims = new List<Claim> {
                     new Claim(ClaimTypes.NameIdentifier, coord.id.ToString()),
                     new Claim(ClaimTypes.Email, coord.correoElectronico)                    
             };
-            if(result==1)
-                claims.Add(new Claim(ClaimTypes.Role, "Profesor"));
+            if(result==3)
+                claims.Add(new Claim(ClaimTypes.Role, "AsistenteAdministrativo"));
             else
-                claims.Add(new Claim(ClaimTypes.Role, "ProfesorCoordinador"));
+                claims.Add(new Claim(ClaimTypes.Role, "AsistenteAdministrativoCartago"));
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
             return claimsIdentity;
             
@@ -122,7 +125,6 @@ public class SingletonDAO
         string query= "SELECT codigo,nombreCompleto,correoElectronico,telefonoOficina, telefonoCelular, fotografia, activo FROM Profesor WHERE correoElectronico=@pCorreo";
 
         SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
-        cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.AddWithValue("@pCorreo",pCorreo);
         
         using (SqlDataReader dr = cmd.ExecuteReader()){
@@ -133,31 +135,29 @@ public class SingletonDAO
                 objeto.telefonoOficina=dr["telefonoOficina"].ToString();
                 objeto.telefonoCelular=dr["telefonoCelular"].ToString();
                 objeto.fotografia=(Byte[])dr["fotografia"];
-                if (Convert.ToBoolean((dr["activo"].ToString())))
-                        objeto.activo="Activo";
-                    else
-                        objeto.activo="Inactivo";
+                objeto.activo=(dr["activo"].ToString());
             }
         }
         basedatos.getConnection().Close();
         return objeto;
     }
 
-    public Coordinador getCoordinadorCorreo(string pCorreo){
+    public Asistente getAsistenteCorreo(string pCorreo){
         SingletonDB basedatos = SingletonDB.getInstance();
         basedatos.getConnection().Open();
-        Coordinador objeto = new Coordinador();
+        Asistente objeto = new Asistente();
 
-        string query= "SELECT id,nombreCompleto,correoElectronico FROM Coordinador WHERE correo=@pCorreo";
+        string query= "SELECT idAsistente,nombre,correo,idCentroAcademico FROM Asistente WHERE correo=@pCorreo";
 
         SqlCommand cmd = new SqlCommand(query,basedatos.getConnection());
         cmd.Parameters.AddWithValue("@pCorreo",pCorreo);
         
         using (SqlDataReader dr = cmd.ExecuteReader()){
             while(dr.Read()){
-                objeto.id=dr["id"].ToString();
-                objeto.nombreCompleto=dr["nombreCompleto"].ToString();
-                objeto.correoElectronico=dr["correoElectronico"].ToString();
+                objeto.id=dr["idAsistente"].ToString();
+                objeto.nombreCompleto=dr["nombre"].ToString();
+                objeto.correoElectronico=dr["correo"].ToString();
+                objeto.idCentro=Int32.Parse(dr["idCentroAcademico"].ToString());
             }
         }
         basedatos.getConnection().Close();
