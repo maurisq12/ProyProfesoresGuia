@@ -57,6 +57,7 @@ public class Controlador : Controller
             ViewBag.credenciales="incorrectos";
             return View("../Acceso/IniciarSesion");
         }
+        Console.WriteLine("Credenciales correctos");
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(auntent),new AuthenticationProperties());
         switch(auntent.Claims.Where(c => c.Type == ClaimTypes.Role)
                    .Select(c => c.Value).SingleOrDefault()){                
@@ -93,6 +94,14 @@ public class Controlador : Controller
 
     public IActionResult AsistenteCargarEstudiantes(){
         return View("../Asistente/cargarEstudiantes");
+    }
+
+    public IActionResult AsistenteCargarEstudiantesConf(){
+        //string docE = document.getElementById('fileInput');
+        //Console.WriteLine("El arhcivo es"+Request.Form["archivoExcel"]);
+        //System.IO.Path.GetDirectoryName(FormatException.)
+        //IFormFile Excel = HttpContext.Request.Form.Files["archivoExcel"];
+        return AsistenteEstudiantes();
     }
 
     public IActionResult AsistenteProfesores(){
@@ -144,6 +153,8 @@ public class Controlador : Controller
     
     
     public IActionResult ProfesorEstudiantesSede(){
+        ViewBag.usuario=User.Claims.Where(x=> x.Type == ClaimTypes.Role).SingleOrDefault().Value;
+        Console.WriteLine();
         var todosEstudiantes = admEstudiantes.obtenerEstudiantes();
         ViewBag.estudiantes = todosEstudiantes;
         return View("../Profesor/estudiantesSede");
