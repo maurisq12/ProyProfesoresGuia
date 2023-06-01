@@ -1086,7 +1086,7 @@ public class SingletonDAO
         }
         string query= "SELECT TOP 1 * FROM Actividad WHERE fechaHora >= GETDATE() ORDER BY fechaHora ASC";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
+        //command.CommandType = System.Data.CommandType.StoredProcedure;
 
         SqlDataReader reader = command.ExecuteReader();
 
@@ -1158,7 +1158,7 @@ public class SingletonDAO
 
                 SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
                 commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
-                commandRespuestas.Parameters.AddWithValue("@id_comentario", actividad.idActividad);
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", c.idComentario);
 
                 SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
                 while (readerRespuestas.Read()){
