@@ -174,12 +174,12 @@ public class Controlador : Controller
     if(Request.Form["opc"]=="MiSede"){
         var miSede=(User.Claims.Where(x=> x.Type == ClaimTypes.Locality).SingleOrDefault().Value);
         var listaEstudiantes = admEstudiantes.obtenerEstudiantes();
-        pExcel.EscribirEstudiantesEnExcelXsede(listaEstudiantes,(SiglasCentros)Enum.Parse(typeof(SiglasCentros), miSede.ToUpper()),AppDomain.CurrentDomain.BaseDirectory + "estudiantes.xlsx");
+        pExcel.EscribirEstudiantesEnExcelXsede(listaEstudiantes,(SiglasCentros)Enum.Parse(typeof(SiglasCentros), miSede.ToUpper()),AppDomain.CurrentDomain.BaseDirectory + "estudiantesD.xlsx");
     }
     else{
 
         var listaEstudiantes = admEstudiantes.obtenerEstudiantes();
-        pExcel.EscribirEstudiantesEnExcelSeparados(listaEstudiantes,AppDomain.CurrentDomain.BaseDirectory + "estudiantes.xlsx");
+        pExcel.EscribirEstudiantesEnExcelSeparados(listaEstudiantes,AppDomain.CurrentDomain.BaseDirectory + "estudiantesD.xlsx");
     }
     return View("../Profesor/generarExcel");
    }
@@ -708,36 +708,6 @@ public class Controlador : Controller
     }
     
 
-    
-
-    //////////////////////////////////////////////////                         //////////////////////////////////////////////////
-    //////////////////////////////////////////////////                         //////////////////////////////////////////////////
-    //////////////////////////////////////////////////         Excel           //////////////////////////////////////////////////
-    //////////////////////////////////////////////////                         //////////////////////////////////////////////////
-    //////////////////////////////////////////////////                         //////////////////////////////////////////////////
-   
-    
-   
-   // Profe Guia, Coordinador
-   
-   
-   /*public IActionResult generarExcelEstudiantesSedeConf()
-   {
-       pExcel.generarExcelEstudiantes(Request.Form["ruta"]);
-       return consultarEstudiantesCentroProfeGuiaCoordinador();
-   }*/
-    
-    public IActionResult generarExcelPestanas()
-    {
-        return View();/// no se
-    }
-    
-    /*public IActionResult generarExcelPestanasConf()
-    {
-        pExcel.generarExcelPestanas(Request.Form["ruta"]);
-        return consultarEstudiantesCentroProfeGuiaCoordinador();
-    }*/
-    
     
     
 }
