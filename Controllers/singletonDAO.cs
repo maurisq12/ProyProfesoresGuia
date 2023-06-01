@@ -669,8 +669,44 @@ public class SingletonDAO
     } 
    
    
-    public bool insertarProfesor(ProfesorGuia p)
+      public bool insertarUsuario(ProfesorGuia p,int contrasena)
     {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        SqlCommand command = new SqlCommand("insertar_usuario", basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            command.Parameters.AddWithValue("@correo", p.correoElectronico);
+            command.Parameters.AddWithValue("@contrasena",contrasena);
+            command.Parameters.AddWithValue("idTipo", 1);
+            
+        try
+        {            
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            Console.WriteLine("Usuario registrado correctamente.");
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Number == 2627) // Número de error para violación de clave primaria duplicada
+            {
+                Console.WriteLine("Error: ID duplicado. No se insertó el registro.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el registro: " + ex.Message);
+            }
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+    public bool insertarProfesor(ProfesorGuia p,int contrasena)
+    {   
+        insertarUsuario(p,contrasena);
         SingletonDB basedatos = SingletonDB.getInstance();
         if (basedatos.IsConnectionOpen() == false){
             basedatos.getConnection().Open();
@@ -686,10 +722,9 @@ public class SingletonDAO
             command.Parameters.AddWithValue("@in_fotografia", p.fotografia);
         
             command.Parameters.AddWithValue("@in_activo", p.activo);
-        try
-        {
-                    
             
+        try
+        { 
             command.ExecuteNonQuery();
             basedatos.getConnection().Close();
             return true;
