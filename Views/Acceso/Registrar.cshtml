@@ -29,7 +29,7 @@
 </head>
 
 <body>
-	<form>
+	<form method="post" action="@Url.Action("nuevoRegistro", "Controlador")" enctype="multipart/form-data" >
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -55,10 +55,11 @@
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Sede</h3><br>
                             <select name="sede" id="sede" class = "login-entry">
-                                <option value="volvo">Cartago</option>
-                                <option value="saab">San José</option>
-                                <option value="opel">Limón</option>
-                                <option value="audi">San Carlos</option>
+                                <option value="CA">Cartago</option>
+                                <option value="SJ">San José</option>
+                                <option value="LI">Limón</option>
+                                <option value="AL">Alajuela</option>
+                                <option value="SC">San Carlos</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
@@ -85,7 +86,7 @@
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Contraseña</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="contrasena" name="contrasena"><br> </h3>
+                            <h3> <input class = "login-entry" type="password" id="contrasena" name="contrasena"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                         <div class="wrap-input100 validate-input " data-validate="Nombre">

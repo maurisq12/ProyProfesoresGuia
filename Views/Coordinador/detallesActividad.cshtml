@@ -97,7 +97,7 @@
 
                 <div style="display:flex;justify-content:space-between;">
                     <button style="align-self: center;" class="btn-not" type="submit" > Activar notificaciones</button><br><br><br>
-                    <button style="align-self: center;" class="btn-rlz" type="submit" > Realizada</button><br><br><br>
+                    <button style="align-self: center;" class="btn-rlz" type="submit" onclick="location.href='/Controlador/marcarRealizada?id=@ViewBag.actividad.idActividad'" > Realizada</button><br><br><br>
                     <button style="align-self: center;" class="btn-delete"  onclick="location.href='/Controlador/marcarCancelada?id=@ViewBag.actividad.idActividad'"> Cancelar</button><br><br><br>
                 </div><br><br>
 

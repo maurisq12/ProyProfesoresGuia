@@ -29,8 +29,19 @@ public class Controlador : Controller
         return View("../Acceso/IniciarSesion");
     }
 
-    public IActionResult nuevoRegistro(){
-        
+    [HttpPost]
+    public async Task<IActionResult> nuevoRegistroAsync(){
+        Console.WriteLine("1");
+        int num_prof = admProfesores.obtenerProfesores().Count + 1;
+        string sede = Request.Form["sede"];
+        DTOProfesor profe = new DTOProfesor(sede + "-" + ((num_prof < 10) ? "0" : "") + num_prof, Request.Form["nombre"], Request.Form["correo"], Request.Form["telefonoOficina"], Request.Form["telefonoCelular"], null, "Activo", (SiglasCentros)Enum.Parse(typeof(SiglasCentros), sede.ToUpper()));
+        //   agrega el profesor a la base de datos
+        if (HttpContext.Request.Form.Files.GetFile("fotografia") != null && HttpContext.Request.Form.Files.GetFile("fotografia").Length > 0){
+            var ms = new MemoryStream();
+            await HttpContext.Request.Form.Files.GetFile("fotografia").CopyToAsync(ms);
+             profe.fotografia = ms.ToArray();
+        }
+        admProfesores.agregarProfesor(profe, Request.Form["contrasena"]);
         return View("../Acceso/RegistroExito");
     }
 
@@ -297,7 +308,7 @@ public class Controlador : Controller
             await HttpContext.Request.Form.Files.GetFile("fotografia").CopyToAsync(ms);
              profe.fotografia = ms.ToArray();
         }
-        admProfesores.agregarProfesor(profe);
+        admProfesores.agregarProfesor(profe, Request.Form["contrasena"]);
         //   regresa a la pantalla anterior
         return consultarProfesoresAsistente();
     }
@@ -544,15 +555,19 @@ public class Controlador : Controller
         return CoordinadorPlanTrabajo();
     }
 
-
-
-
-
-
     public IActionResult marcarRealizada()
     {
         return View("../Coordinador/ActividadRealizada");
     }
+
+    [HttpPost]
+    public void pruebaImg(){
+        var imgs = HttpContext.Request.Form.Files["lista"];
+        Console.WriteLine(imgs);
+    }
+
+
+
     /*
     [HttpPost]
     public IActionResult marcarRealizadaEvidencia()
