@@ -1144,7 +1144,7 @@ public class SingletonDAO
         if (basedatos.IsConnectionOpen() == false){
             basedatos.getConnection().Open();
         }
-        string query= "UPDATE Actividad SET EstadoActividad = \"NOTIFICADA\" WHERE idActividad=@pidActividad";
+        string query= "UPDATE Actividad SET EstadoActividad = 'NOTIFICADA' WHERE idActividad=@pidActividad";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
         //command.CommandType = System.Data.CommandType.Text;
 
