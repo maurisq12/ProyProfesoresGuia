@@ -9,6 +9,7 @@ using System.Linq;
 using SpreadsheetLight;
 using System.Data;
 using OfficeOpenXml;
+using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
 

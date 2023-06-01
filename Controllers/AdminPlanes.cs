@@ -16,9 +16,9 @@ public class AdminPlanes
         return p;
     }
 
-    public Actividad consultarProxActividad(int pPlan)
+    public Actividad consultarProxActividad()
     {
-        return SingletonDAO.getInstance().getProximaActividad(pPlan);
+        return SingletonDAO.getInstance().getProximaActividad();
     }
 
     public bool agregarActividadPlan(Actividad pActividad)

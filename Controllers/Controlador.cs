@@ -213,7 +213,7 @@ public class Controlador : Controller
     
     public IActionResult cargarEstudiantesConf()
     {
-        List<Estudiante> estudiantes = pExcel.procesarExcel(Request.Form["ruta"]);
+        List<Estudiante> estudiantes = pExcel.LeerEstudiantesDesdeExcel(Request.Form["ruta"]);
         admEstudiantes.agregarEstudiantes(estudiantes);
         return consultarEstudiantesCentroAsistente();
     }
@@ -264,7 +264,7 @@ public class Controlador : Controller
 
     public IActionResult consultarPlanSinComentarios()
     {
-        ViewBag.Plan = admPlanes.consultarPlan(1);
+        ViewBag.Plan = admPlanes.consultarPlan();
         return View("../Asistente/planTrabajo");
     }
     
@@ -336,7 +336,7 @@ public class Controlador : Controller
     
     public IActionResult consultarPlanConComentarios()
     {
-        ViewBag.Plan = admPlanes.consultarPlan(1);
+        ViewBag.Plan = admPlanes.consultarPlan();
         return View("../Profesor/planTrabajo");
     }
     
@@ -379,7 +379,7 @@ public class Controlador : Controller
 
     public IActionResult agregarActividad()
     {
-        ViewBag.Plan = admPlanes.consultarPlan(1);
+        ViewBag.Plan = admPlanes.consultarPlan();
         return View("../Coordinador/nuevaActividad");
     }
     
@@ -405,15 +405,15 @@ public class Controlador : Controller
             }
         }
        
-        DTOActividad act = new DTOActividad(idAct, Int32.Parse(Request.Form["semana"]), (TipoActividad)Enum.Parse(typeof(TipoActividad), tipo.ToUpper()), 
+        Actividad act = new Actividad(idAct, Int32.Parse(Request.Form["semana"]), (TipoActividad)Enum.Parse(typeof(TipoActividad), tipo.ToUpper()), 
             Request.Form["nombre"], DateTime.Parse(Request.Form["fechaActividad"] + " " + Request.Form["horaActividad"]), 
             responsablesList, DateTime.Parse(Request.Form["fechaAnuncio"] + " " + Request.Form["horaAnuncio"]), 
             Int32.Parse(Request.Form["diasPreviosAnuncio"]), 
             recordatorios.Split(new[] { ". ", "." }, StringSplitOptions.RemoveEmptyEntries).Select(s => DateTime.Parse(s.Trim())).ToList(), 
             (Modalidad)Enum.Parse(typeof(Modalidad), modalidad.ToUpper()), Request.Form["enlace"], Request.Form["afiche"], 
-            (EstadoActividad)Enum.Parse(typeof(EstadoActividad), estado.ToUpper()));
+            (EstadoActividad)Enum.Parse(typeof(EstadoActividad), estado.ToUpper()), new List<Comentario>());
 
-        admPlanes.agregarActividadPlan((PlanTrabajo)ViewBag.Plan, act);
+        admPlanes.agregarActividadPlan(act);
         return consultarPlanCoord();
     }
     
@@ -483,7 +483,7 @@ public class Controlador : Controller
     
     public IActionResult consultarPlanCoord()
     {
-        ViewBag.Plan = admPlanes.consultarPlan(1);
+        ViewBag.Plan = admPlanes.consultarPlan();
         return View();/// no se
     }
     
@@ -618,7 +618,7 @@ public class Controlador : Controller
     // Asistente, Profesor Guia
     public IActionResult consultarProximaActividad()
     {
-        ViewBag.Actividad = admPlanes.consultarProxActividad(1);
+        ViewBag.Actividad = admPlanes.consultarProxActividad();
         return View("../Asistente/proximaActividad");
     }
 
@@ -748,4 +748,5 @@ public class Controlador : Controller
 
 
 
+   
 }
