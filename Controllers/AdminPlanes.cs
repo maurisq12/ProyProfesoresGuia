@@ -5,9 +5,15 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdminPlanes
 {
-    public PlanTrabajo consultarPlan(int pPlan)
+    
+    public PlanTrabajo consultarPlan()
     {
-        return SingletonDAO.getInstance().getPlan(pPlan);
+        PlanTrabajo p = new PlanTrabajo();
+        p.idPlanTrabajo = 1;
+        p.equipo = return SingletonDAO.getInstance().getEquiposGuia();
+        p.itinerario = consultarActividades();
+        
+        return p;
     }
 
     public Actividad consultarProxActividad(int pPlan)
@@ -15,9 +21,9 @@ public class AdminPlanes
         return SingletonDAO.getInstance().getProximaActividad(pPlan);
     }
 
-    public bool agregarActividadPlan( DTOActividad pActividad)
+    public bool agregarActividadPlan(Actividad pActividad)
     {
-        return SingletonDAO.getInstance().agregarActividadPlan( pActividad);
+        return SingletonDAO.getInstance().InsertarActividad( pActividad);
     }
 
     public bool activarPublicacion(int idActividad)
@@ -37,12 +43,12 @@ public class AdminPlanes
 
     public Actividad consultarActividad(int idActividad)
     {
-        return SingletonDAO.getInstance().consultarActividad(idActividad);
+        return SingletonDAO.getInstance().getActividadXid(idActividad);
     }
 
     public List<Actividad> consultarActividades()
     {
-        return SingletonDAO.getInstance().consultarActividades();
+        return SingletonDAO.getInstance().getActividades();
     }
 
     public List<Evidencia> getEvidencias()
