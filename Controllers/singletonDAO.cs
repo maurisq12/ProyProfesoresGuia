@@ -1211,6 +1211,52 @@ public class SingletonDAO
         }  
     }
     
-    
+    public bool marcarCancelada(int idActividad, String justificacion, DateTime fecha)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+
+        int idJustificacion = 1;
+        string query= "UPDATE Actividad SET EstadoActividad = \"CANCELADA\" WHERE idActividad=@pidActividad";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        //command.CommandType = System.Data.CommandType.Text;
+
+        command.Parameters.AddWithValue("@pidActividad",idActividad);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            
+            query = "SELECT ISNULL(MAX(idJustificacion), 0) + 1 AS idJustificacion FROM Justificacion";
+            SqlCommand commandidJustificacion = new SqlCommand(query, basedatos.getConnection());
+            
+            using (SqlDataReader reader = commandidJustificacion.ExecuteReader())
+            {
+                if (reader.Read()){
+                    idJustificacion = (int)reader["idJustificacion"];
+                }
+            }
+            
+            query = "INSERT INTO Justificacion (idJustificacion, idActividad, cuerpo, fecha) VALUES (@idJustificacion,@idActividad, @cuerpo, @fecha)";
+            SqlCommand commandInsert = new SqlCommand(query, basedatos.getConnection());
+            commandInsert.Parameters.AddWithValue("@idJustificacion", idJustificacion);
+            commandInsert.Parameters.AddWithValue("@idActivida", idActividad);
+            commandInsert.Parameters.AddWithValue("@cuerpo", justificacion);
+            commandInsert.Parameters.AddWithValue("@fecha", fecha);
+            
+            commandInsert.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine($"Error al cancelar la actividad {idActividad}: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
 
 }
