@@ -1182,5 +1182,35 @@ public class SingletonDAO
         basedatos.getConnection().Close();
         return actividad;
     }
+    
+    public bool definirCoordinador(String idProfesor, int idEquipo)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        string query= "UPDATE EquipoGuia SET idProfesorCoordinador = @pProfesor WHERE idEquipoGuia=@pEquipo";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        //command.CommandType = System.Data.CommandType.Text;
+
+        command.Parameters.AddWithValue("@pProfesor",idProfesor);
+        command.Parameters.AddWithValue("@pEquipo",idEquipo);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error al definir el coordinador: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+    
+    
 
 }
