@@ -15,7 +15,7 @@ public class AdminPlanes
         return SingletonDAO.getInstance().getProximaActividad(pPlan);
     }
 
-    public bool agregarActividadPlan(PlanTrabajo pId, DTOActividad pActividad)
+    public bool agregarActividadPlan( DTOActividad pActividad)
     {
         return SingletonDAO.getInstance().agregarActividadPlan(pId, pActividad);
     }
@@ -30,9 +30,9 @@ public class AdminPlanes
         return SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
     }
     
-    public bool marcarRealizada(Evidencia evidencia)
+    public bool marcarRealizada(Evidencia evidencia, int idActividad)
     {
-        return SingletonDAO.getInstance().marcarRealizada(evidencia);
+        return SingletonDAO.getInstance().marcarRealizada(evidencia,int idActividad);
     }
 
     public Actividad consultarActividad(int idActividad)
