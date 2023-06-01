@@ -38,9 +38,9 @@
 </script>
 
 <div class="text-center">
-  <div style="display: flex;"">
-  <span><button type="button" class = "button-67">Ver próxima actividad del equipo</button></span>
+  <div style="display: flex;justify-content: space-between;"">
   <span></span><h1 style="color: #004879; font-size: 80x;margin-left:200px">Profesores del equipo</h1></span>
+  <span></span><button type="button" class = "button-67" onclick="location.href='@Url.Action("ProfesorEstudiantesEquipo", "Controlador")'">Estudiantes del equipo</button></span>
   </div><br>
   <div style="display: flex; flex-direction: column ">
     <div style="align-self: start;">
@@ -55,7 +55,6 @@
           <th style="color:black; font-size:110%; width:15%">Campus</th>
           <th style="color:black; font-size:110%">Correo electrónico</th>
           <th style="color:black; font-size:110%">Estado</th>
-          <th style="color:black; font-size:110%">Editar</th>
         </tr>
 
       </thead>
@@ -68,10 +67,6 @@
             <td align="center"> @unProfesor.codigo.Substring(0,2) </td>
             <td align="center"> @unProfesor.correoElectronico </td>
             <td align="center"> @unProfesor.activo </td>
-            <td style="display: flex; justify-content: space-around;">
-              <a style="text-decoration: none;padding: 6px;" href=""
-                ><img src="https://cdn-icons-png.flaticon.com/512/266/266146.png" width="20" height="20"></a>
-            </td>
           </tr>
         }        
       </tbody>

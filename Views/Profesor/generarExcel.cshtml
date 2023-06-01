@@ -17,13 +17,15 @@
                 <p>Se generará un archivo de Excel con los estudiantes</p>
                 <p>¿Desea que estos sean de su sede únicamente o de todas las sedes?</p>
             </div><br><br>
+            <form method="post" action="@Url.Action("generarExcelEstudiantesConf", "Controlador")">
             <div>
-                <select name="cars" id="cars" class = "login-entry">
-                    <option value="1">Mi sede</option>
-                    <option value="2">Todas las sedes</option>
+                <select name="opc" id="opc" class = "login-entry">
+                    <option value="MiSede">Mi sede</option>
+                    <option value="Todas">Todas las sedes</option>
                 </select><br><br><br>
                 <button style="align-self: center;" class="btn-not" type="submit">Generar archivo</button><br><br><br>
             </div>
+            </form>
     </body>
         
 </html>

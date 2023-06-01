@@ -1086,7 +1086,7 @@ public class SingletonDAO
         }
         string query= "SELECT TOP 1 * FROM Actividad WHERE fechaHora >= GETDATE() ORDER BY fechaHora ASC";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.StoredProcedure;
+        //--command.CommandType = System.Data.CommandType.StoredProcedure;
 
         SqlDataReader reader = command.ExecuteReader();
 

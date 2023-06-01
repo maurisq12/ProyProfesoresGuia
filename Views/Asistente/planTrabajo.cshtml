@@ -27,7 +27,6 @@
 </script>
 <style>
 table, th, td {
-  border: 1px solid black;
   border-collapse: collapse;
   border-color: #b7c0c0;
 }
@@ -61,12 +60,12 @@ table, th, td {
           <tr>
             <td align="center"> @unaActividad.semana </td>
             <td align="center"> @unaActividad.nombre</td>
-            <td align="center"> @unaActividad.tipo.nombre </td>
+            <td align="center"> @unaActividad.tipo </td>
             <td align="center"> @unaActividad.responsables[0].nombreCompleto </td>
             <td align="center"> @unaActividad.modalidad </td>
             <td align="center"> @unaActividad.estado </td>
             <td>
-              <a onclick="location.href='@Url.Action("AsistenteDetallesActividad", "Controlador")'" style="text-decoration: none;padding: 6px;cursor:pointer;" 
+              <a href="/Controlador/AsistenteDetallesActividad?id=@unaActividad.idActividad" style="text-decoration: none;padding: 6px;cursor:pointer;" 
                 ><img src="https://cdn-icons-png.flaticon.com/128/2274/2274790.png" width="25" height="25"
                 ></a>
             </td>

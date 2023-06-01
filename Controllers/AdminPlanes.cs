@@ -6,7 +6,7 @@ namespace ProfesoresGuia.Controllers;
 public class AdminPlanes
 {
     
-    public PlanTrabajo consultarPlan()
+    /*public PlanTrabajo consultarPlan()
     {
         PlanTrabajo p = new PlanTrabajo();
         p.idPlanTrabajo = 1;
@@ -14,7 +14,7 @@ public class AdminPlanes
         p.itinerario = consultarActividades();
         
         return p;
-    }
+    }*/
 
     public Actividad consultarProxActividad()
     {
@@ -33,12 +33,12 @@ public class AdminPlanes
 
     public bool marcarCancelada(int idActividad, String justificacion, DateTime fecha)
     {
-        return SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
+        return true;//SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
     }
     
     public bool marcarRealizada(Evidencia evidencia, int idActividad)
     {
-        return SingletonDAO.getInstance().marcarRealizada(evidencia,int idActividad);
+        return true;//SingletonDAO.getInstance().marcarRealizada(evidencia,int idActividad);
     }
 
     public Actividad consultarActividad(int idActividad)
@@ -53,11 +53,11 @@ public class AdminPlanes
 
     public List<Evidencia> getEvidencias()
     {
-        return SingletonDAO.getInstance().getEvidencias();
+        return null;//SingletonDAO.getInstance().getEvidencias();
     }
 
     public List<Imagen> getImagenes()
     {
-        return SingletonDAO.getInstance().getImagenes();
+        return null;//SingletonDAO.getInstance().getImagenes();
     }
 }

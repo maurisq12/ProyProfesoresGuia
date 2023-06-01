@@ -29,7 +29,7 @@
 </head>
 
 <body>
-	<form>
+	<form method="post" action="@Url.Action("modificarEstudianteConf", "Controlador")">
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -41,39 +41,40 @@
                 <h1 style="color:#004879"> Editar información de estudiante</h1>
                 <div>
                     <div>
-
+                        <input type="hidden" id="idE" name="idE" value="@ViewBag.Estudiante.idEstudiante">
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Carne</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="carne" name="carne"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="carne" name="carne" value="@ViewBag.Estudiante.carne"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Nombre completo</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre" value="@ViewBag.Estudiante.nombreCompleto"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Sede</h3><br>
-                            <select name="cars" id="cars" class = "login-entry">
-                                <option value="volvo">Cartago</option>
-                                <option value="saab">San José</option>
-                                <option value="opel">Limón</option>
-                                <option value="audi">San Carlos</option>
+                            <select name="sede" id="sede" class = "login-entry">
+                                <option value="1">Cartago</option>
+                                <option value="2">San José</option>
+                                <option value="3">Limón</option>
+                                <option value="4">Alajuela</option>
+                                <option value="5">San Carlos</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Correo electrónico</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="correo" name="correo" value="@ViewBag.Estudiante.correoElectronico"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Teléfono celular</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="telefonoCelular" name="telefonoCelular" value="@ViewBag.Estudiante.telefonoCelular"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                         
