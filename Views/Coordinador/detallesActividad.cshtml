@@ -36,6 +36,7 @@
                 <span class="login100-form-logo">
                     <i class="zmdi zmdi-landscape"></i>
                 </span>
+                <title>Registro</title>
                 <h1 style="color:#004879">Detalles de la actividad</h1>
                 <div class="cont-formulario">
                     <div>
@@ -87,13 +88,21 @@
                     </div>
                     
                     <div>
-                        <img src="https://edit.org/photos/img/blog/3j8-bienvenido-colegio-cartel-plantilla-editable-online.jpg-840.jpg" style="width:475px;height:690;">
+                        <img src="data:image;base64,@Convert.ToBase64String(@ViewBag.actividad.afiche)">
 
 
 
                     </div>          
-                </div>    
+                </div> 
+
+                <div style="display:flex;justify-content:space-between;">
+                    <button style="align-self: center;" class="btn-not" type="submit" > Activar notificaciones</button><br><br><br>
+                    <button style="align-self: center;" class="btn-rlz" type="submit" > Realizada</button><br><br><br>
+                    <button style="align-self: center;" class="btn-delete"  onclick="location.href='/Controlador/marcarCancelada?id=@ViewBag.actividad.idActividad'"> Cancelar</button><br><br><br>
+                </div><br><br>
+
                 <hr><br>
+
                 <div>
                     <h4 style="color:#004879">Sección de comentarios</h4><br>
                     

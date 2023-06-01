@@ -4,14 +4,14 @@ public class Imagen
 {
     public int idImagen { get; set; }
     public int idEvidencia { get; set; }
-    public String imagen { get; set; }
+    public Byte[] imagen { get; set; }
 
 
     public Imagen()
     {
     }
 
-    public Imagen(int idImagen, int idEvidencia, String imagen)
+    public Imagen(int idImagen, int idEvidencia, Byte[] imagen)
     {
         this.idImagen = idImagen;
         this.idEvidencia = idEvidencia;

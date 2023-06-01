@@ -16,15 +16,17 @@ public class Actividad
     public List<DateTime> recordatorios { get; set; }
     public Modalidad modalidad { get; set; }
     public String enlaceRemoto { get; set; }
-    public String afiche { get; set; }
+    public Byte[] afiche { get; set; }
     public EstadoActividad estado { get; set; }
     public List<Comentario> listaComentarios { get; set; }
+
+    public Evidencia evidencia { get; set; }
 
     public Actividad()
     {
     }
 
-    public Actividad(int idActividad, int semana, TipoActividad tipo, string nombre, DateTime fechaHora, List<ProfesorGuia> responsables, DateTime fechaAnuncio, int diasPreviosAnuncio, List<DateTime> recordatorios, Modalidad modalidad, string enlaceRemoto, string afiche, EstadoActividad estado, List<Comentario> listaComentarios)
+    public Actividad(int idActividad, int semana, TipoActividad tipo, string nombre, DateTime fechaHora, List<ProfesorGuia> responsables, DateTime fechaAnuncio, int diasPreviosAnuncio, List<DateTime> recordatorios, Modalidad modalidad, string enlaceRemoto, EstadoActividad estado, List<Comentario> listaComentarios)
     {
         this.idActividad = idActividad;
         this.semana = semana;
@@ -37,12 +39,11 @@ public class Actividad
         this.recordatorios = recordatorios;
         this.modalidad = modalidad;
         this.enlaceRemoto = enlaceRemoto;
-        this.afiche = afiche;
         this.estado = estado;
         this.listaComentarios = listaComentarios;
     }
 
-    public Actividad(int idActividad, int semana, TipoActividad tipo, String nombre, DateTime fechaHora, DateTime fechaAnuncio, int diasPreviosAnuncio, Modalidad modalidad, String enlaceRemoto, String afiche, EstadoActividad estado)
+    public Actividad(int idActividad, int semana, TipoActividad tipo, String nombre, DateTime fechaHora, DateTime fechaAnuncio, int diasPreviosAnuncio, Modalidad modalidad, String enlaceRemoto, Byte[] afiche, EstadoActividad estado)
     {
         this.idActividad = idActividad;
         this.semana = semana;

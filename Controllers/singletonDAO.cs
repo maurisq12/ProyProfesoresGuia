@@ -426,7 +426,7 @@ public class SingletonDAO
             actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
             actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
             actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
-            actividad.afiche = reader["afiche"].ToString();
+            actividad.afiche = (byte[])reader["afiche"];
             actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
             actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
             actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
@@ -558,7 +558,7 @@ public class SingletonDAO
             actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
             actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
             actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
-            actividad.afiche = reader["afiche"].ToString();
+            actividad.afiche = (byte[])reader["afiche"];
             actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
             actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
             actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
@@ -1154,7 +1154,7 @@ public class SingletonDAO
             actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
             actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
             actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
-            actividad.afiche = reader["afiche"].ToString();
+            actividad.afiche = (byte[])reader["afiche"];
             actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
             actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
             actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
@@ -1273,7 +1273,7 @@ public class SingletonDAO
         }
 
         int idJustificacion = 1;
-        string query= "UPDATE Actividad SET EstadoActividad = \"CANCELADA\" WHERE idActividad=@pidActividad";
+        string query= "UPDATE Actividad SET EstadoActividad = 'CANCELADA' WHERE idActividad=@pidActividad";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
         //command.CommandType = System.Data.CommandType.Text;
 
@@ -1293,9 +1293,8 @@ public class SingletonDAO
                 }
             }
             
-            query = "INSERT INTO Justificacion (idJustificacion, idActividad, cuerpo, fecha) VALUES (@idJustificacion,@idActividad, @cuerpo, @fecha)";
+            query = "INSERT INTO Justificacion (idActividad, cuerpo, fecha) VALUES (@idActividad, @cuerpo, @fecha)";
             SqlCommand commandInsert = new SqlCommand(query, basedatos.getConnection());
-            commandInsert.Parameters.AddWithValue("@idJustificacion", idJustificacion);
             commandInsert.Parameters.AddWithValue("@idActividad", idActividad);
             commandInsert.Parameters.AddWithValue("@cuerpo", justificacion);
             commandInsert.Parameters.AddWithValue("@fecha", fecha);

@@ -33,7 +33,7 @@ public class AdminPlanes
 
     public bool marcarCancelada(int idActividad, String justificacion, DateTime fecha)
     {
-        return true;//SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
+        return SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
     }
     
     public bool marcarRealizada(Evidencia evidencia, int idActividad)

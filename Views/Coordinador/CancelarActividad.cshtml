@@ -17,9 +17,12 @@
                 <p>Se cancelará la actividad, indique la razón:</p>
             </div><br><br>
             <div>
-                <textarea id="obs" name="obs" rows="4" cols="50"> Observación...</textarea>
+                <form id="obser" method="post" action="@Url.Action("marcarCanceladaJustificacion", "Controlador")">
+                <textarea id="obs" name="obs" rows="4" cols="50" placeholder="Observación..." form="obser"> </textarea>
+                <input type="hidden" value="@ViewBag.act" name="idAct" id="idAct">
                 <br><br><br>
                 <button style="align-self: center;" class="btn-delete" type="submit">Cancelar actividad</button><br><br><br>
+                </form>
             </div>
     </body>
         

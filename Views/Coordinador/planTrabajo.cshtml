@@ -1,0 +1,80 @@
+@{
+  ViewData["Title"] = "Gestión de profesores";
+  if(ViewBag.usuario!="Profesor"){
+    Layout = "ProfesoresLayout";}
+  else{
+    Layout = "CoordinadorLayout";}
+}
+
+
+<script>
+  function buscar() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("busq");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tablaProfesores");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+<style>
+table, th, td {
+  border-collapse: collapse;
+  border-color: #b7c0c0;
+}
+</style>
+
+<div class="text-center">
+  <div>
+  <span></span><h1 style="color: #004879; font-size: 80x">Plan de trabajo</h1></span>
+  </div><br>
+  <div style="display: flex; flex-direction: column " class="justify">
+    <div style="display:flex;justify-content:space-between;">
+    <span><input class="search-bar" type="text" id="busq" onkeyup="buscar()" placeholder="Buscar actividad..."></span>
+    <span><button class="btn-not" onclick="location.href='@Url.Action("agregarActividad", "Controlador")'">Agregar actividad</button></span>
+    </div>
+    <table id="tablaProfesores" style="margin-top: 60px;" class="table">
+      <thead>
+        <tr style="background: #89D2CF">
+          <th style="color:black; font-size:110%; width:5%" >Semana</th>
+          <th style="color:black; font-size:110%">Nombre</th>
+          <th style="color:black; font-size:110%; width:15%">Tipo</th>
+          <th style="color:black; font-size:110%">Modalidad</th>
+          <th style="color:black; font-size:110%">Estado</th>
+          <th style="color:black; font-size:110%">Información</th>
+
+        </tr>
+
+      </thead>
+      <tbody>
+        @foreach (var unaActividad in ViewBag.actividades)
+        {
+          <tr>
+            <td align="center"> @unaActividad.semana </td>
+            <td align="center"> @unaActividad.nombre</td>
+            <td align="center"> @unaActividad.tipo </td>
+            <td align="center"> @unaActividad.modalidad </td>
+            <td align="center"> @unaActividad.estado </td>
+            <td>
+              <a href="/Controlador/CoordinadorDetallesActividad?id=@unaActividad.idActividad" style="text-decoration: none;padding: 6px;cursor:pointer;" 
+                ><img src="https://cdn-icons-png.flaticon.com/128/2274/2274790.png" width="25" height="25"
+                ></a>
+            </td>
+          </tr>
+        }      
+      </tbody>
+    </table>
+  </div>
+
+</div>

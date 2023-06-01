@@ -45,7 +45,7 @@
 </head>
 
 <body>
-	<form method="post" action="@Url.Action("AgAct", "Controlador")">
+	<form method="post" action="@Url.Action("agregarActividadConf", "Controlador")" enctype="multipart/form-data>
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -94,18 +94,18 @@
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Tipo: </h3><br>
                             <select name="tipo" id="tipo" class = "login-entry">
-                                <option value="1">Orientadora</option>
-                                <option value="2">Motivacional</option>
-                                <option value="3">Apoyo a vida estudiantil</option>
-                                <option value="4">De orden técnico</option>
-                                <option value="5">De recreación</option>
+                                <option value="ORIENTADORA">Orientadora</option>
+                                <option value="MOTIVACIONAL">Motivacional</option>
+                                <option value="DE_APOYO_A_LA_VIDA_ESTUDIANTIL">Apoyo a vida estudiantil</option>
+                                <option value="DE_ORDEN_TECNICO">De orden técnico</option>
+                                <option value="DE_RECREACION">De recreación</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Fecha y hora</h3><br>
-                            <h3> <input type="datetime-local" class = "login-entry" id="fechayhora" multiple></h3>
+                            <h3> <input type="datetime-local" class = "login-entry" name="fechahoraActividad" id="fechahoraActividad" multiple></h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
@@ -124,8 +124,14 @@
 
                     <div>
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Fecha de notificación:</h3><br>
+                            <h3> <input type="datetime-local" class = "login-entry" name="fechahoraAnuncio" id="fechahoraAnuncio" multiple></h3>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Días previos para avisos</h3><br>
-                            <h3><select name="diasp" id="diasp" class = "login-entry">
+                            <h3><select name="diasPreviosAnuncio" id="diasPreviosAnuncio" class = "login-entry">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -149,35 +155,25 @@
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Días en que se notifica:</h3><br>
                             <h3>                                 
-                                <input type="text" class="form-control date login-entry" placeholder="Seleccione las fechas">
+                                <input type="text" id="recordatorios" name="recordatorios" class="form-control date login-entry" placeholder="Seleccione las fechas">
                             </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>   
 
-                        <div>
-  <p>Select dates</p>
-  <input type="date" id="date" />
-
-  <button onclick='return false;' id="myBtn">Add Date</button>
-</div>
-
-<div style="padding-top:20px;">
-  <select name="dates" id="dates" size="5">
-  </select>
-</div>
-
-<button type="button" id="finish">Finish</button>      
+                        <div>   
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Modalidad: </h3><br>
                             <select name="modalidad" id="modalidad" class = "login-entry">
-                                <option value="1">Orientadora</option>
-                                <option value="2">Motivacional</option>
-                                <option value="3">Apoyo a vida estudiantil</option>
-                                <option value="4">De orden técnico</option>
-                                <option value="5">De recreación</option>
+                                <option value="PRESENCIAL">Presencial</option>
+                                <option value="REMOTA">Remota</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Enlace:</h3><br>
+                            <h3> <input class = "login-entry" type="url" id="enlace" name="enlace"><br> </h3>                            
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
