@@ -91,7 +91,7 @@ public class SingletonDAO
         }
         string query= "UPDATE Usuario SET contrasena = @pContrasena WHERE correo=@pCorreo";
         SqlCommand command = new SqlCommand(query, basedatos.getConnection());
-        command.CommandType = System.Data.CommandType.Text;
+        //command.CommandType = System.Data.CommandType.Text;
 
         command.Parameters.AddWithValue("@pCorreo",correo);
         command.Parameters.AddWithValue("@pContrasena",contrasena);
@@ -1048,6 +1048,169 @@ public class SingletonDAO
         }
     }
 
+    
+    public bool activarPublicacion(int idActividad)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        string query= "UPDATE Actividad SET EstadoActividad = \"NOTIFICADA\" WHERE idActividad=@pidActividad";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        //command.CommandType = System.Data.CommandType.Text;
 
+        command.Parameters.AddWithValue("@pidActividad",idActividad);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine($"Error al activar la publicacion de la actividad {idActividad}: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+
+
+    public Actividad getProximaActividad()
+    {
+     Actividad actividad = new Actividad();
+     SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        string query= "SELECT TOP 1 * FROM Actividad WHERE fechaHora >= GETDATE() ORDER BY fechaHora ASC";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+        SqlDataReader reader = command.ExecuteReader();
+
+        if (reader.Read())
+        {
+            
+            actividad.idActividad = (int)reader["idActividad"];
+            actividad.semana = (int)reader["semana"];
+            actividad.nombre = (string)reader["nombre"];
+            actividad.fechaHora = (DateTime)reader["fechaHora"];
+            actividad.fechaAnuncio = (DateTime)reader["fechaAnuncio"];
+            actividad.diasPreviosAnuncio = (int)reader["diasPreviosAnuncio"];
+            actividad.enlaceRemoto = (string)reader["enlaceRemoto"];
+            actividad.afiche = reader["afiche"].ToString();
+            actividad.estado = (EstadoActividad)Enum.Parse(typeof(EstadoActividad),(string)reader["EstadoActividad"]);
+            actividad.modalidad = (Modalidad)Enum.Parse(typeof(Modalidad),(string)reader["Modalidad"]);
+            actividad.tipo = (TipoActividad)Enum.Parse(typeof(TipoActividad),(string)reader["TipoActividad"]);
+            actividad.responsables = new List<ProfesorGuia>();
+            actividad.recordatorios = new List<DateTime>();
+            actividad.listaComentarios = new List<Comentario>();
+            SqlCommand commandResponsables = new SqlCommand("consultar_ActividadXresponsables", basedatos.getConnection());
+            commandResponsables.CommandType = System.Data.CommandType.StoredProcedure;
+            commandResponsables.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+            SqlDataReader readerResponsables = commandResponsables.ExecuteReader();
+            
+
+            while (readerResponsables.Read()){
+                ProfesorGuia profesor = new ProfesorGuia();
+                profesor.codigo = readerResponsables["codigo"].ToString();
+                profesor.nombreCompleto = readerResponsables["nombrecompleto"].ToString();
+                profesor.correoElectronico = readerResponsables["correoelectronico"].ToString();
+                profesor.telefonoOficina = readerResponsables["telefonooficina"].ToString();
+                profesor.telefonoCelular = readerResponsables["telefonocelular"].ToString();
+                profesor.fotografia = (byte[])readerResponsables["fotografia"];
+                profesor.activo = readerResponsables["activo"].ToString();
+                    
+                actividad.responsables.Add(profesor);
+                
+            }
+            readerResponsables.Close();
+
+            SqlCommand commandRecordatorios = new SqlCommand("consultar_recordatorio", basedatos.getConnection());
+            commandRecordatorios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandRecordatorios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+
+            SqlDataReader readerRecordatorios = commandRecordatorios.ExecuteReader();
+            while (readerRecordatorios.Read()){
+
+                actividad.recordatorios.Add((DateTime)readerRecordatorios["fechaRecordatorio"]);
+            }
+            readerRecordatorios.Close();
+
+            SqlCommand commandComentarios = new SqlCommand("consultar_comentarios", basedatos.getConnection());
+            commandComentarios.CommandType = System.Data.CommandType.StoredProcedure;
+            commandComentarios.Parameters.AddWithValue("@idActividad", actividad.idActividad);
+
+            SqlDataReader readerComentarios = commandComentarios.ExecuteReader();
+        
+            while (readerComentarios.Read()){
+                Comentario c = new Comentario();
+                c.listaRespuestas = new List<Respuesta>();
+                c.idComentario = (Int32)readerComentarios["idComentario"];
+                   
+
+                c.emisor = getProfesorXcodigo((String)readerComentarios["idProfesorGuia"]);
+            
+                c.cuerpo = (String)readerComentarios["cuerpo"];
+                c.fechaHora = (DateTime)readerComentarios["fechaHora"];
+
+                SqlCommand commandRespuestas = new SqlCommand("consultar_respuestas", basedatos.getConnection());
+                commandRespuestas.CommandType = System.Data.CommandType.StoredProcedure;
+                commandRespuestas.Parameters.AddWithValue("@id_comentario", actividad.idActividad);
+
+                SqlDataReader readerRespuestas = commandRespuestas.ExecuteReader();
+                while (readerRespuestas.Read()){
+                    Respuesta r = new Respuesta(); 
+                    r.idRespuesta = (Int32)readerRespuestas["idRespuesta"];
+                    r.fechaHora = (DateTime)readerRespuestas["fechaHora"];
+                    r.cuerpo = (String)readerRespuestas["cuerpo"];
+                      
+                    r.emisor = getProfesorXcodigo((String)readerRespuestas["idProfesorGuia"]);
+                 
+                    c.listaRespuestas.Add(r);  
+                    
+                }
+
+                actividad.listaComentarios.Add(c);
+            }
+
+        }
+
+        reader.Close();
+        basedatos.getConnection().Close();
+        return actividad;
+    }
+    
+    public bool definirCoordinador(String idProfesor, int idEquipo)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }
+        string query= "UPDATE EquipoGuia SET idProfesorCoordinador = @pProfesor WHERE idEquipoGuia=@pEquipo";
+        SqlCommand command = new SqlCommand(query, basedatos.getConnection());
+        //command.CommandType = System.Data.CommandType.Text;
+
+        command.Parameters.AddWithValue("@pProfesor",idProfesor);
+        command.Parameters.AddWithValue("@pEquipo",idEquipo);
+        
+        try
+        {
+            command.ExecuteNonQuery();
+            basedatos.getConnection().Close();
+            return true;
+            
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error al definir el coordinador: " + ex.Message);
+            basedatos.getConnection().Close();
+            return false;
+        }  
+    }
+    
+    
 
 }

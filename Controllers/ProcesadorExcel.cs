@@ -1,14 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using SpreadsheetLight;
+using System.Data;
+using OfficeOpenXml;
 using ProfesoresGuia.Models;
 
 namespace ProfesoresGuia.Controllers;
 
 public class ProcesadorExcel
 {
-    public List<Estudiante> procesarExcel(String ruta)
+     public void EscribirEstudiantesEnExcel(List<Estudiante> estudiantes, string rutaArchivo)
+    {
+    // Crear un nuevo archivo de Excel
+        ExcelPackage excel = new ExcelPackage();
+        var hoja = excel.Workbook.Worksheets.Add("Estudiantes");
+    
+        // Escribir estudiantes
+        int fila = 1;
+        foreach (Estudiante estudiante in estudiantes)
+        {
+            hoja.Cells[fila, 1].Value = estudiante.idEstudiante;
+            hoja.Cells[fila, 2].Value = estudiante.carne;
+            hoja.Cells[fila, 3].Value = estudiante.nombreCompleto;
+            hoja.Cells[fila, 4].Value = estudiante.correoElectronico;
+            hoja.Cells[fila, 5].Value = estudiante.telefonoCelular;
+            
+            hoja.Cells[fila, 6].Value = estudiante.centroEstudio.idCentro;
+            hoja.Cells[fila, 7].Value = estudiante.centroEstudio.nombre;
+            hoja.Cells[fila, 8].Value = estudiante.centroEstudio.siglas;
+             hoja.Cells[fila, 9].Value = estudiante.centroEstudio.cantidadProfesores;
+            fila++;
+    }
+
+    // Guardar el archivo de Excel
+    FileInfo archivo = new FileInfo(rutaArchivo);
+    excel.SaveAs(archivo);
+    }
+
+    public List<Estudiante> LeerEstudiantesDesdeExcel(string rutaArchivo)
     {
         List<Estudiante> estudiantes = new List<Estudiante>();
 
-        FileInfo archivo = new FileInfo(ruta);
+        FileInfo archivo = new FileInfo(rutaArchivo);
         using (ExcelPackage excel = new ExcelPackage(archivo))
         {
             ExcelWorksheet hoja = excel.Workbook.Worksheets[0]; // Leer la primera hoja
@@ -36,16 +75,5 @@ public class ProcesadorExcel
         }
 
         return estudiantes;
-    }
-
-    public String generarExcelEstudiantes(String ruta)
-    {
-        
-    }
-
-
-    public String generarExcelPestanas(String ruta)
-    {
-        
     }
 }

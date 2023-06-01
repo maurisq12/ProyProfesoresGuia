@@ -5,19 +5,25 @@ namespace ProfesoresGuia.Controllers;
 
 public class AdminPlanes
 {
-    public PlanTrabajo consultarPlan(int pPlan)
+    
+    public PlanTrabajo consultarPlan()
     {
-        return SingletonDAO.getInstance().getPlan(pPlan);
+        PlanTrabajo p = new PlanTrabajo();
+        p.idPlanTrabajo = 1;
+        p.equipo = return SingletonDAO.getInstance().getEquiposGuia();
+        p.itinerario = consultarActividades();
+        
+        return p;
     }
 
-    public Actividad consultarProxActividad(int pPlan)
+    public Actividad consultarProxActividad()
     {
-        return SingletonDAO.getInstance().getProximaActividad(pPlan);
+        return SingletonDAO.getInstance().getProximaActividad();
     }
 
-    public bool agregarActividadPlan(PlanTrabajo pId, DTOActividad pActividad)
+    public bool agregarActividadPlan(Actividad pActividad)
     {
-        return SingletonDAO.getInstance().agregarActividadPlan(pId, pActividad);
+        return SingletonDAO.getInstance().InsertarActividad( pActividad);
     }
 
     public bool activarPublicacion(int idActividad)
@@ -30,19 +36,19 @@ public class AdminPlanes
         return SingletonDAO.getInstance().marcarCancelada(idActividad, justificacion, fecha);
     }
     
-    public bool marcarRealizada(Evidencia evidencia)
+    public bool marcarRealizada(Evidencia evidencia, int idActividad)
     {
-        return SingletonDAO.getInstance().marcarRealizada(evidencia);
+        return SingletonDAO.getInstance().marcarRealizada(evidencia,int idActividad);
     }
 
     public Actividad consultarActividad(int idActividad)
     {
-        return SingletonDAO.getInstance().consultarActividad(idActividad);
+        return SingletonDAO.getInstance().getActividadXid(idActividad);
     }
 
     public List<Actividad> consultarActividades()
     {
-        return SingletonDAO.getInstance().consultarActividades();
+        return SingletonDAO.getInstance().getActividades();
     }
 
     public List<Evidencia> getEvidencias()
