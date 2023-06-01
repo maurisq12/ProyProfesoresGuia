@@ -1296,7 +1296,7 @@ public class SingletonDAO
             query = "INSERT INTO Justificacion (idJustificacion, idActividad, cuerpo, fecha) VALUES (@idJustificacion,@idActividad, @cuerpo, @fecha)";
             SqlCommand commandInsert = new SqlCommand(query, basedatos.getConnection());
             commandInsert.Parameters.AddWithValue("@idJustificacion", idJustificacion);
-            commandInsert.Parameters.AddWithValue("@idActivida", idActividad);
+            commandInsert.Parameters.AddWithValue("@idActividad", idActividad);
             commandInsert.Parameters.AddWithValue("@cuerpo", justificacion);
             commandInsert.Parameters.AddWithValue("@fecha", fecha);
             
