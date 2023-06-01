@@ -29,7 +29,7 @@
 </head>
 
 <body>
-	<form method="post" action="@Url.Action("agregarProfesorConf", "Controlador")" >
+	<form method="post" action="@Url.Action("agregarProfesorConf", "Controlador")" enctype="multipart/form-data" >
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -37,8 +37,8 @@
                 <span class="login100-form-logo">
                     <i class="zmdi zmdi-landscape"></i>
                 </span>
-                <title>Registro</title>
-                <h1 style="color:#004879">Registro de usuario </h1>
+                <title>Registro de profesor</title>
+                <h1 style="color:#004879">Registro de profesor </h1>
 
                 <h2>
                     Por favor proporciona los siguientes datos para poder realizar el registro.
@@ -55,10 +55,11 @@
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Sede</h3><br>
                             <select name="sede" id="sede" class = "login-entry">
-                                <option value="volvo">Cartago</option>
-                                <option value="saab">San José</option>
-                                <option value="opel">Limón</option>
-                                <option value="audi">San Carlos</option>
+                                <option value="1">Cartago</option>
+                                <option value="2">San José</option>
+                                <option value="3">Limón</option>
+                                <option value="4">Alajuela</option>
+                                <option value="5">San Carlos</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
@@ -85,14 +86,14 @@
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Contraseña</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="contrasena" name="contrasena"><br> </h3>
+                            <h3> <input class = "login-entry" type="password" id="contrasena" name="contrasena"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Fotografía:</h3><br>
 
                             <img src="" id="img_url" alt="your image" style="width:400px; height:300px;"><br> <br>    
-                            <input type="file" id="fotografia" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
+                            <input type="file" name="fotografia" id="fotografia" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                     </div>                    

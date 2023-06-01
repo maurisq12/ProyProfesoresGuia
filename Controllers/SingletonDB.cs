@@ -11,7 +11,7 @@ public class SingletonDB
     private static SingletonDB instance;
 
     private SingletonDB(){
-        string connectionString = "Server=compuguias.mssql.somee.com;User Id=maurisq12cr_SQLLogin_1;Password=vmwxcnu5pt;Database=compuguias;MultipleActiveResultSets=true"";
+        string connectionString = "Server=compuguias.mssql.somee.com;User Id=maurisq12cr_SQLLogin_1;Password=vmwxcnu5pt;Database=compuguias;MultipleActiveResultSets=true";
         con = new SqlConnection(connectionString);
     }
 

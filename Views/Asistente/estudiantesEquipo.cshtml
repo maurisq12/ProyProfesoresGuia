@@ -84,7 +84,6 @@ function sortTable(n) {
 </script>
 <style>
 table, th, td {
-  border: 1px solid black;
   border-collapse: collapse;
   border-color: #b7c0c0;
 }
@@ -114,17 +113,16 @@ table, th, td {
 
       </thead>
       <tbody>
-
-          @foreach (var unEstudiante in ViewBag.estudiantes)
+        @foreach (var unEstudiante in ViewBag.estudiantes)
         {
           <tr>
-            <td align="center"> @unEstudiante.id </td>
+            <td align="center"> @unEstudiante.idEstudiante </td>
             <td align="center"> @unEstudiante.nombreCompleto</td>
-            <td align="center"> @unEstudiante.centroAcademico </td>
+            <td align="center"> @unEstudiante.centroEstudio.nombre </td>
             <td align="center"> @unEstudiante.correoElectronico </td>
-            <td align="center"> @unEstudiante.carnet </td>
+            <td align="center"> @unEstudiante.carne </td>
           </tr>
-        }  
+        }    
         
       </tbody>
     </table>

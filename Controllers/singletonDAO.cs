@@ -132,7 +132,7 @@ public class SingletonDAO
                 objeto.correoElectronico=dr["correoElectronico"].ToString();
                 objeto.telefonoOficina=dr["telefonoOficina"].ToString();
                 objeto.telefonoCelular=dr["telefonoCelular"].ToString();
-                objeto.fotografia=dr["fotografia"].ToString();
+                objeto.fotografia=(Byte[])dr["fotografia"];
                 if (Convert.ToBoolean((dr["activo"].ToString())))
                         objeto.activo="Activo";
                     else

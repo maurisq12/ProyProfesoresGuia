@@ -29,7 +29,7 @@
 </head>
 
 <body>
-	<form>
+	<form method="post" action="@Url.Action("editarProfesorConf", "Controlador")" enctype="multipart/form-data" >
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -43,50 +43,54 @@
                     <div>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Código: CA-001</h3>
+                            <h3 style="font-size: 20px;">Código: @ViewBag.Profesor.codigo</h3>
+                            <input type="hidden" id="codigo" name="codigo" value="@ViewBag.Profesor.codigo">
+                            <input type="hidden" id="activo" name="activo" value="@ViewBag.Profesor.activo">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Nombre</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre" value="@ViewBag.Profesor.nombreCompleto"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Sede</h3><br>
-                            <select name="cars" id="cars" class = "login-entry">
-                                <option value="volvo">Cartago</option>
-                                <option value="saab">San José</option>
-                                <option value="opel">Limón</option>
-                                <option value="audi">San Carlos</option>
+                            <select name="sede" id="sede" class = "login-entry">
+                                <option value="CA">Cartago</option>
+                                <option value="SJ">San José</option>
+                                <option value="LI">Limón</option>
+                                <option value="AL">Alajuela</option>
+                                <option value="SC">San Carlos</option>
                             </select>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Correo electrónico</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="correo" name="correo" value="@ViewBag.Profesor.correoElectronico"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Teléfono oficina</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="telefonoOficina" name="telefonoOficina" value="@ViewBag.Profesor.telefonoOficina"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
                             <h3 style="font-size: 20px;">Teléfono celular</h3><br>
-                            <h3> <input class = "login-entry" type="text" id="nombre" name="nombre"><br> </h3>
+                            <h3> <input class = "login-entry" type="text" id="telefonoCelular" name="telefonoCelular" value="@ViewBag.Profesor.telefonoCelular"><br> </h3>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fotografía:</h3><br>
-
-                            <img src="" id="img_url" alt="your image" style="width:400px; height:300px;"><br> <br>    
-                            <input type="file" id="fotografía" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
+                            <h3 style="font-size: 20px;">Fotografía actual:</h3><br>
+                            <input type="hidden" id="codigo" name="fotografiaV" value="@ViewBag.Profesor.fotografia">
+                            <img style="height: 250px;width: 250px;" src="data:image;base64,@Convert.ToBase64String(@ViewBag.Profesor.fotografia)" /> <br> <br>  
+                            <img src="" id="img_url" alt="your image" style="width:250px; height:250px;"><br> <br>    
+                            <input type="file" id="fotografia" name="fotografia" accept="image/png, image/gif, image/jpeg" onChange="img_pathUrl(this);">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                     </div>

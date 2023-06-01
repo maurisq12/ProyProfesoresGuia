@@ -9,7 +9,7 @@ public class DTOProfesor
     public String correoElectronico { get; set; }
     public String telefonoOficina { get; set; }
     public String telefonoCelular { get; set; }
-    public String fotografia { get; set; }
+    public byte[] fotografia { get; set; }
     public String activo { get; set; }
     
     public SiglasCentros sede { get; set; }
@@ -17,7 +17,7 @@ public class DTOProfesor
     public DTOProfesor(){}
 
 
-    public DTOProfesor(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, String fotografia, String activo, SiglasCentros sede)
+    public DTOProfesor(String codigo, String nombreCompleto, String correoElectronico, String telefonoOficina, String telefonoCelular, byte[] fotografia, String activo, SiglasCentros sede)
     {
         this.codigo = codigo;
         this.nombreCompleto = nombreCompleto;

@@ -29,7 +29,7 @@
 <script>
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("myTable");
+  table = document.getElementById("tablaEstudiantes");
   switching = true;
   //Set the sorting direction to ascending:
   dir = "asc"; 
@@ -84,7 +84,6 @@ function sortTable(n) {
 </script>
 <style>
 table, th, td {
-  border: 1px solid black;
   border-collapse: collapse;
   border-color: #b7c0c0;
 }
@@ -100,14 +99,14 @@ table, th, td {
     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
     <span><button type="button" class = "button-66" onclick="location.href='@Url.Action("AsistenteCargarEstudiantes", "Controlador")'">Cargar estudiantes</button></span>
     </div>
-    <table id="tablaProfesores" style="margin-top: 60px;" class="table">
+    <table id="tablaEstudiantes" style="margin-top: 60px;" class="table">
       <thead>
         <tr style="background: #89D2CF">
           <th style="color:black; font-size:110%; width:5%" >ID</th>
-          <th style="color:black; font-size:110%" onclick="sortTable(0)">Nombre</th>
-          <th style="color:black; font-size:110%; width:15%" onclick="sortTable(0)">Campus</th>
+          <th style="color:black; font-size:110%;cursor: pointer;" onclick="sortTable(1)">Nombre</th>
+          <th style="color:black; font-size:110%; width:15%;cursor: pointer;" onclick="sortTable(2)">Campus</th>
           <th style="color:black; font-size:110%">Correo electrónico</th>
-          <th style="color:black; font-size:110%" onclick="sortTable(0)">Carnet</th>
+          <th style="color:black; font-size:110%;cursor: pointer;" onclick="sortTable(4)">Carnet</th>
         </tr>
 
       </thead>
@@ -115,11 +114,11 @@ table, th, td {
         @foreach (var unEstudiante in ViewBag.estudiantes)
         {
           <tr>
-            <td align="center"> @unEstudiante.id </td>
+            <td align="center"> @unEstudiante.idEstudiante </td>
             <td align="center"> @unEstudiante.nombreCompleto</td>
-            <td align="center"> @unEstudiante.centroAcademico </td>
+            <td align="center"> @unEstudiante.centroEstudio.nombre </td>
             <td align="center"> @unEstudiante.correoElectronico </td>
-            <td align="center"> @unEstudiante.carnet </td>
+            <td align="center"> @unEstudiante.carne </td>
           </tr>
         }        
       </tbody>

@@ -36,58 +36,51 @@
                 <span class="login100-form-logo">
                     <i class="zmdi zmdi-landscape"></i>
                 </span>
-                <title>Registro</title>
-                <h1 style="color:#004879">Detalles de la actividad </h1><br><br>
-                <div style="display: flex; justify-content:space-between">
+                <h1 style="color:#004879">Detalles de la actividad</h1>
+                <div class="cont-formulario">
                     <div>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Nombre</h3><br>
+                            <h3 style="font-size: 20px;">Nombre: @ViewBag.actividad.nombre </h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Sede</h3><br>
+                            <h3 style="font-size: 20px;">Tipo: @ViewBag.actividad.tipo</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Tipo</h3><br>
+                            <h3 style="font-size: 20px;">Responsable: </h3><br>
+                            @foreach (var resp in @ViewBag.actividad.responsables)
+                            {
+                                <p>- @resp.nombre</p>
+                            }
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Responsable</h3><br>
+                            <h3 style="font-size: 20px;">Fecha y hora: @ViewBag.actividad.fechaHora</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fecha y hora</h3><br>
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div><br>
-
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Modalidad</h3><br>
+                            <h3 style="font-size: 20px;">Modalidad: @ViewBag.actividad.modalidad</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                     
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fecha de anuncio</h3><br>
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div><br>
-                    
-                        <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Fecha de anuncio</h3><br>
+                            <h3 style="font-size: 20px;">Fecha de anuncio: @ViewBag.actividad.fechaAnuncio</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Días previos de aviso</h3><br>
+                            <h3 style="font-size: 20px;">Días previos de aviso: @ViewBag.actividad.diasPreviosAnuncio</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
 
                         <div class="wrap-input100 validate-input " data-validate="Nombre">
-                            <h3 style="font-size: 20px;">Estado</h3><br>
+                            <h3 style="font-size: 20px;">Estado: @ViewBag.actividad.estado</h3><br>
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div><br>
                     
@@ -99,9 +92,8 @@
 
 
                     </div>          
-                </div>   
-
-                <hr><br>
+                </div>                
+			</div>
             
 		</div>
     </div>	
