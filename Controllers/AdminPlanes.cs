@@ -51,6 +51,12 @@ public class AdminPlanes
         return SingletonDAO.getInstance().getActividades();
     }
 
+    public List<Actividad> consultarActividadesPlaneadas()
+    {
+        var todas= SingletonDAO.getInstance().getActividades();
+        return todas.Where(a => a.estado == EstadoActividad.NOTIFICADA).ToList();
+    }
+
     public List<Evidencia> getEvidencias()
     {
         return null;//SingletonDAO.getInstance().getEvidencias();

@@ -706,6 +706,7 @@ public class Controlador : Controller
         ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
         return View("../Profesor/estudiantesEquipo");
     }
+    
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -737,7 +738,7 @@ public class Controlador : Controller
     }
 
     public IActionResult calendarioEstudiante(){
-        var plan= admPlanes.consultarActividades();
+        var plan= admPlanes.consultarActividadesPlaneadas();
         ViewBag.actividades = plan;
         return View("../Estudiante/calendario");
     }
@@ -749,8 +750,7 @@ public class Controlador : Controller
     }
 
     public IActionResult EstudianteDetallesActividad(){
-        Actividad actv = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
-        ViewBag.actividad = actv;
+        ViewBag.Actividad = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
         return View("../Estudiante/detallesActividad");
     }
 
