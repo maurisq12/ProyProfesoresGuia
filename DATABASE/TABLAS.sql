@@ -1,9 +1,24 @@
-CREATE TABLE Usuarios(
-	idUsuario iNT IDENTITY (1,1) PRIMARY KEY,
-	correoElectronico varchar(100),
-	contrasenna varchar(100),
-	rol varchar(100)
+
+CREATE TABLE Usuario
+(
+    id INT PRIMARY KEY IDENTITY(1,1),
+    correo VARCHAR(100),
+    contrasena VARCHAR(100),
+    idTipo int FOREIGN KEY REFERENCES TiposUsuario(idTipoUsuario)        
 );
+
+
+
+CREATE TABLE TiposUsuario(
+	idTipoUsuario INT PRIMARY KEY IDENTITY(1,1),
+   nombre VARCHAR(40)
+);
+
+INSERT INTO TiposUsuario (nombre)
+VALUES ('Profesor'),
+('ProfesorCoordinador'),
+('AsistenteAdministrativo'),
+('AsistenteAdministrativoCartago')
 
 CREATE TABLE Profesor (
     codigo varchar(100) PRIMARY KEY,
@@ -146,4 +161,32 @@ CREATE TABLE Justificacion
     cuerpo VARCHAR(200),
     fecha DATETIME
 
+);
+
+CREATE TABLE Buzon
+(
+	 idBuzon INT PRIMARY KEY IDENTITY(1,1),
+	 idUsuario INT FOREIGN KEY REFERENCES Usuario(id)     
+);
+
+CREATE TABLE Servicio
+(
+	 idServicio INT PRIMARY KEY IDENTITY(1,1),
+	 idUsuario INT FOREIGN KEY REFERENCES Usuario(id)     
+);
+
+
+CREATE TABLE Notificacion
+(
+	 idNotificacion INT PRIMARY KEY IDENTITY(1,1),
+	 idBuzon INT FOREIGN KEY REFERENCES Buzon(idBuzon),
+    idServicio INT FOREIGN KEY REFERENCES Servicio(idServicio),
+    contenido VARCHAR(300),
+    fecha DATETIME,
+    estado VARCHAR(20)      
+);
+
+CREATE TABLE BuzonesXServicio(
+	idBuzon INT FOREIGN KEY REFERENCES Buzon(idBuzon),
+	idServicio INT FOREIGN KEY REFERENCES Servicio(idServicio)
 );

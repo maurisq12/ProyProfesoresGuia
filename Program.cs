@@ -1,4 +1,6 @@
+using ChatRoom;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ProfesoresGuia.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     option.LoginPath="/Acceso/IniciarSesion";
     option.AccessDeniedPath="/Acceso/Error";
 });
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -29,8 +32,17 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints=>{
+    endpoints.MapHub<ChatHub>("/Controlador");
+});
+
+
+        
 
 app.Run();

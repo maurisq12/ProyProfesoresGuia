@@ -41,4 +41,11 @@ public class AdminEstudiantes
     {
         return SingletonDAO.getInstance().getCentro(idCentro);
     }
+
+    public bool modificarEstudianteTel(string pTelefono, int pEstudiante)
+    {
+        return SingletonDAO.getInstance().modificarEstudianteTel(pTelefono,pEstudiante);
+    }
+
+    
 }

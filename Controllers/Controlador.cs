@@ -706,6 +706,127 @@ public class Controlador : Controller
         ViewBag.Estudiantes = admEstudiantes.obtenerEstudiantes();
         return View("../Profesor/estudiantesEquipo");
     }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //                                             TERCER PROYECTO
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public IActionResult InicioEstudiante(){
+        return View("../Estudiante/Inicio");
+    }
+
+    public int getCantNot(){
+        int id= 1;
+        var nots = SingletonDAO.getInstance().getNotificaciones(id).Where(n => n.estado == "NO_LEIDA");
+        return nots.Count();
+    }
+
+    public IActionResult miInformacion(){
+        var est=admEstudiantes.obtenerEstudiantes().FirstOrDefault(p => p.idEstudiante == 1);
+        ViewBag.estudiante=est;
+        //Int32.Parse(User.Claims.Where(x=> x.Type == ClaimTypes.NameIdentifier).SingleOrDefault().Value);
+        return View("../Estudiante/miInformacion");
+    }
+
+    public IActionResult editarInformacionEstudiante(){
+        var est=admEstudiantes.obtenerEstudiantes().FirstOrDefault(p => p.idEstudiante == 1);
+        ViewBag.estudiante=est;
+        //Int32.Parse(User.Claims.Where(x=> x.Type == ClaimTypes.NameIdentifier).SingleOrDefault().Value);
+        return View("../Estudiante/editarEstudiante");
+    }
+
+    public IActionResult calendarioEstudiante(){
+        var plan= admPlanes.consultarActividades();
+        ViewBag.actividades = plan;
+        return View("../Estudiante/calendario");
+    }
+
+    public IActionResult EstudianteProximaActividad(){
+        var act = admPlanes.consultarProxActividad();
+        ViewBag.actividad= act;
+        return View("../Estudiante/proximaActividad");
+    }
+
+    public IActionResult EstudianteDetallesActividad(){
+        Actividad actv = admPlanes.consultarActividad(Int32.Parse(Request.Query["id"]));
+        ViewBag.actividad = actv;
+        return View("../Estudiante/detallesActividad");
+    }
+
+    public IActionResult EstudianteMisChats(){
+        ViewBag.chats= SingletonDAO.getInstance().getMisChats();
+        return View("../Estudiante/misChats");
+    }
+
+    public IActionResult verChat(){
+        int idChat=Int32.Parse(Request.Query["id"]);
+        ViewBag.elChat=SingletonDAO.getInstance().getMisChats().FirstOrDefault(c => c.id == idChat);
+        ViewBag.mensajes=SingletonDAO.getInstance().getMensajesChat(idChat);
+        ViewBag.yo=1;
+
+        return View("../Estudiante/unChat");
+    }
+
+    [HttpPost]
+    public void enviarMensaje(string pSala, string pMensaje){
+        int idUsuario =1;//Int32.Parse(User.Claims.Where(x=> x.Type == ClaimTypes.NameIdentifier).SingleOrDefault().Value);
+        SingletonDAO.getInstance().enviarMensajeChat(Int32.Parse(pSala),idUsuario,pMensaje);
+    }
+
+    public IActionResult notificaciones(){
+        int id= 1;//Int32.Parse(Request.Query["id"]);
+        ViewBag.notificaciones= SingletonDAO.getInstance().getNotificaciones(id);
+        return View("../Estudiante/misNotificaciones");
+    }
+
+    public IActionResult unaNotificacion(){
+        int id= 1;//Int32.Parse(Request.Query["id"]);
+        int idNot = Int32.Parse(Request.Query["id"]);
+        ViewBag.notificacion = SingletonDAO.getInstance().getNotificaciones(id).FirstOrDefault(n => n.idNotificacion == idNot);
+        SingletonDAO.getInstance().marcarLeida(idNot);
+        return View("../Estudiante/unaNotificacion");
+    }
+
+    public IActionResult marcarNoLeida(int idNot){
+        SingletonDAO.getInstance().marcarNoLeida(idNot);
+        return notificaciones();
+    }
+
+    public IActionResult eliminarNotificacion(int idNot){
+        SingletonDAO.getInstance().eliminarNot(idNot);
+        return notificaciones();
+    }
+
+    public IActionResult darBajaServicio(int idBuzon, int idServicio){
+        SingletonDAO.getInstance().desafiliarServicio(idBuzon,idServicio);
+        return notificaciones();
+    }
+
+    public IActionResult eliminarTodasNotificaciones(){
+        var nots = SingletonDAO.getInstance().getNotificaciones(1);
+        foreach (var una in nots){
+            SingletonDAO.getInstance().eliminarNot(una.idNotificacion);
+        }
+        return notificaciones();
+    }
+
+    public IActionResult EstudianteModificarInformacion(){
+        var nuevoTelefono = Request.Form["telefonoCelular"];
+        var idEstudiante = Int32.Parse(Request.Form["idEstudiante"]);
+        admEstudiantes.modificarEstudianteTel(nuevoTelefono,idEstudiante);
+        return miInformacion();
+    }
+
+
+
+
+
+
+
+
+     
+
     
 
     

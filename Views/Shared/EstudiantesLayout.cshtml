@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CompuGuías Estudiante</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MvcMovie.styles.css" asp-append-version="true" />
+</head>
+<body style="background-color: #E6F4F1">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light prof-nav-bar border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <img src= "https://i.imgur.com/6PFqpgR.png" width="50" height="50"/>
+
+                <h1 class="bar-text">CompuGuías</h1>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav top-menu flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Controlador" asp-action="miInformacion">Mi información</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Controlador" asp-action="calendarioEstudiante">Calendario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Controlador" asp-action="EstudianteMisChats">Chats</a>
+                        </li>
+                        <li class="nav-item notification">
+                            <span class="nav-link text-white" style="cursor:pointer" onclick="location.href='@Url.Action("Notificaciones", "Controlador")'">Notificaciones</span>
+                            <span id="hCantNot" style="display:none" class="badge" ></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Controlador" asp-action="CerrarSesion">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; CompuGuías
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $.get("/Controlador/getCantNot",null, function (data) {
+            if(data>0){
+                document.getElementById("hCantNot").style.display="block";
+                document.getElementById("hCantNot").textContent=data; 
+            }
+       }); 
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <style>
+
+        .notification {
+  color: white;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+
+    </style>
+</body>
+</html>

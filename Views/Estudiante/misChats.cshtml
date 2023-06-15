@@ -1,0 +1,21 @@
+@{
+  ViewData["Title"] = "Gestión de profesores";
+  Layout = "EstudiantesLayout";
+}
+
+  <div class="text-center">
+    <h1 style="color: #004879; font-size: 80x">Mis chats</h1><br><br>
+    <div style="display: flex; flex-direction: column ">
+@foreach (var item in ViewBag.chats)
+{
+      <a style="width: fit-content;"href="/Controlador/verChat?id=@item.id">
+      <div style="background-color:white;border-radius:10px;border-style:groove;width: fit-content;padding: 10px 200px 10px 10px;cursor:pointer;">
+              <h5 align="left"> @item.nombre </h5>
+              <p align="left"> Creado por: @item.creador</p>
+              <p align="left"> Participantes: Participante1, Participante2, Participante3</p>
+      </div></a><br>
+    
+}
+</div>      
+  </div>
+  

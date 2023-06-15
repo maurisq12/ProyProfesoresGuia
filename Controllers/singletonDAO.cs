@@ -1452,4 +1452,313 @@ public class SingletonDAO
         return count;
     }
 
+    public List<SalasChat> getMisChats()
+    {
+    var losChats = new List<SalasChat>();
+    SingletonDB basedatos = SingletonDB.getInstance();
+    if (basedatos.IsConnectionOpen() == false){
+            basedatos.getConnection().Open();
+        }   
+
+    SqlCommand command = new SqlCommand("SELECT idSala,nombre,idCreador FROM Sala", basedatos.getConnection());
+
+        try
+        {
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                SalasChat unaSala = new SalasChat();
+                unaSala.id = Convert.ToInt32(reader["idSala"]);
+                unaSala.nombre = reader["nombre"].ToString();
+                unaSala.creador = Convert.ToInt32(reader["idCreador"]);
+                losChats.Add(unaSala);
+            }
+            
+
+            reader.Close();
+            basedatos.getConnection().Close();
+            return losChats;
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+            basedatos.getConnection().Close();
+            return losChats;
+            
+        }
+    }
+
+    public List<Mensaje> getMensajesChat(int pSala)
+    {
+        var losChats = new List<Mensaje>();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("SELECT idMensaje,emisor,fecha,mensaje FROM Mensaje where idSala=@pSala", basedatos.getConnection());
+        command.Parameters.AddWithValue("@pSala", pSala);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Mensaje unMensaje = new Mensaje();
+                    unMensaje.idMensaje = Convert.ToInt32(reader["idMensaje"]);
+                    unMensaje.mensaje = reader["mensaje"].ToString();
+                    unMensaje.emisor = Convert.ToInt32(reader["emisor"]);
+                    unMensaje.fecha = DateTime.Parse(reader["fecha"].ToString());
+                    losChats.Add(unMensaje);
+                }
+                
+
+                reader.Close();
+                basedatos.getConnection().Close();
+                return losChats;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+                basedatos.getConnection().Close();
+                return losChats;
+                
+        }
+    }
+
+    public List<Notificacion> getNotificaciones(int pUsuario)
+    {
+        var losNotis = new List<Notificacion>();
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("SELECT idNotificacion, idBuzon, idServicio, contenido, fecha, estado FROM Notificacion WHERE idBuzon=(SELECT idBuzon FROM Buzon WHERE idUsuario=@pUsuario)",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pUsuario", pUsuario);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Notificacion unaNoti = new Notificacion();
+                    unaNoti.idNotificacion = Convert.ToInt32(reader["idNotificacion"]);
+                    unaNoti.idBuzon = Convert.ToInt32(reader["idBuzon"]);
+                    unaNoti.emisor = Convert.ToInt32(reader["idServicio"]);
+                    unaNoti.contenido = reader["contenido"].ToString();
+                    unaNoti.fecha = DateTime.Parse(reader["fecha"].ToString());
+                    unaNoti.estado = reader["estado"].ToString();
+                    losNotis.Add(unaNoti);
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+                return losNotis;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error al obtener los equipos guía: " + ex.Message);
+                basedatos.getConnection().Close();
+                return losNotis;
+                
+        }
+    }
+
+    public void marcarLeida(int pNot)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("UPDATE Notificacion SET estado='LEIDA' WHERE idNotificacion=@pNot",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pNot", pNot);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();                
+        }
+    }
+
+    public void marcarNoLeida(int pNot)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("UPDATE Notificacion SET estado='NO_LEIDA' WHERE idNotificacion=@pNot;",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pNot", pNot);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();                
+        }
+    }
+
+    public void eliminarNot(int pNot)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("DELETE Notificacion WHERE idNotificacion=@pNot;",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pNot", pNot);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();                
+        }
+    }
+
+    public void desafiliarServicio(int pBuzon, int pServicio)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("DELETE FROM BuzonesXServicio WHERE idBuzon=@pBuzon AND idServicio=@pServicio",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pBuzon", pBuzon);
+        command.Parameters.AddWithValue("@pServicio", pServicio);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();                
+        }
+    }
+
+    public void enviarMensajeChat(int pSala, int pUsuario, string pMensaje)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("INSERT INTO Mensaje(idSala,emisor,fecha,mensaje) VALUES (@pSala,@pUsuario,@pFecha,@pMensaje) ",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pSala", pSala);
+        command.Parameters.AddWithValue("@pUsuario", pUsuario);
+        command.Parameters.AddWithValue("@pFecha", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+        command.Parameters.AddWithValue("@pMensaje", pMensaje);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();                
+        }
+    }
+
+    public bool modificarEstudianteTel(string pTelefono, int pEstudiante)
+    {
+        SingletonDB basedatos = SingletonDB.getInstance();
+        if (basedatos.IsConnectionOpen() == false){
+                basedatos.getConnection().Open();
+            }   
+
+        SqlCommand command = new SqlCommand("UPDATE Estudiante SET telefonoCelular=@pTelefono WHERE idEstudiante=@pEstudiante;",
+        basedatos.getConnection());
+        command.Parameters.AddWithValue("@pEstudiante", pEstudiante);
+        command.Parameters.AddWithValue("@pTelefono", pTelefono);
+
+            try
+            {
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                }
+                
+                reader.Close();
+                basedatos.getConnection().Close();
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                basedatos.getConnection().Close();  
+                return false;              
+        }
+    }   
+
+
+
+
+    
+
 }

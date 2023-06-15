@@ -1,0 +1,87 @@
+@{
+    Layout = "EstudiantesLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function img_pathUrl(input){
+        $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+</script>
+
+<head>
+	<style>
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+	</style>
+
+	<title>Login V3</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	<form method="post" action="@Url.Action("EstudianteModificarInformacion", "Controlador")">
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100">
+                
+                <span class="login100-form-logo">
+                    <i class="zmdi zmdi-landscape"></i>
+                </span>
+                <title>Registro</title>
+                <h1 style="color:#004879"> Editar mi información</h1><br><br>
+                <div>
+                    <div style="background-color: white;border-radius: 10px;padding: 10px;width: fit-content;">
+                        <input type="hidden" id="idE" name="idE" value="@ViewBag.Estudiante.idEstudiante">
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Carne: @ViewBag.Estudiante.carne </h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Nombre completo: @ViewBag.Estudiante.nombreCompleto</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Sede: @ViewBag.Estudiante.centroEstudio.nombre</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            <h3 style="font-size: 20px;">Correo electrónico: @ViewBag.Estudiante.correoElectronico</h3><br>
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div><br>
+
+                        <div class="wrap-input100 validate-input " data-validate="Nombre">
+                            
+                                <h3 style="font-size: 20px;">Teléfono celular</h3><br>
+                                <input type="hidden" id="idEstudiante" name="idEstudiante" value="@ViewBag.Estudiante.idEstudiante">
+                                <h3> <input class = "login-entry" type="text" id="telefonoCelular" name="telefonoCelular" value="@ViewBag.Estudiante.telefonoCelular"><br> </h3>
+                                <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                            
+                        </div><br>
+                        
+                    </div>              
+                </div>                
+			</div>
+            
+		</div>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button style="align-self: center;" class="btn-rlz" type="submit">Guardar cambios</button>
+        </div>
+    </div>
+	</form>
+	
+</body>
+
+</html>
